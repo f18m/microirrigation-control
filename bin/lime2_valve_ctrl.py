@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 #
-# Valve Toggle:
-# Every 5sec command the radio module attached to the LIME2
-# to OPEN or CLOSE the idraulic VALVE attached
+# Valve CONTROL utility:
+# supports the following modes:
+#  OPEN
+#  CLOSE
+#  TEST: Every 5sec command the radio module attached to the LIME2
+#        to OPEN or CLOSE the idraulic VALVE attached
 #
 
 from pyA20Lime2.gpio import gpio
@@ -35,6 +38,17 @@ def valve_close():
 	time.sleep(LIME2_RADIOMOD_HOLDOFF_TIME_SEC-1)			 # we sleep close to the hold off time to make sure the radio TX module receives the command
 	reset_gpio()
 
+def valve_test():
+	while True:
+		print "REST POSITION"
+		time.sleep(5)
+		print "VALVE OPEN!"
+		valve_open()
+		time.sleep(5)
+		print "VALVE CLOSE!"
+		valve_close()
+		time.sleep(5)
+
 
 # MAIN PROGRAM
 
@@ -43,12 +57,16 @@ gpio.init() #Initialize module. Always called first
 gpio.setcfg(LIME2_RADIOMOD_GPIO1, gpio.OUTPUT)
 gpio.setcfg(LIME2_RADIOMOD_GPIO2, gpio.OUTPUT)
 reset_gpio()
-while True:
-	print "NO ACTIVITY"
-	time.sleep(5)
-	print "VALVE OPEN!"
+
+if sys.argv[0]  == "start":
 	valve_open()
-	time.sleep(5)
-	print "VALVE CLOSE!"
+elif sys.argv[0]  == "close":
 	valve_close()
-	time.sleep(5)
+elif sys.argv[0]  == "test":
+	valve_test()
+else:
+	print "Wrong mode provided: %s" % sys.argv[0]
+	exit(1)
+	
+exit(0)
+
