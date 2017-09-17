@@ -11,7 +11,7 @@
 from pyA20Lime2.gpio import gpio
 from pyA20Lime2.gpio import port
 from pyA20Lime2.gpio import connector
-import time
+import time, sys
 
 # CONSTANTS
 
@@ -31,12 +31,14 @@ def valve_open():
 	gpio.output(LIME2_RADIOMOD_GPIO2, gpio.LOW)
 	time.sleep(LIME2_RADIOMOD_HOLDOFF_TIME_SEC-1)			 # we sleep close to the hold off time to make sure the radio TX module receives the command
 	reset_gpio()
+	print "Valve open"
 
 def valve_close():
 	gpio.output(LIME2_RADIOMOD_GPIO1, gpio.LOW)
 	gpio.output(LIME2_RADIOMOD_GPIO2, gpio.HIGH)
 	time.sleep(LIME2_RADIOMOD_HOLDOFF_TIME_SEC-1)			 # we sleep close to the hold off time to make sure the radio TX module receives the command
 	reset_gpio()
+	print "Valve closed"
 
 def valve_test():
 	while True:
@@ -58,14 +60,17 @@ gpio.setcfg(LIME2_RADIOMOD_GPIO1, gpio.OUTPUT)
 gpio.setcfg(LIME2_RADIOMOD_GPIO2, gpio.OUTPUT)
 reset_gpio()
 
-if sys.argv[0]  == "start":
+if len(sys.argv)>=2:
+	mode = sys.argv[1]
+
+if mode  == "open":
 	valve_open()
-elif sys.argv[0]  == "close":
+elif mode  == "close":
 	valve_close()
-elif sys.argv[0]  == "test":
+elif mode  == "test":
 	valve_test()
 else:
-	print "Wrong mode provided: %s" % sys.argv[0]
+	print "Wrong mode provided: %s" % mode
 	exit(1)
 	
 exit(0)
