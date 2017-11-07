@@ -2,15 +2,24 @@
 
 Filename:	    remote.c
 
-Description:	
-
-Operation:    
-
+Description:        Code for the "remote" node.
+                    Puts the CC1110 in listen mode on SPI and radio.
+                    The CC1110 is supposed to be connected to a MASTER SYSTEM via radio
+                    and to an actuator (group of relays).
+                    As soon as a radio command is received, the remote node will send
+                    back an ACK over radio with the "transaction ID" received in the
+                    over-radio comamnd. Then the actuator system is
+                    turned on/off (depending on the command).
+                    The remote node is supposed to be battery-powered and thus implements
+                    a low power policy.
 ***********************************************************************************/
 
 /***********************************************************************************
 * INCLUDES
 */
+#include <ioCC1110.h>
+#include <string.h>
+
 #include "bsp.h"
 #include "mrfi.h"
 #include "bsp_leds.h"
@@ -18,179 +27,222 @@ Operation:
 #include "bsp_extended.h"
 #include "main.h"
 
+#include "ioCCxx10_bitdef.h"
+#include "hal_cc8051.h"
 
 #if REMOTE
 
 
-#define ENABLE_LOWPOWER_MODE                    (0)
+/***********************************************************************************
+* CONSTANTS
+*/
+
+#define ENABLE_LOWPOWER_MODE                               (0)
+
+#define ACTUATOR_IMPULSE_DURATION_MSEC                     (4000)
+#define WAIT_TIME_RADIOOFF_MSEC                            (1000)
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   GPIO #1 --->
+ *      LIME2: attached to LIME2 PC22
+ *      REMOTE: attached to VALVE_CTRL1
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Polarity  :  Active High
+ *   GPIO      :  P0.3
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+#define REMOTE_GPIO1_PORT__          P0
+#define REMOTE_GPIO1_BIT__           3
+#define REMOTE_GPIO1_DDR__           P0DIR
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   GPIO #2 --->
+ *      LIME2: attached to LIME2 PC23
+ *      REMOTE: attached to VALVE_CTRL2
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Polarity  :  Active High
+ *   GPIO      :  P0.2
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+#define REMOTE_GPIO2_PORT__          P0
+#define REMOTE_GPIO2_BIT__           2
+#define REMOTE_GPIO2_DDR__           P0DIR
+
+#define REMOTE_GPIO_ACTIVE_LOW       1
 
 
 /***********************************************************************************
 * LOCAL VARIABLES
 */
-//static          linkID_t      sLinkID;
-//static          uint8_t       sNoAckCount = 0;
+
 static          mrfiPacket_t  g_pktTx;
-static          uint8_t       g_lastCmdRx = 0;
-static          uint16_t      g_last_adc_result;
+static          command_e     g_lastCmdRx = CMD_MAX;
+static          uint8_t       g_lastTransactionID = 0;
+static          uint16_t      g_last_adc_result = 0;
 
 
 /***********************************************************************************
 * LOCAL FUNCTIONS
 */
 
-static uint8_t CheckCmdAndReplyWithAck()
+static uint8_t CheckCmdAndReplyWithAck()                // will leave the radio back in RX mode
 {
-  //uint8_t  radioMsg[MAX_RADIO_PKT_LEN], len;   
-  
-  /* Put Radio in IDLE to save power */
-  MRFI_RxIdle();//SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
-  //MRFI_Receive(&g_pktRx); //SMPL_Receive(sLinkID, radioMsg, &len);
-  sRxCallbackSemaphore = 0;
-  
-  uint8_t len = MRFI_GET_PAYLOAD_LEN(&g_pktRx);   
-  uint8_t* radioMsg = MRFI_P_PAYLOAD(&g_pktRx);
-  if (len == CMD_PKT_LEN &&
-        radioMsg[0] == 'C' &&
-        radioMsg[1] == 'M' &&
-        radioMsg[2] == 'D')     
-  {
-    // retrieve the command bit
-    g_lastCmdRx = radioMsg[3];
-    
-    #if 0
-    /* Check and adjust wanted output power */
-    info.lid = sLinkID;
-    SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SIGINFO, &info);
-    if( sRequestPwrLevel > MINIMUM_OUTPUT_POWER )
-      if( info.sigInfo.rssi  > RSSI_UPPER_THRESHOLD )
-        sRequestPwrLevel--;
-    if( sRequestPwrLevel < MAXIMUM_OUTPUT_POWER )
-      if( info.sigInfo.rssi  < RSSI_LOWER_THRESHOLD )
-        sRequestPwrLevel++;
-    #endif
-    
-    /* Build and send acknowledge */
-    MRFI_SET_PAYLOAD_LEN(&g_pktTx, ACK_PKT_LEN);   
-    uint8_t* ackMsg = MRFI_P_PAYLOAD(&g_pktTx);
-    ackMsg[0] = 'A';
-    ackMsg[1] = 'C';
-    ackMsg[2] = 'K';
-    ackMsg[3] = (uint8_t)g_last_adc_result;
+    /* Put Radio in IDLE to save power */
+    MRFI_RxIdle();
+    g_sRxCallbackSemaphore = 0;                 // reset semaphore
 
-    CopyAddress(MRFI_P_SRC_ADDR(&g_pktTx), NODE_REMOTE);
-    CopyAddress(MRFI_P_DST_ADDR(&g_pktTx), NODE_LIME2);
-    
+
+    // g_pktRx contains the received packet:
+
+    uint8_t len = MRFI_GET_PAYLOAD_LEN(&g_pktRx);
+    uint8_t* radioMsg = MRFI_P_PAYLOAD(&g_pktRx);
+
+    g_lastCmdRx = String2Command(radioMsg, len);
+    if (g_lastCmdRx == CMD_MAX)
+    {
+        MRFI_RxOn();
+        return 0;                 // invalid command received!
+    }
+
+    // retrieve the transaction ID
+    g_lastTransactionID = radioMsg[COMMAND_LEN+0];
+
+    /* Build and send acknowledge */
+    MRFI_SET_PAYLOAD_LEN(&g_pktTx, REPLY_LEN+REPLY_POSTFIX_LEN);
+#if 1
+    uint8_t* ackMsg = MRFI_P_PAYLOAD(&g_pktTx);
+
+    memcpy(ackMsg, g_ack, REPLY_LEN);
+    ackMsg[REPLY_LEN+0] = g_lastTransactionID;
+    ackMsg[REPLY_LEN+1] = (uint8_t)g_last_adc_result;
+
+    //CopyAddress(MRFI_P_SRC_ADDR(&g_pktTx), NODE_REMOTE);
+    //CopyAddress(MRFI_P_DST_ADDR(&g_pktTx), NODE_LIME2);
+#endif
     MRFI_Transmit(&g_pktTx, MRFI_TX_TYPE_CCA);
-    //SMPL_Send(sLinkID, radioMsg, ACK_PKT_LEN);
-    
+
+    //MRFI_Transmit(&g_pktTx, MRFI_TX_TYPE_FORCED);
+
+
     // signal we are transmitting the ACK
     BSP_TURN_ON_LED1();
-    SPIN_ABOUT_QUARTER_A_SECOND;
-    BSP_TURN_OFF_LED1();  
-    
-    // we got something!
-    return 1;
-  }
-  
-  /* Turn on RX. default is RX off. */
-  //MRFI_RxOn();//SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
+    //DELAY_ABOUT_QUARTER_A_SECOND_WITH_INTERRUPTS;
+    DelayMsNOInterrupts(250);
+    BSP_TURN_OFF_LED1();
 
-  // leave radio in IDLE
-  //MRFI_RxIdle();
-  return 0;
+    // we got something!
+    MRFI_RxOn();
+    return 1;
 }
 
 static void ApplyCmdRx()
 {
-  if (g_lastCmdRx)
-  {
-    __bsp_LED_TURN_ON__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, 0 /* is active low */ );
-    __bsp_LED_TURN_OFF__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, 0 /* is active low */ );
-  } else {
-    __bsp_LED_TURN_OFF__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, 0 /* is active low */ );
-    __bsp_LED_TURN_ON__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, 0 /* is active low */ );
-  }
+    // activate output relay:
 
-  NWK_DELAY(4000);              // BSP_SleepFor(uint8_t mode, uint8_t res, uint16_t steps)
+    if (g_lastCmdRx == CMD_TURN_ON)
+    {
+        __bsp_LED_TURN_ON__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        __bsp_LED_TURN_OFF__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    }
+    else if (g_lastCmdRx == CMD_TURN_OFF)
+    {
+        __bsp_LED_TURN_OFF__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        __bsp_LED_TURN_ON__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    }
+    else
+        return;
 
-  __bsp_LED_TURN_OFF__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, 0 /* is active low */ );
-  __bsp_LED_TURN_OFF__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, 0 /* is active low */ );
+
+    // the duration of the pulse needs to be tuned for your specific application.
+    // in my case the electrovalve I had took about 4sec to stabilize to the new
+    // position!
+
+    DelayMsNOInterrupts(ACTUATOR_IMPULSE_DURATION_MSEC);
+
+
+    // then turn off relay:
+
+    __bsp_LED_TURN_OFF__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    __bsp_LED_TURN_OFF__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
 }
 
 static void WaitInLowPowerMode()
 {
+    // IMPORTANT: we cannot sleep too much time because we must be able to
+    //            ACK a radio command quickly enough
+
 #if ENABLE_LOWPOWER_MODE
-  MRFI_RxIdle();
-  NWK_DELAY(3000);              // BSP_SleepFor(uint8_t mode, uint8_t res, uint16_t steps)
-  MRFI_RxOn();                  // before leaving restore radio RX status
+    MRFI_RxIdle();
+    DelayMsNOInterrupts(WAIT_TIME_RADIOOFF_MSEC);
+    MRFI_RxOn();                  // before leaving restore radio RX status
+#else
+    // no sleep policy: sleep with radio in RX and with interrupts enabled
+    DelayMsNOInterrupts(WAIT_TIME_RADIOOFF_MSEC);
 #endif
 }
 
-
-#include "ioCCxx10_bitdef.h"
-#include "hal_cc8051.h"
-
-#include <ioCC1110.h>
-
 static void ReadBatteryVoltage()
 {
-  /* ADC conversion :
-   * The ADC conversion is triggered by setting [ADCCON1.ST = 1].
-   * The CPU will then poll [ADCCON1.EOC] until the conversion is completed.
-   */
+    /* ADC conversion :
+    * The ADC conversion is triggered by setting [ADCCON1.ST = 1].
+    * The CPU will then poll [ADCCON1.EOC] until the conversion is completed.
+    */
 
-  /* Set [ADCCON1.ST] and await completion (ADCCON1.EOC = 1) */
-  ADCCON1 |= ADCCON1_ST | BIT1 | BIT0;
-  while( !(ADCCON1 & ADCCON1_EOC));
+    /* Set [ADCCON1.ST] and await completion (ADCCON1.EOC = 1) */
+    ADCCON1 |= ADCCON1_ST | BIT1 | BIT0;
+    while( !(ADCCON1 & ADCCON1_EOC));
 
-  /* Store the ADC result from the ADCH/L register to the adc_result variable.
-   * The 4 LSBs in ADCL will not contain valid data, and are masked out.
-   */
-  g_last_adc_result = ADCL & 0xF0;
-  
-  // these are for 8bits resolution:
-  //g_last_adc_result &= 0x00FF;
+    /* Store the ADC result from the ADCH/L register to the adc_result variable.
+    * The 4 LSBs in ADCL will not contain valid data, and are masked out.
+    */
+    g_last_adc_result = ADCL & 0xF0;
 
-  // these are for 12bits resolution:
-  g_last_adc_result |= (ADCH << 8);
-  g_last_adc_result &= 0x0FFF;
-  
-  g_last_adc_result = g_last_adc_result*6/100;
+    // these are for 8bits resolution:
+    //g_last_adc_result &= 0x00FF;
+
+    // these are for 12bits resolution:
+    g_last_adc_result |= (ADCH << 8);
+    g_last_adc_result &= 0x0FFF;
+
+    // convert ADC read range:
+    // final result:
+    //   80=FULL BATTERY (about 13V)
+    //   20=DEPLETED BATTERY (about 3.3V)
+    g_last_adc_result = g_last_adc_result*6/100;
 }
 
 static void PinConfigRemote()
 {
-  /* I/O-Port configuration :
-   * configure our 2 output pins
-   * PIN0_7 is configured to an ADC input pin.
-   */
+    /* I/O-Port configuration :
+    * configure our 2 output pins
+    * PIN0_7 is configured to an ADC input pin.
+    */
 
-  __bsp_LED_CONFIG__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, 0 /* is active low */ );
-  __bsp_LED_CONFIG__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, 0 /* is active low */ );
-  __bsp_LED_TURN_OFF__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, 0 /* is active low */ );
-  __bsp_LED_TURN_OFF__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, 0 /* is active low */ );
+    __bsp_LED_CONFIG__  ( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    __bsp_LED_CONFIG__  ( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    __bsp_LED_TURN_OFF__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    __bsp_LED_TURN_OFF__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
 
-  // Set [ADCCFG.ADCCFG7 = 1].
-  ADCCFG |= ADCCFG_7;
+    // Set [ADCCFG.ADCCFG7 = 1].
+    ADCCFG |= ADCCFG_7;
 
-  /* ADC configuration :
-   *  - [ADCCON1.ST] triggered
-   *  - 8 bit resolution   (we could go up to 12 but 8 are easier to send over radio!)
-   *  - Single-ended
-   *  - Single-channel, due to only 1 pin is selected in the ADCCFG register
-   *  - Reference voltage is VDD on AVDD pin
+    /* ADC configuration :
+    *  - [ADCCON1.ST] triggered
+    *  - 8 bit resolution   (we could go up to 12 but 8 are easier to send over radio!)
+    *  - Single-ended
+    *  - Single-channel, due to only 1 pin is selected in the ADCCFG register
+    *  - Reference voltage is VDD on AVDD pin
 
-   *  Note: - [ADCCON1.ST] must always be written to 11
-   *
-   *  The ADC result is represented in two's complement.
-   */
+    *  Note: - [ADCCON1.ST] must always be written to 11
+    *
+    *  The ADC result is represented in two's complement.
+    */
 
-  // Set [ADCCON1.STSEL] according to ADC configuration */
-  ADCCON1 = (ADCCON1 & ~ADCCON1_STSEL) | STSEL_ST | BIT1 | BIT0;
+    // Set [ADCCON1.STSEL] according to ADC configuration */
+    ADCCON1 = (ADCCON1 & ~ADCCON1_STSEL) | STSEL_ST | BIT1 | BIT0;
 
-  // Set [ADCCON2.SREF/SDIV/SCH] according to ADC configuration */
-  ADCCON2 = ADCCON2_SREF_AVDD | ADCCON2_SDIV_512 | ADCCON2_SCH_AIN7;
+    // Set [ADCCON2.SREF/SDIV/SCH] according to ADC configuration */
+    ADCCON2 = ADCCON2_SREF_AVDD | ADCCON2_SDIV_512 | ADCCON2_SCH_AIN7;
 }
 
 
@@ -208,58 +260,74 @@ static void PinConfigRemote()
 */
 void sRemoteNode(void)
 {
-  //ioctlRadioSiginfo_t info;
-  //uint8_t       sCurrentPwrLevel;
+    // I/O-Port configuration
+    PinConfigRemote();
 
-  // I/O-Port configuration 
-  PinConfigRemote();
-  
-  /* turn on RX. default is RX off. */
-  //sCurrentPwrLevel  = MAXIMUM_OUTPUT_POWER;
-  //SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SETPWR, &sCurrentPwrLevel);
-  //SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0 );
-  
-  ReadBatteryVoltage();
+    // do a first read of the battery voltage; this will enable us to inform
+    // the MASTER SYSTEM about our battery status next time we must send an ACK
+    ReadBatteryVoltage();
 
-  unsigned int count1=0, count2=0;
-  unsigned int go_low_power=0;
-  unsigned int do_battery_meas=0;
-  while (1)
-  {
+    /* turn on RX. default is RX off. */
     MRFI_RxOn();
-    if( sRxCallbackSemaphore )                    /* Command successfully received? */
+
+
+    unsigned int count1=0, count2=0, counter_to_apply_lastcmd=0;
+    unsigned int go_low_power=0;
+    unsigned int do_battery_meas=0;
+    while (1)
     {
-      if (CheckCmdAndReplyWithAck())
-      {
-        ApplyCmdRx();
-        
-        // we just received something; it's unlikely we're going to receive
-        // another command shortly... we can sleep a little bit
-        go_low_power=1;
-      }
-    }  
-    
-    count1++;
-    go_low_power |= ((count1 % 0xFF00) == 0);
-    if (go_low_power)
-    {
-      WaitInLowPowerMode();
-      go_low_power = 0;
-      
-      // should we do a battery measurement?
-      count2++;
-      do_battery_meas = ((count2 % 0x20) == 0);
-      if (do_battery_meas)
-      {
-         // with current settings for count1 and count2, we enter
-         // this piece of code about every 40sec
-        
-        ReadBatteryVoltage();
-        do_battery_meas = 0;
-      }
+        if( g_sRxCallbackSemaphore )                    /* Command successfully received? */
+        {
+            if (CheckCmdAndReplyWithAck())              // this is very quick and will leave the radio in RX
+            {
+                // we recognized a command from radio interface and we sent
+                // an ACK back however do not execute immediately the command:
+                // our ACK may not be received; in that case the MASTER will repeat
+                // us the same command till he receives our ACK.
+                // In the meantime we don't want to repeat the same commands
+                // a lot of times!!
+
+                // resetting the "counter to apply" we force restarting the
+                // wait-before-exec
+                counter_to_apply_lastcmd = 0;
+            }
+        }
+
+        count1++;
+        go_low_power = ((count1 % 0xFF00) == 0);
+        if (go_low_power)
+        {
+            if (g_lastCmdRx != CMD_MAX)
+            {
+                counter_to_apply_lastcmd++;
+                if (counter_to_apply_lastcmd == 3)      // wait some time before applying RX command!
+                {
+                    ApplyCmdRx();               // this will take a lot of time!
+                    g_lastCmdRx = CMD_MAX;
+                    counter_to_apply_lastcmd = 0;
+                    // we just received something; it's unlikely we're going to receive
+                    // another command shortly... we can sleep a little bit
+                    ///go_low_power=1;
+                }
+            }
+
+            WaitInLowPowerMode();               // this may take a lot of time but will leave the radio in RX
+            go_low_power = 0;
+
+            // should we do a battery measurement?
+            count2++;
+            do_battery_meas = ((count2 % 0x20) == 0);
+            if (do_battery_meas)
+            {
+                 // with current settings for count1 and count2, we enter
+                 // this piece of code about every 40sec
+
+                ReadBatteryVoltage();
+                do_battery_meas = 0;
+            }
+        }
+        //else: keep spinning with radio in Rx mode for a while
     }
-    //else: keep spinning with radio in Rx mode for a while
-  }
 }
 
 #endif   // REMOTE
