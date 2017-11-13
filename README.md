@@ -12,7 +12,28 @@ anything you like.
 
 ## Source code ##
 
-firmware-cc1110-lime2-remote: this is the firmware for both the CC1110 "lime2" node and the "remote" node.
+Tree of contained source code is:
+
+ firmware-cc1110-lime2-remote:  this is the firmware written in C for both the CC1110 "lime2" node and the "remote" node. 
+  \-- source
+       \-- apps    
+            \-- lime2.c: contains the firmware source code for the node attached to the Linux embedded system over SPI
+                remote.c: contains the firmware source code for the node attached to the electrovalve
+  
+ software-lime2: this is the PHP code for the Linux embedded system
+  \-- spidev_test:  this is the Linux kernel utility written in C that provide an easy way to communicate with devices over SPI
+      web:          this folder contains the PHP code implementing the specific communication protocol over-SPI;
+                    this code must be run inside a regular web server (e.g. Apache, lighttpd or nginx) and uses a mix of PHP and
+                    Javascript to open WebSockets to get updates about SPI activities.
+      bin:          this folder contains PHP code to implement a WebSocket server using Ratchet (http://socketo.me/);  
+                    the WebSocket server is used by Javascript code to fetch updates from SPI.
+
+
+## Installation ##
+
+To install the Ratchet webserver just type:
+
+make
 
 
 ## Similar Projects ##
