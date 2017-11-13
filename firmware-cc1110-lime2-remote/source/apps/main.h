@@ -2,9 +2,9 @@
 
 Filename:	    main.h
 
-Description:	
+Description:
 
-Operation:    
+Operation:
 
 ***********************************************************************************/
 
@@ -26,13 +26,8 @@ Operation:
 * CONSTANTS and DEFINITIONS
 */
 
-/* Delay loop support. Requires mrfi.h. MRFI will disable interrupts while sleeping.
-   If this is not desired, use BSP_DELAY_USECS() instead. */
-#define NWK_DELAY_NO_INTERRUPTS(spinMs)      MRFI_DelayMs(spinMs)
-#define NWK_REPLY_DELAY()                    MRFI_ReplyDelay()
+#define DELAY_ABOUT_QUARTER_A_SECOND_WITH_INTERRUPTS   DelayMsWithInterrupts(250)            /* this one runs with interrupts enabled! */
 
-#define SPIN_ABOUT_QUARTER_A_SECOND   NWK_DELAY_NO_INTERRUPTS(250)
-#define SPIN_ABOUT_100_MS             NWK_DELAY_NO_INTERRUPTS(100)
 #define MRFI_CHANNEL                  0
 
 #define SLEEP_31_25_US_RESOLUTION     0
@@ -44,41 +39,12 @@ Operation:
 #define SLAVE_BUTTON                  2
 #define BOTH_BUTTONS                  3
 
-#define MAX_RADIO_PKT_LEN             10
-#define ACK_PKT_LEN                   4
-#define CMD_PKT_LEN                   4
+// NOTE: __mrfi_MAX_PAYLOAD_SIZE__ is 20bytes:
+#define MAX_RADIO_PKT_LEN             16
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   GPIO #1 ---> 
- *      LIME2: attached to LIME2 PC22
- *      REMOTE: attached to VALVE_CTRL1
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Polarity  :  Active High
- *   GPIO      :  P0.3
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
-#define LIME2_GPIO1_PORT__           P0
-#define LIME2_GPIO1_BIT__            3
-#define LIME2_GPIO1_DDR__            P0DIR
-#define REMOTE_GPIO1_PORT__          P0
-#define REMOTE_GPIO1_BIT__           3
-#define REMOTE_GPIO1_DDR__           P0DIR
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   GPIO #2 --->
- *      LIME2: attached to LIME2 PC23
- *      REMOTE: attached to VALVE_CTRL2
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Polarity  :  Active High
- *   GPIO      :  P0.2
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
-#define LIME2_GPIO2_PORT__           P0
-#define LIME2_GPIO2_BIT__            2
-#define LIME2_GPIO2_DDR__            P0DIR
-#define REMOTE_GPIO2_PORT__          P0
-#define REMOTE_GPIO2_BIT__           2
-#define REMOTE_GPIO2_DDR__           P0DIR
+// we have no hard limits on SPI max command lenght but it should be
+// bigger than COMMAND_LEN+COMMAND_POSTFIX_LEN and REPLY_LEN+REPLY_POSTFIX_LEN:
+#define SPI_COMMAND_MAX_LEN           16
 
 typedef enum
 {
@@ -86,20 +52,58 @@ typedef enum
   NODE_REMOTE
 } NodeType_t;
 
-   
+
+/***********************************************************************************
+* COMMANDS OVER SPI AND OVER RADIO
+*/
+
+// direction MASTER -> SLAVE:
+ // after COMMAND_LEN bytes, we expect to find 1 byte containing the
+ // "transaction ID", i.e., a number that will be provided in the ACK
+ // to allow the master to associate the cmd with its ack
+#define COMMAND_LEN                                    (7)
+#define COMMAND_POSTFIX_LEN                            (1)
+
+// direction SLAVE -> MASTER:
+ // after REPLY_LEN bytes, we provide 1 byte containing the
+ // "transaction ID" and 1 byte containing the "last remote battery read"
+#define REPLY_LEN                                      (4)
+#define REPLY_POSTFIX_LEN                              (2)
+
+typedef enum
+{
+    CMD_TURN_ON = 0,
+    CMD_TURN_OFF,
+    CMD_GET_STATUS,
+    CMD_MAX
+} command_e;
+
 
 /***********************************************************************************
 * GLOBALS
 */
 extern volatile uint8_t       g_sRxCallbackSemaphore;
 extern mrfiPacket_t           g_pktRx;
-
+extern const char*            g_commands[CMD_MAX];
+extern const char*            g_ack;
 
 /***********************************************************************************
 * FUNCTIONS
 */
+
+void sLime2Node(void);
+void sRemoteNode(void);
 int ShouldRESET(void);
 void CopyAddress(uint8_t* destAddr, NodeType_t type);
+command_e String2Command(const uint8_t* buf, uint16_t len);
+
+/* Delay loop support. Requires mrfi.h. MRFI will disable interrupts while sleeping.
+   If this is not desired, use BSP_DELAY_USECS() instead.
+   Note that DelayMsNOInterrupts() accepts values in uint16_t range. */
+#define DelayMsNOInterrupts(milliseconds)                MRFI_DelayMs(milliseconds)
+
+/* Note that DelayMsWithInterrupts() accepts values in uint16_t range. */
+void DelayMsWithInterrupts(uint16_t milliseconds);
 
 #endif
 

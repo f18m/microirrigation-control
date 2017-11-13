@@ -1,7 +1,14 @@
 #!/usr/bin/env python
 #
-# Valve CONTROL utility:
-# supports the following modes:
+# lime2_valve_ctrl.py
+# Author: Francesco Montorsi
+# Creation Date: Oct 2017
+# Project website: https://github.com/f18m/microirrigation-control
+#
+# This script is the companion script of the "firmware-cc1110-lime2-remote" firmware project.
+# This script assumes it runs on a Linux system connected via SPI to the "lime2" node of the project.
+#
+# This script supports the following modes:
 #  OPEN
 #  CLOSE
 #  TEST: Every 5sec command the radio module attached to the LIME2
