@@ -20,6 +20,7 @@ This project assumes that you have:
 
 ## Architecture ##
 
+See the Architecture picture in docs folder:
 <img src="docs/architecture.png" />
 
 
@@ -27,6 +28,7 @@ This project assumes that you have:
 
 Tree of contained source code is:
 
+```
  firmware-cc1110-lime2-remote:  this is the firmware written in C for both the CC1110 "lime2" node and the "remote" node. 
   \-- source
        \-- apps    
@@ -40,7 +42,7 @@ Tree of contained source code is:
                     Javascript to open WebSockets to get updates about SPI activities.
       bin:          this folder contains PHP code to implement a WebSocket server using Ratchet (http://socketo.me/);  
                     the WebSocket server is used by Javascript code to fetch updates from SPI.
-
+```
 
 
 ## Installation ##
