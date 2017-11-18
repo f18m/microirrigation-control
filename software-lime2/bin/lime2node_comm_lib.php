@@ -1,8 +1,8 @@
 <?php
 
   // 
-  // lime2node_over_spi.php
-  // This is a library of PHP functions to be used on a Linux system to communicate ovre SPI with the "lime2" node
+  // lime2node_comm_lib.php
+  // This is a library of PHP functions to be used on a Linux system to communicate over SPI with the "lime2" node
   // part of the https://github.com/f18m/microirrigation-control github project
   //
   // Author: Francesco Montorsi
@@ -13,6 +13,7 @@
   // constants
   $transaction_file = 'last_spi_transaction_id';
   $output_file = '/tmp/last_spi_reply';
+  $last_spi_op_logfile = '/var/log/lime2node_last_operation.log';
 
   $max_wait_time_sec = 30;
   $speed_hz = 5000;
@@ -27,6 +28,22 @@
   $last_valid_tid = 57;     // '9'
 
 
+  function lime2node_empty_log()
+  {
+    global $last_spi_op_logfile;
+    $f = @fopen($last_spi_op_logfile, "r+");
+    if ($f !== false) {
+        ftruncate($f, 0);
+        fclose($f);
+    }
+  }
+
+  function lime2node_write_log($msg)
+  {
+      global $last_spi_op_logfile;
+      file_put_contents($last_spi_op_logfile, $msg . "\n", FILE_APPEND | LOCK_EX);
+  }
+  
   function lime2node_init_over_spi()
   {
     /* Fread is binary-safe IF AND ONLY IF you don't use magic-quotes.
@@ -75,25 +92,25 @@
   {
     global $output_file, $speed_hz;
 
-    echo "Sending command over SPI:" . $cmd . " with transaction ID=" . $transactionID . "\n";
+    lime2node_write_log("Sending command over SPI:" . $cmd . " with transaction ID=" . $transactionID);
     $rawcommand = $cmd . chr($transactionID);
     
     // NOTE: the "sudo" operation is required when running e.g. on a webserver that is not running as ROOT user:
     //       to be able to send/receive data over SPI, root permissions are needed.
     $command = 'sudo spidev_test -D /dev/spidev2.0 -s ' . strval($speed_hz) . ' -v -p "' . $rawcommand . '" --output ' . $output_file;
-    echo $command . "\n";
+    lime2node_write_log($command);
 
     exec($command, $output, $retval);
     if ($retval != 0)
     {
-      echo "Failed sending command... spidev_test exited with " . $retval . "... output: " . implode("\n", $output) . "\n";
+      lime2node_write_log("Failed sending command... spidev_test exited with " . $retval . "... output: " . implode("\n", $output));
       $ret_array = array(
           "valid"  => FALSE,
           "ack" => array(),
       );
       return $ret_array;
     }
-    echo implode("\n", $output) . "\n";
+    lime2node_write_log(implode("\n", $output));
 
     // read output reply from SPI
     $handle = fopen($output_file, "rb");
@@ -103,7 +120,7 @@
     // transform in binary array of uint8
     $content_arr = unpack("C*", $content_str);
     $content_arr = lime2node_trim_nulls($content_arr);
-    echo "Received a reply over SPI that is " . count($content_arr) . "B long\n";
+    lime2node_write_log("Received a reply over SPI that is " . count($content_arr) . "B long");
     //print_r($content_arr);
     
     $ret_array = array(
@@ -173,7 +190,7 @@
 
       if ($waited_time_sec > $max_wait_time_sec)
       {
-        echo "After " . $waited_time_sec . "secs still no valid ACK received. Aborting.\n";
+        lime2node_write_log("After " . $waited_time_sec . "secs still no valid ACK received. Aborting.");
         break;
       }
       $waited_time_sec = $waited_time_sec + 3;
@@ -182,13 +199,13 @@
       $valid_ack_ret = lime2node_is_valid_ack($ack);
       if ($valid_ack_ret["valid"]==1 && $valid_ack_ret["transactionID"]==$transactionID)
       {
-        echo "Received valid ACK; last ACK'ed transaction ID=" . $valid_ack_ret["transactionID"] . ", battery read=" . $valid_ack_ret["batteryRead"] . "\n";
+        lime2node_write_log("Received valid ACK; last ACK'ed transaction ID=" . $valid_ack_ret["transactionID"] . ", battery read=" . $valid_ack_ret["batteryRead"]);
         return TRUE;
       }
     }
 
-    echo "Invalid ACK received (waiting for the ACK of transaction ID=" . $transactionID . 
-         " but the last ACK'ed command had transaction ID=" . $valid_ack_ret["transactionID"] . ")!";
+    lime2node_write_log("Invalid ACK received (waiting for the ACK of transaction ID=" . $transactionID . 
+                        " but the last ACK'ed command had transaction ID=" . $valid_ack_ret["transactionID"] . ")!");
     return FALSE;
   }
 

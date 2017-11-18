@@ -1,3 +1,6 @@
 composer.phar
+composer.json
+composer.lock
 composer-setup.php
+vendor
 
