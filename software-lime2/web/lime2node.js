@@ -40,8 +40,11 @@ function ws_init() {
     };
     
     socket.onopen = function() {
-        // upon successful WebSocket connection, we send command: 
-        socket.send('TURNON');
+        // upon successful WebSocket connection, we send command:
+        if (window.location.href.indexOf("irrigation-start") !== -1)
+             socket.send('TURNON');
+        else if (window.location.href.indexOf("irrigation-stop") !== -1)
+             socket.send('TURNOFF');
     };
 }
 
