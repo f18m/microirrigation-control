@@ -9,11 +9,26 @@ which in my case is attached to an electrovalve that opens or closes water flow 
 However the target of the system is much more generic and you can attach to the "remote" node pretty much
 anything you like.
 
+## Prerequisites ##
+
+This project assumes that you have:
+1. an embedded Linux system, in particular Olimex Lime2 is assumed here.
+   Moreover I tested this project only with a recent Debian-variant "armbian" installed, using DeviceTree overlays for
+   accessing the SPI bus of the embedded system. See https://docs.armbian.com/User-Guide_Allwinner_overlays/.
+2. two digital radios, based on Texas Instruments CC1110 
+
+
+## Architecture ##
+
+See the Architecture picture in docs folder:
+<img src="docs/architecture.png" />
+
 
 ## Source code ##
 
 Tree of contained source code is:
 
+```
  firmware-cc1110-lime2-remote:  this is the firmware written in C for both the CC1110 "lime2" node and the "remote" node. 
   \-- source
        \-- apps    
@@ -27,13 +42,11 @@ Tree of contained source code is:
                     Javascript to open WebSockets to get updates about SPI activities.
       bin:          this folder contains PHP code to implement a WebSocket server using Ratchet (http://socketo.me/);  
                     the WebSocket server is used by Javascript code to fetch updates from SPI.
+```
 
 
 ## Installation ##
 
-To install the Ratchet webserver just type:
-
-make
 
 
 ## Similar Projects ##
