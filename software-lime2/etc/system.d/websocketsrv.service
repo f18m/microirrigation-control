@@ -1,0 +1,13 @@
+[Unit]
+Description=Websocket Server
+After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/bin/php /opt/microirrigation-control/software-lime2/bin/lime2node_websocket_srv.php
+WorkingDirectory=/opt/microirrigation-control/software-lime2/bin/
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
