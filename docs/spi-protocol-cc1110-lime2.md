@@ -36,8 +36,10 @@ To test commands toward the Lime2 node, you must first verify you have a working
 1) log into the Linux system attached via SPI to the Lime2 node.
 2) verify you have a device named "/dev/spidev2.0"
 3) run
+```
       cd /opt && git clone https://github.com/f18m/microirrigation-control.git
       /opt/microirrigation-control/software-lime2/bin/lime2node_cli_test.php TURNON
+```
    to send a test command.
 4) verify that the YELLOW LED on the "Lime2 node" turns on and the RED LED starts blinking
    slowly. In current firmware implementation each blink of the RED LED means a TX attempt.
