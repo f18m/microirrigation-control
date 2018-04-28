@@ -62,6 +62,9 @@ The result is a battery duration of 162 days.
 
 ## Firmware and Software Design ##
 
+Basic documentation for the [SPI protocol](docs/spi-protocol-cc1110-lime2.md)
+
+
 TO BE WRITTEN
 
 
