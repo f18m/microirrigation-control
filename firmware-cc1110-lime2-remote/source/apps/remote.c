@@ -39,15 +39,13 @@ Description:        Code for the "remote" node.
 
 #define ENABLE_LOWPOWER_MODE                               (0)
 
-#define ACTUATOR_IMPULSE_DURATION_MSEC                     (4000)
-#define WAIT_TIME_RADIOOFF_MSEC                            (1000)
+#define ACTUATOR_IMPULSE_DURATION_MSEC                     (3000)
+#define WAIT_TIME_RADIOOFF_MSEC                            (6000)
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   GPIO #1 --->
- *      LIME2: attached to LIME2 PC22
- *      REMOTE: attached to VALVE_CTRL1
+ *   GPIO #1 ---> attached to VALVE_CTRL1
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Polarity  :  Active High
+ *   Polarity  :  Active Low
  *   GPIO      :  P0.3
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
@@ -56,11 +54,9 @@ Description:        Code for the "remote" node.
 #define REMOTE_GPIO1_DDR__           P0DIR
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   GPIO #2 --->
- *      LIME2: attached to LIME2 PC23
- *      REMOTE: attached to VALVE_CTRL2
+ *   GPIO #2 ---> attached to VALVE_CTRL2
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Polarity  :  Active High
+ *   Polarity  :  Active Low
  *   GPIO      :  P0.2
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
@@ -71,13 +67,28 @@ Description:        Code for the "remote" node.
 #define REMOTE_GPIO_ACTIVE_LOW       1
 
 
+
+/***********************************************************************************
+* MACROS
+*/
+
+
+#define TURN_OUTPUT_PORT_ON(bit,port,ddr,low)  \
+  st( if (low) { port &= ~BV(bit); } else { port |= BV(bit); } )
+
+#define TURN_OUTPUT_PORT_OFF(bit,port,ddr,low)  \
+  st( if (low) { port |= BV(bit); } else { port &= ~BV(bit); } )
+
+
+
 /***********************************************************************************
 * LOCAL VARIABLES
 */
 
 static          mrfiPacket_t  g_pktTx;
 static          command_e     g_lastCmdRx = CMD_MAX;
-static          uint8_t       g_lastTransactionID = 0;
+static          uint8_t       g_lastTransactionIDRX = 0;
+static          uint8_t       g_lastTransactionIDApplied = 0;
 static          uint16_t      g_last_adc_result = 0;
 
 
@@ -90,7 +101,6 @@ static uint8_t CheckCmdAndReplyWithAck()                // will leave the radio 
     /* Put Radio in IDLE to save power */
     MRFI_RxIdle();
     g_sRxCallbackSemaphore = 0;                 // reset semaphore
-
 
     // g_pktRx contains the received packet:
 
@@ -105,15 +115,17 @@ static uint8_t CheckCmdAndReplyWithAck()                // will leave the radio 
     }
 
     // retrieve the transaction ID
-    g_lastTransactionID = radioMsg[COMMAND_LEN+0];
+    g_lastTransactionIDRX = radioMsg[COMMAND_LEN+0];
 
-    /* Build and send acknowledge */
+    // Build and immediately send the acknowledge for this transaction
+    // otherwise the "lime2" node will keep sending us the same command
+    // over and over...
     MRFI_SET_PAYLOAD_LEN(&g_pktTx, REPLY_LEN+REPLY_POSTFIX_LEN);
 #if 1
     uint8_t* ackMsg = MRFI_P_PAYLOAD(&g_pktTx);
 
     memcpy(ackMsg, g_ack, REPLY_LEN);
-    ackMsg[REPLY_LEN+0] = g_lastTransactionID;
+    ackMsg[REPLY_LEN+0] = g_lastTransactionIDRX;
     ackMsg[REPLY_LEN+1] = (uint8_t)g_last_adc_result;
 
     //CopyAddress(MRFI_P_SRC_ADDR(&g_pktTx), NODE_REMOTE);
@@ -121,40 +133,41 @@ static uint8_t CheckCmdAndReplyWithAck()                // will leave the radio 
 #endif
     MRFI_Transmit(&g_pktTx, MRFI_TX_TYPE_CCA);
 
-    //MRFI_Transmit(&g_pktTx, MRFI_TX_TYPE_FORCED);
-
-
-    // signal we are transmitting the ACK
+    // signal visually we are transmitting the ACK
     BSP_TURN_ON_LED1();
     //DELAY_ABOUT_QUARTER_A_SECOND_WITH_INTERRUPTS;
     DelayMsNOInterrupts(250);
     BSP_TURN_OFF_LED1();
 
-    // we got something!
     MRFI_RxOn();
-    return 1;
+    return 1;    // we received something!
 }
 
 static void ApplyCmdRx()
 {
+    // did we receive a new command or this is just an over-radio copy of the previous one?
+    if (g_lastTransactionIDRX == g_lastTransactionIDApplied)
+      return;           // repeated command... ignore
+
+
     // activate output relay:
 
     if (g_lastCmdRx == CMD_TURN_ON)
     {
-        __bsp_LED_TURN_ON__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
-        __bsp_LED_TURN_OFF__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        TURN_OUTPUT_PORT_ON( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        TURN_OUTPUT_PORT_OFF( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
     }
     else if (g_lastCmdRx == CMD_TURN_OFF)
     {
-        __bsp_LED_TURN_OFF__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
-        __bsp_LED_TURN_ON__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        TURN_OUTPUT_PORT_OFF( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        TURN_OUTPUT_PORT_ON( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
     }
     else
         return;
 
 
     // the duration of the pulse needs to be tuned for your specific application.
-    // in my case the electrovalve I had took about 4sec to stabilize to the new
+    // in my case the electrovalve I had took quite a lot of time to stabilize to the new
     // position!
 
     DelayMsNOInterrupts(ACTUATOR_IMPULSE_DURATION_MSEC);
@@ -162,18 +175,21 @@ static void ApplyCmdRx()
 
     // then turn off relay:
 
-    __bsp_LED_TURN_OFF__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
-    __bsp_LED_TURN_OFF__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    TURN_OUTPUT_PORT_OFF( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    TURN_OUTPUT_PORT_OFF( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+
+    g_lastTransactionIDApplied = g_lastTransactionIDRX;
 }
 
 static void WaitInLowPowerMode()
 {
     // IMPORTANT: we cannot sleep too much time because we must be able to
-    //            ACK a radio command quickly enough
+    //            ACK a radio command quickly enough!
 
 #if ENABLE_LOWPOWER_MODE
-    MRFI_RxIdle();
-    DelayMsNOInterrupts(WAIT_TIME_RADIOOFF_MSEC);
+    MRFI_RxIdle();              // this decreases very much power consumption!
+    ///DelayMsNOInterrupts(WAIT_TIME_RADIOOFF_MSEC);                    // with this consumption remains around 14mA
+    BSP_SleepFor( POWER_MODE_2, SLEEP_1_MS_RESOLUTION, WAIT_TIME_RADIOOFF_MSEC );
     MRFI_RxOn();                  // before leaving restore radio RX status
 #else
     // no sleep policy: sleep with radio in RX and with interrupts enabled
@@ -289,7 +305,7 @@ void sRemoteNode(void)
 
                 // resetting the "counter to apply" we force restarting the
                 // wait-before-exec
-                counter_to_apply_lastcmd = 0;
+                //counter_to_apply_lastcmd = 0;
             }
         }
 
@@ -299,8 +315,8 @@ void sRemoteNode(void)
         {
             if (g_lastCmdRx != CMD_MAX)
             {
-                counter_to_apply_lastcmd++;
-                if (counter_to_apply_lastcmd == 3)      // wait some time before applying RX command!
+                //counter_to_apply_lastcmd++;
+                //if (counter_to_apply_lastcmd == 3)      // wait some time before applying RX command!
                 {
                     ApplyCmdRx();               // this will take a lot of time!
                     g_lastCmdRx = CMD_MAX;

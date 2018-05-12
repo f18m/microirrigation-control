@@ -418,7 +418,7 @@ void sLime2Node(void)
             if (handle_spi)
             {
                 // with current settings for count1 and count2, this part is
-                // executed every secs
+                // executed every ??? secs
 
                 HandleSPI();            // this is very fast, no delay
             }

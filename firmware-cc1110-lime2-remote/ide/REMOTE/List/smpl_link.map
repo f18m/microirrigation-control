@@ -1,0 +1,1881 @@
+################################################################################
+#                                                                              #
+#      IAR Universal Linker V6.4.6.89                                          #
+#                                                                              #
+#           Link time     =  11/May/2018  16:56:50                             #
+#           Target CPU    =  x51                                               #
+#           List file     =  D:\microirrigation-control\firmware-cc1110-lime2- #
+#                            remote\ide\REMOTE\List\smpl_link.map              #
+#           Output file 1 =  D:\microirrigation-control\firmware-cc1110-lime2- #
+#                            remote\ide\REMOTE\Exe\smpl_link.hex               #
+#                            Format: intel-extended                            #
+#           Output file 2 =  D:\microirrigation-control\firmware-cc1110-lime2- #
+#                            remote\ide\REMOTE\Exe\smpl_link.d51               #
+#                            Format: ubrof10                                   #
+#                            UBROF version 10.0.6                              #
+#                            Using library modules for C-SPY (-rt)             #
+#           Command line  =  -f C:\Users\fr_m\AppData\Local\Temp\EWEC1D.tmp    #
+#                            (D:\microirrigation-control\firmware-cc1110-lime2 #
+#                            -remote\ide\REMOTE\Obj\bsp.r51                    #
+#                            D:\microirrigation-control\firmware-cc1110-lime2- #
+#                            remote\ide\REMOTE\Obj\bsp_extended.r51            #
+#                            D:\microirrigation-control\firmware-cc1110-lime2- #
+#                            remote\ide\REMOTE\Obj\lime2.r51                   #
+#                            D:\microirrigation-control\firmware-cc1110-lime2- #
+#                            remote\ide\REMOTE\Obj\main.r51                    #
+#                            D:\microirrigation-control\firmware-cc1110-lime2- #
+#                            remote\ide\REMOTE\Obj\mrfi.r51                    #
+#                            D:\microirrigation-control\firmware-cc1110-lime2- #
+#                            remote\ide\REMOTE\Obj\remote.r51                  #
+#                            -o                                                #
+#                            D:\microirrigation-control\firmware-cc1110-lime2- #
+#                            remote\ide\REMOTE\Exe\smpl_link.d51               #
+#                            -l                                                #
+#                            D:\microirrigation-control\firmware-cc1110-lime2- #
+#                            remote\ide\REMOTE\List\smpl_link.map              #
+#                            -xmsn                                             #
+#                            -ID:\microirrigation-control\firmware-cc1110-lime #
+#                            2-remote\ide\..\..\..\tools\cc1110\               #
+#                            -f                                                #
+#                            "C:\Program Files (x86)\IAR Systems\Embedded Work #
+#                            bench 8.0\8051\config\devices\Texas Instruments\l #
+#                            nk51ew_cc1110F32.xcl"                             #
+#                            (-D_IDATA0_START=0x00 -D_IDATA0_END=0xFF          #
+#                            -D_PDATA0_START=0xF000 -D_PDATA0_END=0xF0FF       #
+#                            -D_IXDATA0_START=0x00F000                         #
+#                            -D_IXDATA0_END=0x00FDA1                           #
+#                            -D_XDATA0_START=0x00F000 -D_XDATA0_END=0x00FDA1   #
+#                            -D_CODE0_START=0x000000 -D_CODE0_END=0x007FFF     #
+#                            -D?REGISTER_BANK=0x0 -D_REGISTER_BANK_START=0x0   #
+#                            -D_BREG_START=0x00 -D?VB=0x20                     #
+#                            -Z(BIT)BREG=_BREG_START -Z(BIT)BIT_N=0-7F         #
+#                            -Z(DATA)REGISTERS+8=_REGISTER_BANK_START          #
+#                            -Z(DATA)BDATA_Z,BDATA_N,BDATA_I=20-2F             #
+#                            -Z(DATA)VREG=08-7F -Z(DATA)PSP,XSP=08-7F          #
+#                            -Z(DATA)DOVERLAY=08-7F                            #
+#                            -Z(DATA)DATA_I,DATA_Z,DATA_N=08-7F                #
+#                            -U(IDATA)0-7F=(DATA)0-7F                          #
+#                            -Z(IDATA)IDATA_I,IDATA_Z,IDATA_N=08-_IDATA0_END   #
+#                            -Z(IDATA)ISTACK+_IDATA_STACK_SIZE#08-_IDATA0_END  #
+#                            -Z(IDATA)IOVERLAY=08-FF -Z(CODE)INTVEC=0          #
+#                            -Z(CODE)CSTART=_CODE0_START-_CODE0_END            #
+#                            -Z(CODE)BIT_ID,BDATA_ID,DATA_ID,IDATA_ID,IXDATA_I #
+#                            D,PDATA_ID,XDATA_ID=_CODE0_START-_CODE0_END       #
+#                            -Z(CODE)RCODE,DIFUNCT,CODE_C,CODE_N,NEAR_CODE=_CO #
+#                            DE0_START-_CODE0_END                              #
+#                            -Z(CODE)CHECKSUM#_CODE0_END                       #
+#                            -Z(XDATA)PDATA_Z,PDATA_I=_PDATA0_START-_PDATA0_EN #
+#                            D                                                 #
+#                            -P(XDATA)PDATA_N=_PDATA0_START-_PDATA0_END        #
+#                            -Z(XDATA)PSTACK+_PDATA_STACK_SIZE=_PDATA0_START-_ #
+#                            PDATA0_END                                        #
+#                            -Z(XDATA)EXT_STACK+_EXTENDED_STACK_SIZE=_EXTENDED #
+#                            _STACK_START                                      #
+#                            -Z(XDATA)XSTACK+_XDATA_STACK_SIZE=_XDATA0_START-_ #
+#                            XDATA0_END                                        #
+#                            -Z(XDATA)IXDATA_Z,IXDATA_I=_IXDATA0_START-_IXDATA #
+#                            0_END                                             #
+#                            -P(XDATA)IXDATA_N=_IXDATA0_START-_IXDATA0_END     #
+#                            -Z(XDATA)XDATA_Z,XDATA_I=_XDATA0_START-_XDATA0_EN #
+#                            D                                                 #
+#                            -P(XDATA)XDATA_N=_XDATA0_START-_XDATA0_END        #
+#                            -Z(XDATA)XDATA_HEAP+_XDATA_HEAP_SIZE=_XDATA0_STAR #
+#                            T-_XDATA0_END                                     #
+#                            -Z(CONST)XDATA_ROM_C=_XDATA0_START-_XDATA0_END    #
+#                            -cx51 -Z(XDATA)XDATA_SCRATCH=0xFDA2-0xFEFF)       #
+#                            "-IC:\Program Files (x86)\IAR Systems\Embedded Wo #
+#                            rkbench 8.0\8051\CONFIG\"                         #
+#                            -D_NR_OF_VIRTUAL_REGISTERS=8 -D?PBANK=0xA0        #
+#                            -D?CBANK=0xC7 -D?CBANK_MASK=0x30                  #
+#                            -e?BCALL_30=?BCALL -e?BRET_30=?BRET               #
+#                            -e?BDISPATCH_30=?BDISPATCH                        #
+#                            -D_CODEBANK_START=0x8000 -D_CODEBANK_END=0xFFFF   #
+#                            -D_NR_OF_BANKS=0x03                               #
+#                            -e_medium_write=_formatted_write                  #
+#                            -e_medium_read=_formatted_read -rt                #
+#                            -Ointel-extended=D:\microirrigation-control\firmw #
+#                            are-cc1110-lime2-remote\ide\REMOTE\Exe\smpl_link. #
+#                            hex                                               #
+#                            -s __program_start                                #
+#                            "C:\Program Files (x86)\IAR Systems\Embedded Work #
+#                            bench 8.0\8051\LIB\CLIB\cl-pli-nlxd-1e16x01.r51"  #
+#                            -D_IDATA_STACK_SIZE=0x40 -D?ESP=0 -D?ESP_MASK=0   #
+#                            -D_EXTENDED_STACK_START=0                         #
+#                            -D_EXTENDED_STACK_SIZE=0                          #
+#                            -D_PDATA_STACK_SIZE=0x80                          #
+#                            -D_XDATA_STACK_SIZE=0x100                         #
+#                            -D_XDATA_HEAP_SIZE=0xFF -D_FAR_HEAP_SIZE=0xFFF    #
+#                            -D_HUGE_HEAP_SIZE=0xFFF                           #
+#                            -D_FAR22_HEAP_SIZE=0xFFF)                         #
+#                                                                              #
+#                           Copyright (C) 1987-2016 IAR Systems AB.            #
+################################################################################
+
+
+
+
+
+                ****************************************
+                *                                      *
+                *           CROSS REFERENCE            *
+                *                                      *
+                ****************************************
+
+       Program entry at : CODE      000000C7  Relocatable, from module : CSTARTUP
+
+
+
+
+                ****************************************
+                *                                      *
+                *            RUNTIME MODEL             *
+                *                                      *
+                ****************************************
+
+  __SystemLibrary          = CLib
+  __calling_convention     = xdata_reentrant
+  __code_model             = near
+  __core                   = plain
+  __data_model             = large
+  __dptr_size              = 16
+  __extended_stack         = disabled
+  __location_for_constants = data
+  __number_of_dptrs        = 1
+  __register_banks         = *
+  __rt_version             = 1
+
+                ****************************************
+                *                                      *
+                *    AUTOMATIC SYMBOL REDIRECTIONS     *
+                *                                      *
+                ****************************************
+
+                  There are no automatic symbol redirections.
+
+
+
+                ****************************************
+                *                                      *
+                *              MODULE MAP              *
+                *                                      *
+                ****************************************
+
+
+  DEFINED ABSOLUTE ENTRIES
+    *************************************************************************
+
+  DEFINED ABSOLUTE ENTRIES
+  PROGRAM MODULE, NAME : ?ABS_ENTRY_MOD
+
+Absolute parts
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _FAR22_HEAP_SIZE        00000FFF 
+           _HUGE_HEAP_SIZE         00000FFF 
+           _FAR_HEAP_SIZE          00000FFF 
+           _XDATA_HEAP_SIZE        000000FF 
+           _XDATA_STACK_SIZE       00000100 
+           _PDATA_STACK_SIZE       00000080 
+           _EXTENDED_STACK_SIZE    00000000 
+           _EXTENDED_STACK_START   00000000 
+           ?ESP_MASK               00000000 
+           ?ESP                    00000000 
+           _IDATA_STACK_SIZE       00000040 
+           _NR_OF_BANKS            00000003 
+           _CODEBANK_END           0000FFFF 
+           _CODEBANK_START         00008000 
+           ?CBANK_MASK             00000030 
+           ?CBANK                  000000C7 
+           ?PBANK                  000000A0 
+           _NR_OF_VIRTUAL_REGISTERS
+                                   00000008 
+           ?VB                     00000020        ?FUNC_ENTER_XDATA (?FUNC_ENTER_XDATA)
+                                                   ?FUNC_LEAVE_XDATA (?FUNC_LEAVE_XDATA)
+                                                   ?INTERRUPT_ENTER_XSP (?INTERRUPT_ENTER_XSP)
+                                                   ?INTERRUPT_LEAVE_XSP (?INTERRUPT_LEAVE_XSP)
+           _BREG_START             00000000 
+           _REGISTER_BANK_START    00000000 
+           ?REGISTER_BANK          00000000        Segment part 6 (CSTARTUP)
+           _CODE0_END              00007FFF 
+           _CODE0_START            00000000 
+           _XDATA0_END             0000FDA1 
+           _XDATA0_START           0000F000 
+           _IXDATA0_END            0000FDA1 
+           _IXDATA0_START          0000F000 
+           _PDATA0_END             0000F0FF 
+           _PDATA0_START           0000F000 
+           _IDATA0_END             000000FF 
+           _IDATA0_START           00000000 
+    *************************************************************************
+
+  FILE NAME : D:\microirrigation-control\firmware-cc1110-lime2-remote\ide\REMOTE\Obj\bsp.r51
+  PROGRAM MODULE, NAME : bsp
+
+  SEGMENTS IN THE MODULE
+  ======================
+SFR_AN
+  Relative segment, address: DATA 00000090 - 00000090 (0x1 bytes), align: 0
+  Segment part 1. ROOT        Intra module refs:   BSP_InitLeds
+                                                   CheckCmdAndReplyWithAck (remote)
+                                                   main (main)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_P1                   00000090 
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           P1                      00000090 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000A8 - 000000A8 (0x1 bytes), align: 0
+  Segment part 2. ROOT        Intra module refs:   BSP_ButtonIsr (bsp_extended)
+                                                   BSP_Init
+                                                   BSP_SleepIsr (bsp_extended)
+                                                   MRFI_Init (mrfi)
+                                                   MRFI_RfIsr (mrfi)
+                                                   MRFI_RxIdle (mrfi)
+                                                   MRFI_RxOn (mrfi)
+                                                   MRFI_SetLogicalChannel (mrfi)
+                                                   MRFI_Transmit (mrfi)
+                                                   MRFI_WakeUp (mrfi)
+                                                   Mrfi_DelayUsec (mrfi)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_IEN0                 000000A8 
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           IEN0                    000000A8 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000CB - 000000CB (0x1 bytes), align: 0
+  Segment part 3. ROOT        Intra module refs:   BSP_Delay
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           T3CTL                   000000CB 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000CD - 000000CD (0x1 bytes), align: 0
+  Segment part 4. ROOT        Intra module refs:   BSP_Delay
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           T3CC0                   000000CD 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000D8 - 000000D8 (0x1 bytes), align: 0
+  Segment part 5. ROOT        Intra module refs:   BSP_Delay
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_TIMIF                000000D8 
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           TIMIF                   000000D8 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000FE - 000000FE (0x1 bytes), align: 0
+  Segment part 6. ROOT        Intra module refs:   BSP_InitLeds
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           P1DIR                   000000FE 
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 000004E5 - 00000517 (0x33 bytes), align: 0
+  Segment part 12.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BSP_Init                000004E5        main (main)
+               calls direct
+               XSTACK = 00000000 ( 00000002 )
+               ISTACK = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000518 - 00000518 (0x1 bytes), align: 0
+  Segment part 13.            Intra module refs:   BSP_Init
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BSP_InitBoard           00000518 
+               XSTACK = 00000002 ( 00000000 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000519 - 0000053D (0x25 bytes), align: 0
+  Segment part 14.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BSP_Delay               00000519        Mrfi_DelayUsec (mrfi)
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 0000053E - 00000543 (0x6 bytes), align: 0
+  Segment part 15.            Intra module refs:   BSP_Init
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BSP_InitDrivers         0000053E 
+               calls direct
+               XSTACK = 00000002 ( 00000000 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000544 - 0000054E (0xb bytes), align: 0
+  Segment part 16.            Intra module refs:   BSP_InitDrivers
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BSP_InitLeds            00000544 
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 0000054F - 0000054F (0x1 bytes), align: 0
+  Segment part 17.            Intra module refs:   BSP_InitDrivers
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BSP_InitButtons         0000054F 
+
+    *************************************************************************
+
+  FILE NAME : D:\microirrigation-control\firmware-cc1110-lime2-remote\ide\REMOTE\Obj\bsp_extended.r51
+  PROGRAM MODULE, NAME : bsp_extended
+
+  SEGMENTS IN THE MODULE
+  ======================
+SFR_AN
+  Relative segment, address: DATA 00000087 - 00000087 (0x1 bytes), align: 0
+  Segment part 1. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           PCON                    00000087 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 0000008A - 0000008A (0x1 bytes), align: 0
+  Segment part 2. ROOT        Intra module refs:   BSP_ButtonIsr
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           P1IFG                   0000008A 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 0000008D - 0000008D (0x1 bytes), align: 0
+  Segment part 3. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           P1IEN                   0000008D 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 0000009A - 0000009A (0x1 bytes), align: 0
+  Segment part 4. ROOT        Intra module refs:   BSP_ButtonIsr
+                                                   MRFI_Init (mrfi)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           IEN2                    0000009A 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000A1 - 000000A1 (0x1 bytes), align: 0
+  Segment part 5. ROOT        Intra module refs:   BSP_SleepIsr
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           WORIRQ                  000000A1 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000A2 - 000000A2 (0x1 bytes), align: 0
+  Segment part 6. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           WORCTRL                 000000A2 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000A3 - 000000A3 (0x1 bytes), align: 0
+  Segment part 7. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           WOREVT0                 000000A3 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000A4 - 000000A4 (0x1 bytes), align: 0
+  Segment part 8. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           WOREVT1                 000000A4 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000A5 - 000000A5 (0x1 bytes), align: 0
+  Segment part 9. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           WORTIME0                000000A5 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000B4 - 000000B4 (0x1 bytes), align: 0
+  Segment part 11. ROOT       Intra module refs:   MRFI_RandomByte (mrfi)
+                                                   PinConfigRemote (remote)
+                                                   ReadBatteryVoltage (remote)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ADCCON1                 000000B4 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000B6 - 000000B6 (0x1 bytes), align: 0
+  Segment part 12. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ADCCON3                 000000B6 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000BA - 000000BA (0x1 bytes), align: 0
+  Segment part 13. ROOT       Intra module refs:   ReadBatteryVoltage (remote)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ADCL                    000000BA 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000BB - 000000BB (0x1 bytes), align: 0
+  Segment part 14. ROOT       Intra module refs:   ReadBatteryVoltage (remote)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ADCH                    000000BB 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000BC - 000000BC (0x1 bytes), align: 0
+  Segment part 15. ROOT       Intra module refs:   MRFI_Init (mrfi)
+                                                   MRFI_RandomByte (mrfi)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           RNDL                    000000BC 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000BE - 000000BE (0x1 bytes), align: 0
+  Segment part 16. ROOT       Intra module refs:   BSP_ButtonIsr
+                                                   BSP_SleepIsr
+                                                   MRFI_Init (mrfi)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           SLEEP                   000000BE 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000C0 - 000000C0 (0x1 bytes), align: 0
+  Segment part 17. ROOT       Intra module refs:   BSP_SleepIsr
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_IRCON                000000C0 
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           IRCON                   000000C0 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000C6 - 000000C6 (0x1 bytes), align: 0
+  Segment part 18. ROOT       Intra module refs:   MRFI_Init (mrfi)
+                                                   MRFI_WakeUp (mrfi)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           CLKCON                  000000C6 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000C7 - 000000C7 (0x1 bytes), align: 0
+  Segment part 19. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MEMCTR                  000000C7 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000D4 - 000000D4 (0x1 bytes), align: 0
+  Segment part 20. ROOT       Intra module refs:   MRFI_Init (mrfi)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           DMA0CFGL                000000D4 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000D5 - 000000D5 (0x1 bytes), align: 0
+  Segment part 21. ROOT       Intra module refs:   MRFI_Init (mrfi)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           DMA0CFGH                000000D5 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000D6 - 000000D6 (0x1 bytes), align: 0
+  Segment part 22. ROOT       Intra module refs:   MRFI_RfIsr (mrfi)
+                                                   MRFI_Transmit (mrfi)
+                                                   Mrfi_RxModeOff (mrfi)
+                                                   Mrfi_RxModeOn (mrfi)
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           DMAARM                  000000D6 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000E8 - 000000E8 (0x1 bytes), align: 0
+  Segment part 23. ROOT       Intra module refs:   BSP_ButtonIsr
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_IRCON2               000000E8 
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           IRCON2                  000000E8 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F100 - 0000F100 (0x1 bytes), align: 0
+  Segment part 31.            Intra module refs:   BSP_ButtonIsr
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           sButtonPushed           0000F100 
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000550 - 00000587 (0x38 bytes), align: 0
+  Segment part 39.            Intra module refs:   BSP_ButtonIsr::??INTVEC 123
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BSP_ButtonIsr           00000550 
+               interrupt function
+               ISTACK = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000588 - 0000059A (0x13 bytes), align: 0
+  Segment part 40.            Intra module refs:   BSP_SleepIsr::??INTVEC 43
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BSP_SleepIsr            00000588 
+               interrupt function
+               ISTACK = 00000000 ( 00000001 )
+    -------------------------------------------------------------------------
+INTVEC
+  Common segment, address: CODE 00000000 - 0000002D (0x2e bytes), align: 0
+  Segment part 24. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BSP_SleepIsr::??INTVEC 43
+                                   0000002B 
+    -------------------------------------------------------------------------
+INTVEC
+  Common segment, address: CODE 00000000 - 0000007D (0x7e bytes), align: 0
+  Segment part 25. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BSP_ButtonIsr::??INTVEC 123
+                                   0000007B 
+
+    *************************************************************************
+
+  FILE NAME : D:\microirrigation-control\firmware-cc1110-lime2-remote\ide\REMOTE\Obj\lime2.r51
+    *************************************************************************
+
+  FILE NAME : D:\microirrigation-control\firmware-cc1110-lime2-remote\ide\REMOTE\Obj\main.r51
+  PROGRAM MODULE, NAME : main
+
+  SEGMENTS IN THE MODULE
+  ======================
+XDATA_Z
+  Relative segment, address: XDATA 0000F101 - 0000F101 (0x1 bytes), align: 0
+  Segment part 15.            Intra module refs:   MRFI_RxCompleteISR
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           g_sRxCallbackSemaphore
+                                   0000F101        CheckCmdAndReplyWithAck (remote)
+                                                   sRemoteNode (remote)
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F102 - 0000F141 (0x40 bytes), align: 0
+  Segment part 16.            Intra module refs:   MRFI_RxCompleteISR
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           g_pktRx                 0000F102        CheckCmdAndReplyWithAck (remote)
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F1D4 - 0000F1DB (0x8 bytes), align: 0
+  Segment part 7.             Intra module refs:   Segment part 18
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F1DC - 0000F1E3 (0x8 bytes), align: 0
+  Segment part 9.             Intra module refs:   Segment part 18
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F1E4 - 0000F1EB (0x8 bytes), align: 0
+  Segment part 11.            Intra module refs:   Segment part 18
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F1EC - 0000F1F0 (0x5 bytes), align: 0
+  Segment part 13.            Intra module refs:   Segment part 20
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F1F1 - 0000F1F6 (0x6 bytes), align: 0
+  Segment part 17.            Intra module refs:   String2Command
+                                                   main
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           g_commands              0000F1F1 
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F1F7 - 0000F1F8 (0x2 bytes), align: 0
+  Segment part 19.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           g_ack                   0000F1F7        CheckCmdAndReplyWithAck (remote)
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 0000059B - 00000614 (0x7a bytes), align: 0
+  Segment part 21.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           main                    0000059B        ?call_main (?cmain)
+               calls direct
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000615 - 0000069C (0x88 bytes), align: 0
+  Segment part 25.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           String2Command          00000615        CheckCmdAndReplyWithAck (remote)
+               calls direct
+               XSTACK = 00000000 ( 00000011 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 0000069D - 000006B2 (0x16 bytes), align: 0
+  Segment part 27.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_RxCompleteISR      0000069D        MRFI_RfIsr (mrfi)
+               calls direct
+               ISTACK = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 000000D6 - 000000DD (0x8 bytes), align: 0
+  Segment part 8.             Intra module refs:   Segment part 7
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 000000DE - 000000E5 (0x8 bytes), align: 0
+  Segment part 10.            Intra module refs:   Segment part 9
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 000000E6 - 000000ED (0x8 bytes), align: 0
+  Segment part 12.            Intra module refs:   Segment part 11
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 000000EE - 000000F2 (0x5 bytes), align: 0
+  Segment part 14.            Intra module refs:   Segment part 13
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 000000F3 - 000000F8 (0x6 bytes), align: 0
+  Segment part 18.            Intra module refs:   g_commands
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 000000F9 - 000000FA (0x2 bytes), align: 0
+  Segment part 20.            Intra module refs:   g_ack
+
+    *************************************************************************
+
+  FILE NAME : D:\microirrigation-control\firmware-cc1110-lime2-remote\ide\REMOTE\Obj\mrfi.r51
+  PROGRAM MODULE, NAME : mrfi
+
+  SEGMENTS IN THE MODULE
+  ======================
+SFR_AN
+  Relative segment, address: DATA 00000091 - 00000091 (0x1 bytes), align: 0
+  Segment part 1. ROOT        Intra module refs:   Mrfi_RxModeOff
+                                                   Mrfi_RxModeOn
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           RFIM                    00000091 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 0000009B - 0000009B (0x1 bytes), align: 0
+  Segment part 3. ROOT        Intra module refs:   MRFI_RfIsr
+                                                   Mrfi_RxModeOff
+                                                   Mrfi_RxModeOn
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           S1CON                   0000009B 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000D1 - 000000D1 (0x1 bytes), align: 0
+  Segment part 9. ROOT        Intra module refs:   Mrfi_RxModeOff
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           DMAIRQ                  000000D1 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000E1 - 000000E1 (0x1 bytes), align: 0
+  Segment part 13. ROOT       Intra module refs:   MRFI_Init
+                                                   MRFI_Transmit
+                                                   MRFI_WakeUp
+                                                   Mrfi_RxModeOff
+                                                   Mrfi_RxModeOn
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           RFST                    000000E1 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000E9 - 000000E9 (0x1 bytes), align: 0
+  Segment part 14. ROOT       Intra module refs:   MRFI_RfIsr
+                                                   MRFI_Transmit
+                                                   Mrfi_RxModeOff
+                                                   Mrfi_RxModeOn
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           RFIF                    000000E9 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F142 - 0000F142 (0x1 bytes), align: 0
+  Segment part 21.            Intra module refs:   MRFI_Init
+                                                   MRFI_RfIsr
+                                                   MRFI_RxIdle
+                                                   MRFI_RxOn
+                                                   MRFI_SetLogicalChannel
+                                                   MRFI_Transmit
+                                                   MRFI_WakeUp
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           mrfiRadioState          0000F142 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F143 - 0000F182 (0x40 bytes), align: 0
+  Segment part 22.            Intra module refs:   MRFI_Init
+                                                   MRFI_Receive
+                                                   MRFI_RfIsr
+                                                   Mrfi_RxModeOn
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           mrfiIncomingPacket      0000F143 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F183 - 0000F184 (0x2 bytes), align: 0
+  Segment part 25.            Intra module refs:   MRFI_Init
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           sReplyDelayScalar       0000F183 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F185 - 0000F186 (0x2 bytes), align: 0
+  Segment part 26.            Intra module refs:   MRFI_Init
+                                                   Mrfi_RandomBackoffDelay
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           sBackoffHelper          0000F185 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F187 - 0000F18E (0x8 bytes), align: 0
+  Segment part 27.            Intra module refs:   MRFI_Init
+                                                   MRFI_Transmit
+                                                   Mrfi_RxModeOn
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           mrfiDmaCfg              0000F187 
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 000006B3 - 0000091D (0x26b bytes), align: 0
+  Segment part 41.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_Init               000006B3        main (main)
+               calls direct
+               XSTACK = 00000000 ( 0000001D )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 0000091E - 00000A02 (0xe5 bytes), align: 0
+  Segment part 42.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_Transmit           0000091E        CheckCmdAndReplyWithAck (remote)
+               calls direct
+               XSTACK = 00000000 ( 0000000D )
+               ISTACK = 00000000 ( 00000001 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000A03 - 00000A17 (0x15 bytes), align: 0
+  Segment part 43.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_Receive            00000A03        MRFI_RxCompleteISR (main)
+               ISTACK = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000A18 - 00000B03 (0xec bytes), align: 0
+  Segment part 44.            Intra module refs:   MRFI_RfIsr::??INTVEC 131
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_RfIsr              00000A18 
+               interrupt function
+               calls direct
+               XSTACK = 00000000 ( 00000011 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000B04 - 00000B41 (0x3e bytes), align: 0
+  Segment part 46.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_WakeUp             00000B04        main (main)
+               ISTACK = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000B42 - 00000B48 (0x7 bytes), align: 0
+  Segment part 47.            Intra module refs:   Mrfi_RandomBackoffDelay
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_RandomByte         00000B42 
+               XSTACK = 00000008 ( 00000000 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000B49 - 00000C04 (0xbc bytes), align: 0
+  Segment part 48.            Intra module refs:   MRFI_RfIsr
+                                                   MRFI_RxOn
+                                                   MRFI_SetLogicalChannel
+                                                   MRFI_Transmit
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           Mrfi_RxModeOn           00000B49 
+               calls direct
+               XSTACK = 0000000F ( 0000000B )
+               ISTACK = 00000000 ( 00000001 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000C05 - 00000C2A (0x26 bytes), align: 0
+  Segment part 49.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_RxOn               00000C05        CheckCmdAndReplyWithAck (remote)
+                                                   main (main)
+                                                   sRemoteNode (remote)
+               calls direct
+               ISTACK = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000C2B - 00000C4D (0x23 bytes), align: 0
+  Segment part 50.            Intra module refs:   MRFI_Init
+                                                   MRFI_RfIsr
+                                                   MRFI_RxIdle
+                                                   MRFI_SetLogicalChannel
+                                                   MRFI_Transmit
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           Mrfi_RxModeOff          00000C2B 
+               XSTACK = 0000001B ( 00000000 )
+               ISTACK = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000C4E - 00000C73 (0x26 bytes), align: 0
+  Segment part 51.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_RxIdle             00000C4E        CheckCmdAndReplyWithAck (remote)
+               calls direct
+               XSTACK = 00000008 ( 00000000 )
+               ISTACK = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000C74 - 00000CBD (0x4a bytes), align: 0
+  Segment part 52.            Intra module refs:   MRFI_DelayMs
+                                                   MRFI_Init
+                                                   MRFI_Transmit
+                                                   Mrfi_RandomBackoffDelay
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           Mrfi_DelayUsec          00000C74 
+               calls direct
+               XSTACK = 0000001B ( 0000000D )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000CBE - 00000CE0 (0x23 bytes), align: 0
+  Segment part 54.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_DelayMs            00000CBE        ApplyCmdRx (remote)
+                                                   CheckCmdAndReplyWithAck (remote)
+                                                   WaitInLowPowerMode (remote)
+                                                   main (main)
+               calls direct
+               XSTACK = 00000000 ( 00000008 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000CE1 - 00000D08 (0x28 bytes), align: 0
+  Segment part 57.            Intra module refs:   MRFI_Transmit
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           Mrfi_RandomBackoffDelay
+                                   00000CE1 
+               calls direct
+               XSTACK = 0000000D ( 00000008 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000D09 - 00000D69 (0x61 bytes), align: 0
+  Segment part 59.            Intra module refs:   MRFI_RfIsr
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           Mrfi_CalculateRssi      00000D09 
+               XSTACK = 0000000F ( 00000009 )
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F1F9 - 0000F1FC (0x4 bytes), align: 0
+  Segment part 28.            Intra module refs:   MRFI_RxAddrIsFiltered
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           mrfiBroadcastAddr       0000F1F9 
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F1FD - 0000F200 (0x4 bytes), align: 0
+  Segment part 30.            Intra module refs:   MRFI_SetLogicalChannel
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           mrfiLogicalChanTable    0000F1FD 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F18F - 0000F18F (0x1 bytes), align: 0
+  Segment part 34.            Intra module refs:   MRFI_RxAddrIsFiltered
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           mrfiRxFilterEnabled     0000F18F 
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F201 - 0000F204 (0x4 bytes), align: 0
+  Segment part 35.            Intra module refs:   MRFI_RxAddrIsFiltered
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           mrfiRxFilterAddr        0000F201 
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F205 - 0000F208 (0x4 bytes), align: 0
+  Segment part 37.            Intra module refs:   MRFI_Init
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __Constant_5            0000F205 
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F209 - 0000F20C (0x4 bytes), align: 0
+  Segment part 39.            Intra module refs:   MRFI_Init
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __Constant_a            0000F209 
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000D6A - 00000DA0 (0x37 bytes), align: 0
+  Segment part 61.            Intra module refs:   MRFI_Init
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_SetLogicalChannel
+                                   00000D6A        main (main)
+               calls direct
+               XSTACK = 0000001B ( 00000008 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000DA1 - 00000E13 (0x73 bytes), align: 0
+  Segment part 66.            Intra module refs:   MRFI_RfIsr
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_RxAddrIsFiltered   00000DA1 
+               XSTACK = 0000000F ( 00000009 )
+    -------------------------------------------------------------------------
+INTVEC
+  Common segment, address: CODE 00000000 - 00000085 (0x86 bytes), align: 0
+  Segment part 15. ROOT 
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MRFI_RfIsr::??INTVEC 131
+                                   00000083 
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 000000FB - 000000FE (0x4 bytes), align: 0
+  Segment part 29.            Intra module refs:   mrfiBroadcastAddr
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 000000FF - 00000102 (0x4 bytes), align: 0
+  Segment part 31.            Intra module refs:   mrfiLogicalChanTable
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 00000103 - 00000106 (0x4 bytes), align: 0
+  Segment part 36.            Intra module refs:   mrfiRxFilterAddr
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 00000107 - 0000010A (0x4 bytes), align: 0
+  Segment part 38.            Intra module refs:   __Constant_5
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 0000010B - 0000010E (0x4 bytes), align: 0
+  Segment part 40.            Intra module refs:   __Constant_a
+
+    *************************************************************************
+
+  FILE NAME : D:\microirrigation-control\firmware-cc1110-lime2-remote\ide\REMOTE\Obj\remote.r51
+  PROGRAM MODULE, NAME : remote
+
+  SEGMENTS IN THE MODULE
+  ======================
+SFR_AN
+  Relative segment, address: DATA 00000080 - 00000080 (0x1 bytes), align: 0
+  Segment part 1. ROOT        Intra module refs:   ApplyCmdRx
+                                                   PinConfigRemote
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _A_P0                   00000080 
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           P0                      00000080 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000B5 - 000000B5 (0x1 bytes), align: 0
+  Segment part 4. ROOT        Intra module refs:   PinConfigRemote
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ADCCON2                 000000B5 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000F2 - 000000F2 (0x1 bytes), align: 0
+  Segment part 7. ROOT        Intra module refs:   PinConfigRemote
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ADCCFG                  000000F2 
+    -------------------------------------------------------------------------
+SFR_AN
+  Relative segment, address: DATA 000000FD - 000000FD (0x1 bytes), align: 0
+  Segment part 8. ROOT        Intra module refs:   PinConfigRemote
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           P0DIR                   000000FD 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F190 - 0000F1CF (0x40 bytes), align: 0
+  Segment part 14.            Intra module refs:   CheckCmdAndReplyWithAck
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           g_pktTx                 0000F190 
+    -------------------------------------------------------------------------
+XDATA_I
+  Relative segment, address: XDATA 0000F20D - 0000F20D (0x1 bytes), align: 0
+  Segment part 15.            Intra module refs:   ApplyCmdRx
+                                                   CheckCmdAndReplyWithAck
+                                                   sRemoteNode
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           g_lastCmdRx             0000F20D 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F1D0 - 0000F1D0 (0x1 bytes), align: 0
+  Segment part 17.            Intra module refs:   ApplyCmdRx
+                                                   CheckCmdAndReplyWithAck
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           g_lastTransactionIDRX   0000F1D0 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F1D1 - 0000F1D1 (0x1 bytes), align: 0
+  Segment part 18.            Intra module refs:   ApplyCmdRx
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           g_lastTransactionIDApplied
+                                   0000F1D1 
+    -------------------------------------------------------------------------
+XDATA_Z
+  Relative segment, address: XDATA 0000F1D2 - 0000F1D3 (0x2 bytes), align: 0
+  Segment part 19.            Intra module refs:   CheckCmdAndReplyWithAck
+                                                   ReadBatteryVoltage
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           g_last_adc_result       0000F1D2 
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000E14 - 00000ED1 (0xbe bytes), align: 0
+  Segment part 20.            Intra module refs:   sRemoteNode
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           CheckCmdAndReplyWithAck
+                                   00000E14 
+               calls direct
+               XSTACK = 00000011 ( 0000000F )
+               ISTACK = 00000000 ( 00000001 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000ED2 - 00000F11 (0x40 bytes), align: 0
+  Segment part 21.            Intra module refs:   sRemoteNode
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           ApplyCmdRx              00000ED2 
+               calls direct
+               XSTACK = 00000011 ( 00000000 )
+               ISTACK = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000F12 - 00000F18 (0x7 bytes), align: 0
+  Segment part 22.            Intra module refs:   sRemoteNode
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           WaitInLowPowerMode      00000F12 
+               calls direct
+               XSTACK = 00000011 ( 00000000 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000F19 - 00000F87 (0x6f bytes), align: 0
+  Segment part 23.            Intra module refs:   sRemoteNode
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           ReadBatteryVoltage      00000F19 
+               XSTACK = 00000011 ( 00000000 )
+               ISTACK = 00000000 ( 00000002 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000F88 - 00000F9B (0x14 bytes), align: 0
+  Segment part 24.            Intra module refs:   sRemoteNode
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           PinConfigRemote         00000F88 
+               XSTACK = 00000011 ( 00000000 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 00000F9C - 00001060 (0xc5 bytes), align: 0
+  Segment part 25.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           sRemoteNode             00000F9C        main (main)
+               calls direct
+               XSTACK = 00000000 ( 00000011 )
+    -------------------------------------------------------------------------
+XDATA_ID
+  Relative segment, address: CODE 0000010F - 0000010F (0x1 bytes), align: 0
+  Segment part 16.            Intra module refs:   g_lastCmdRx
+
+    *************************************************************************
+
+  FILE NAME : C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\8051\LIB\CLIB\cl-pli-nlxd-1e16x01.r51
+  LIBRARY MODULE, NAME : ?cexit
+
+  SEGMENTS IN THE MODULE
+  ======================
+CSTART
+  Relative segment, address: CODE 00000086 - 0000008A (0x5 bytes), align: 0
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           exit                    00000086        ?call_main (?cmain)
+           ?C_EXIT                 00000086 
+           ?ROM_MONITOR_NOPS       00000086 
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?cmain
+
+  SEGMENTS IN THE MODULE
+  ======================
+CSTART
+  Relative segment, address: CODE 0000008B, align: 0
+  Segment part 5.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?cmain                  0000008B        Segment part 13 (CSTARTUP)
+               calls direct
+    -------------------------------------------------------------------------
+CSTART
+  Relative segment, address: CODE 0000008B - 0000009A (0x10 bytes), align: 0
+  Segment part 16.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __INIT_XDATA_Z          0000008B        g_lastTransactionIDApplied (remote)
+                                                   g_lastTransactionIDRX (remote)
+                                                   g_last_adc_result (remote)
+                                                   g_pktRx (main)
+                                                   g_pktTx (remote)
+                                                   g_sRxCallbackSemaphore (main)
+                                                   mrfiDmaCfg (mrfi)
+                                                   mrfiIncomingPacket (mrfi)
+                                                   mrfiRadioState (mrfi)
+                                                   mrfiRxFilterEnabled (mrfi)
+                                                   sBackoffHelper (mrfi)
+                                                   sButtonPushed (bsp_extended)
+                                                   sReplyDelayScalar (mrfi)
+    -------------------------------------------------------------------------
+CSTART
+  Relative segment, address: CODE 0000009B - 000000C0 (0x26 bytes), align: 0
+  Segment part 33.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __INIT_XDATA_I          0000009B        Segment part 11 (main)
+                                                   Segment part 13 (main)
+                                                   Segment part 7 (main)
+                                                   Segment part 9 (main)
+                                                   __Constant_5 (mrfi)
+                                                   __Constant_a (mrfi)
+                                                   g_ack (main)
+                                                   g_commands (main)
+                                                   g_lastCmdRx (remote)
+                                                   mrfiBroadcastAddr (mrfi)
+                                                   mrfiLogicalChanTable (mrfi)
+                                                   mrfiRxFilterAddr (mrfi)
+    -------------------------------------------------------------------------
+CSTART
+  Relative segment, address: CODE 000000C1 - 000000C6 (0x6 bytes), align: 0
+  Segment part 38.            Intra module refs:   ?cmain
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?call_main              000000C1 
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : CSTARTUP
+
+  SEGMENTS IN THE MODULE
+  ======================
+REGISTERS
+  Relative segment, address: DATA 00000000, align: 0
+  Segment part 0.             Intra module refs:   Segment part 6
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?REGISTERS              00000000 
+    -------------------------------------------------------------------------
+ISTACK
+  Relative segment, address: IDATA 000000C0, align: 0
+  Segment part 1.             Intra module refs:   Segment part 6
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?ISTACK_START           000000C0 
+    -------------------------------------------------------------------------
+XSTACK
+  Relative segment, address: XDATA 0000F000, align: 0
+  Segment part 3.             Intra module refs:   ?RESET_XSP
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?XSTACK_START           0000F000 
+    -------------------------------------------------------------------------
+INTVEC
+  Common segment, address: CODE 00000000 - 00000002 (0x3 bytes), align: 0
+  Segment part 5. ROOT        Intra module refs:   Segment part 6
+    -------------------------------------------------------------------------
+CSTART
+  Relative segment, address: CODE 000000C7 - 000000CC (0x6 bytes), align: 0
+  Segment part 6. ROOT        Intra module refs:   Segment part 5
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __program_start         000000C7        Absolute parts (?ABS_ENTRY_MOD)
+           ?RESET_SP               000000CA 
+    -------------------------------------------------------------------------
+CSTART
+  Relative segment, address: CODE 000000CD - 000000D2 (0x6 bytes), align: 0
+  Segment part 8.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?RESET_XSP              000000CD        ?XSP (VIRTUAL_REGISTERS)
+    -------------------------------------------------------------------------
+CSTART
+  Relative segment, address: CODE 000000D3 - 000000D5 (0x3 bytes), align: 0
+  Segment part 13.            Intra module refs:   Absolute parts
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : VIRTUAL_REGISTERS
+
+  SEGMENTS IN THE MODULE
+  ======================
+BREG
+  Relative segment, address: BIT 00000020.0 - 00000020.7 (0x8 bits), align: 0
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?B0                     00000020.0      Absolute parts (CSTARTUP)
+    -------------------------------------------------------------------------
+VREG
+  Relative segment, address: DATA 00000008 - 00000008 (0x1 bytes), align: 0
+  Segment part 1.             Intra module refs:   ?V1
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?V0                     00000008        ?FUNC_ENTER_XDATA (?FUNC_ENTER_XDATA)
+                                                   ?FUNC_LEAVE_XDATA (?FUNC_LEAVE_XDATA)
+                                                   ?INTERRUPT_ENTER_XSP (?INTERRUPT_ENTER_XSP)
+                                                   ?INTERRUPT_LEAVE_XSP (?INTERRUPT_LEAVE_XSP)
+                                                   CheckCmdAndReplyWithAck (remote)
+                                                   MRFI_Init (mrfi)
+                                                   MRFI_RfIsr (mrfi)
+                                                   MRFI_RxAddrIsFiltered (mrfi)
+                                                   MRFI_Transmit (mrfi)
+                                                   Mrfi_CalculateRssi (mrfi)
+                                                   Mrfi_DelayUsec (mrfi)
+                                                   Mrfi_RxModeOn (mrfi)
+                                                   Segment part 7 (?memmove)
+                                                   String2Command (main)
+                                                   main (main)
+                                                   memcpy (?memcpy)
+                                                   memmove (?memmove)
+                                                   sRemoteNode (remote)
+    -------------------------------------------------------------------------
+VREG
+  Relative segment, address: DATA 00000009 - 00000009 (0x1 bytes), align: 0
+  Segment part 2.             Intra module refs:   ?V2
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?V1                     00000009        CheckCmdAndReplyWithAck (remote)
+                                                   MRFI_Init (mrfi)
+                                                   MRFI_RfIsr (mrfi)
+                                                   MRFI_RxAddrIsFiltered (mrfi)
+                                                   MRFI_Transmit (mrfi)
+                                                   Mrfi_CalculateRssi (mrfi)
+                                                   Mrfi_DelayUsec (mrfi)
+                                                   Mrfi_RxModeOn (mrfi)
+                                                   Segment part 7 (?memmove)
+                                                   main (main)
+                                                   memcpy (?memcpy)
+                                                   memmove (?memmove)
+                                                   sRemoteNode (remote)
+    -------------------------------------------------------------------------
+VREG
+  Relative segment, address: DATA 0000000A - 0000000A (0x1 bytes), align: 0
+  Segment part 3.             Intra module refs:   ?V3
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?V2                     0000000A        CheckCmdAndReplyWithAck (remote)
+                                                   MRFI_Init (mrfi)
+                                                   MRFI_Transmit (mrfi)
+                                                   Mrfi_DelayUsec (mrfi)
+                                                   String2Command (main)
+                                                   sRemoteNode (remote)
+    -------------------------------------------------------------------------
+VREG
+  Relative segment, address: DATA 0000000B - 0000000B (0x1 bytes), align: 0
+  Segment part 4.             Intra module refs:   ?V4
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?V3                     0000000B        MRFI_Init (mrfi)
+                                                   String2Command (main)
+                                                   sRemoteNode (remote)
+    -------------------------------------------------------------------------
+VREG
+  Relative segment, address: DATA 0000000C - 0000000C (0x1 bytes), align: 0
+  Segment part 5.             Intra module refs:   ?V5
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?V4                     0000000C        CheckCmdAndReplyWithAck (remote)
+                                                   MRFI_Init (mrfi)
+                                                   MRFI_Transmit (mrfi)
+                                                   Mrfi_DelayUsec (mrfi)
+                                                   String2Command (main)
+                                                   sRemoteNode (remote)
+    -------------------------------------------------------------------------
+VREG
+  Relative segment, address: DATA 0000000D - 0000000D (0x1 bytes), align: 0
+  Segment part 6.             Intra module refs:   ?V6
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?V5                     0000000D        CheckCmdAndReplyWithAck (remote)
+                                                   MRFI_Init (mrfi)
+                                                   MRFI_Transmit (mrfi)
+                                                   Mrfi_DelayUsec (mrfi)
+                                                   String2Command (main)
+                                                   sRemoteNode (remote)
+    -------------------------------------------------------------------------
+VREG
+  Relative segment, address: DATA 0000000E - 0000000E (0x1 bytes), align: 0
+  Segment part 7.             Intra module refs:   ?V7
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?V6                     0000000E        MRFI_Init (mrfi)
+                                                   String2Command (main)
+                                                   sRemoteNode (remote)
+    -------------------------------------------------------------------------
+VREG
+  Relative segment, address: DATA 0000000F - 0000000F (0x1 bytes), align: 0
+  Segment part 8.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?V7                     0000000F        MRFI_Init (mrfi)
+                                                   String2Command (main)
+                                                   sRemoteNode (remote)
+    -------------------------------------------------------------------------
+XSP
+  Relative segment, address: DATA 00000010 - 00000011 (0x2 bytes), align: 0
+  Segment part 34.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?XSP                    00000010        ?ADD_XSTACK_DISP0_8 (?ADD_XSTACK_DISP8)
+                                                   ?ALLOC_XSTACK8 (?ALLOC_XSTACK8)
+                                                   ?DEALLOC_XSTACK8 (?DEALLOC_XSTACK8)
+                                                   ?FUNC_ENTER_XDATA (?FUNC_ENTER_XDATA)
+                                                   ?FUNC_LEAVE_XDATA (?FUNC_LEAVE_XDATA)
+                                                   ?INTERRUPT_ENTER_XSP (?INTERRUPT_ENTER_XSP)
+                                                   ?INTERRUPT_LEAVE_XSP (?INTERRUPT_LEAVE_XSP)
+                                                   ?RESET_XSP (CSTARTUP)
+                                                   ?XSTACK_DISP0_8 (?XSTACK_DISP8)
+                                                   BSP_Init (bsp)
+                                                   MRFI_Init (mrfi)
+                                                   memset (?memset)
+                                                   sRemoteNode (remote)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_MUL
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 00000110 - 00000112 (0x3 bytes), align: 0
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_MUL                  00000110        MRFI_Init (mrfi)
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: CODE 00000113 - 0000018F (0x7d bytes), align: 0
+  Segment part 1.             Intra module refs:   ?L_MUL
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_MUL_REW              00000113 
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?UL_DIV_MOD
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 00000190 - 000001FE (0x6f bytes), align: 0
+  Segment part 1.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?UL_DIV_MOD             00000190        MRFI_Init (mrfi)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?SL_SHR
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 000001FF - 00000203 (0x5 bytes), align: 0
+  Segment part 1.             Intra module refs:   Segment part 2
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?SL_SHR                 000001FF        MRFI_Init (mrfi)
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: CODE 00000204 - 00000218 (0x15 bytes), align: 0
+  Segment part 2.             Intra module refs:   ?SL_SHR
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_ADD_X
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 00000219 - 0000022B (0x13 bytes), align: 0
+  Segment part 1.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_ADD_X                00000219        MRFI_Init (mrfi)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_MOV_X
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 0000022C - 0000023A (0xf bytes), align: 0
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_MOV_X                0000022C        MRFI_Init (mrfi)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?L_MOV_TO_X
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 0000023B - 00000249 (0xf bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_MOV_TO_X             0000023B        MRFI_Init (mrfi)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?MOVE_LONG8_XDATA_IDATA
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 0000024A - 00000256 (0xd bytes), align: 0
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?MOVE_LONG8_XDATA_IDATA
+                                   0000024A        ?PUSH_XSTACK_I (?PUSH_XSTACK_I)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?MOVE_LONG8_XDATA_XDATA
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 00000257 - 00000277 (0x21 bytes), align: 0
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?MOVE_LONG8_XDATA_XDATA
+                                   00000257        MRFI_Receive (mrfi)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?S_DIV_MOD
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 00000278 - 000002B8 (0x41 bytes), align: 0
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?S_DIV_MOD              000002B1        Mrfi_CalculateRssi (mrfi)
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: CODE 000002B9 - 00000311 (0x59 bytes), align: 0
+  Segment part 1.             Intra module refs:   ?S_DIV_MOD
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?US_DIV_MOD             000002B9        ReadBatteryVoltage (remote)
+                                                   sRemoteNode (remote)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?US_SHR
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 00000312 - 00000314 (0x3 bytes), align: 0
+  Segment part 1.             Intra module refs:   Segment part 2
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?US_SHR                 00000312        MRFI_Init (mrfi)
+                                                   Mrfi_DelayUsec (mrfi)
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: CODE 00000315 - 00000320 (0xc bytes), align: 0
+  Segment part 2.             Intra module refs:   ?US_SHR
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?ALLOC_XSTACK8
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 00000321 - 00000336 (0x16 bytes), align: 0
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?ALLOC_XSTACK8          00000321        BSP_Init (bsp)
+                                                   MRFI_Init (mrfi)
+                                                   sRemoteNode (remote)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?DEALLOC_XSTACK8
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 00000337 - 00000351 (0x1b bytes), align: 0
+  Segment part 0.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?DEALLOC_XSTACK8        00000337        BSP_Init (bsp)
+                                                   CheckCmdAndReplyWithAck (remote)
+                                                   MRFI_Init (mrfi)
+                                                   MRFI_RfIsr (mrfi)
+                                                   Mrfi_RxModeOn (mrfi)
+                                                   String2Command (main)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?ADD_XSTACK_DISP8
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 00000352 - 0000036C (0x1b bytes), align: 0
+  Segment part 1.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?ADD_XSTACK_DISP0_8     00000352        ?PUSH_XSTACK_I (?PUSH_XSTACK_I)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?XSTACK_DISP8
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 0000036D - 00000376 (0xa bytes), align: 0
+  Segment part 1.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?XSTACK_DISP0_8         0000036D        MRFI_Init (mrfi)
+                                                   memcmp (?memcmp)
+                                                   memcpy (?memcpy)
+                                                   memmove (?memmove)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FUNC_ENTER_XDATA
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 00000377 - 000003DC (0x66 bytes), align: 0
+  Segment part 1.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?FUNC_ENTER_XDATA       00000377        CheckCmdAndReplyWithAck (remote)
+                                                   MRFI_DelayMs (mrfi)
+                                                   MRFI_Init (mrfi)
+                                                   MRFI_RxAddrIsFiltered (mrfi)
+                                                   MRFI_SetLogicalChannel (mrfi)
+                                                   MRFI_Transmit (mrfi)
+                                                   Mrfi_CalculateRssi (mrfi)
+                                                   Mrfi_DelayUsec (mrfi)
+                                                   Mrfi_RandomBackoffDelay (mrfi)
+                                                   Mrfi_RxModeOn (mrfi)
+                                                   String2Command (main)
+                                                   memcmp (?memcmp)
+                                                   memcpy (?memcpy)
+                                                   memmove (?memmove)
+                                                   sRemoteNode (remote)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FUNC_LEAVE_XDATA
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 000003DD - 0000041C (0x40 bytes), align: 0
+  Segment part 1.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?FUNC_LEAVE_XDATA       000003DD        CheckCmdAndReplyWithAck (remote)
+                                                   MRFI_DelayMs (mrfi)
+                                                   MRFI_Init (mrfi)
+                                                   MRFI_RxAddrIsFiltered (mrfi)
+                                                   MRFI_SetLogicalChannel (mrfi)
+                                                   MRFI_Transmit (mrfi)
+                                                   Mrfi_CalculateRssi (mrfi)
+                                                   Mrfi_DelayUsec (mrfi)
+                                                   Mrfi_RandomBackoffDelay (mrfi)
+                                                   Mrfi_RxModeOn (mrfi)
+                                                   String2Command (main)
+                                                   memcmp (?memcmp)
+                                                   memcpy (?memcpy)
+                                                   memmove (?memmove)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?INTERRUPT_ENTER_XSP
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 0000041D - 0000047B (0x5f bytes), align: 0
+  Segment part 1.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?INTERRUPT_ENTER_XSP    0000041D        MRFI_RfIsr (mrfi)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?INTERRUPT_LEAVE_XSP
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 0000047C - 000004D3 (0x58 bytes), align: 0
+  Segment part 1.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?INTERRUPT_LEAVE_XSP    0000047C        MRFI_RfIsr (mrfi)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?PUSH_XSTACK_I
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: CODE 000004D4 - 000004D7 (0x4 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?PUSH_XSTACK_I_TWO      000004D4        CheckCmdAndReplyWithAck (remote)
+                                                   MRFI_Init (mrfi)
+                                                   MRFI_RfIsr (mrfi)
+                                                   Mrfi_RxModeOn (mrfi)
+                                                   String2Command (main)
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: CODE 000004D8 - 000004E4 (0xd bytes), align: 0
+  Segment part 4.             Intra module refs:   ?PUSH_XSTACK_I_TWO
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?PUSH_XSTACK_I          000004D8 
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?memcmp
+
+  SEGMENTS IN THE MODULE
+  ======================
+NEAR_CODE
+  Relative segment, address: CODE 00001061 - 000010B0 (0x50 bytes), align: 0
+  Segment part 6.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           memcmp                  00001061        String2Command (main)
+               XSTACK = 00000002 ( 00000008 )
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?memcpy
+
+  SEGMENTS IN THE MODULE
+  ======================
+NEAR_CODE
+  Relative segment, address: CODE 000010B1 - 000010F6 (0x46 bytes), align: 0
+  Segment part 6.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           memcpy                  000010B1        CheckCmdAndReplyWithAck (remote)
+               XSTACK = 00000002 ( 00000009 )
+               ISTACK = 00000000 ( 00000001 )
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?memmove
+
+  SEGMENTS IN THE MODULE
+  ======================
+NEAR_CODE
+  Relative segment, address: CODE 000010F7 - 0000117C (0x86 bytes), align: 0
+  Segment part 6.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           memmove                 000010F7        MRFI_RfIsr (mrfi)
+               XSTACK = 00000002 ( 00000009 )
+               ISTACK = 00000000 ( 00000001 )
+    -------------------------------------------------------------------------
+NEAR_CODE
+  Relative segment, address: CODE 0000117D - 0000118F (0x13 bytes), align: 0
+  Segment part 7.             Intra module refs:   memmove
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?memset
+
+  SEGMENTS IN THE MODULE
+  ======================
+NEAR_CODE
+  Relative segment, address: CODE 00001190 - 000011B9 (0x2a bytes), align: 0
+  Segment part 6.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           memset                  00001190        MRFI_Init (mrfi)
+                                                   MRFI_RfIsr (mrfi)
+                                                   Mrfi_RxModeOn (mrfi)
+               XSTACK = 00000002 ( 00000000 )
+               ISTACK = 00000000 ( 00000002 )
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?strlen
+
+  SEGMENTS IN THE MODULE
+  ======================
+NEAR_CODE
+  Relative segment, address: CODE 000011BA - 000011D5 (0x1c bytes), align: 0
+  Segment part 6.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           strlen                  000011BA        main (main)
+               ISTACK = 00000000 ( 00000002 )
+
+
+
+
+                ****************************************
+                *                                      *
+                *            MODULE SUMMARY            *
+                *                                      *
+                ****************************************
+
+Module                    CODE      DATA      XDATA  IDATA    BIT
+------                    ----      ----      -----  -----    ---
+                         (Rel)  (Rel)  (Abs)  (Rel)  (Rel)  (Rel)
+?ADD_XSTACK_DISP8           27
+?ALLOC_XSTACK8              22
+?DEALLOC_XSTACK8            27
+?FUNC_ENTER_XDATA          102
+?FUNC_LEAVE_XDATA           64
+?INTERRUPT_ENTER_XSP        95
+?INTERRUPT_LEAVE_XSP        88
+?L_ADD_X                    19
+?L_MOV_TO_X                 15
+?L_MOV_X                    15
+?L_MUL                     128
+?MOVE_LONG8_XDATA_IDATA     13
+?MOVE_LONG8_XDATA_XDATA     33
+?PUSH_XSTACK_I              17
+?SL_SHR                     26
+?S_DIV_MOD                 154
+?UL_DIV_MOD                111
+?US_SHR                     15
+?XSTACK_DISP8               10
+?cexit                       5
+?cmain                      60
+?memcmp                     80
+?memcpy                     70
+?memmove                   153
+?memset                     42
+?strlen                     28
+CSTARTUP                    15
+  + common                   3
+VIRTUAL_REGISTERS                  10                           8
+bsp                        107             4
+  + shared                                 2
+bsp_extended                75            12      1
+  + shared                 126            10
+  + common
+main                       317                  102
+mrfi                     1 909             5     98
+  + common                 134
+remote                     590             4     69
+N/A (command line)                  8           256     64
+N/A (alignment)
+----------               -----     --     --    ---     --      -
+Total:                   4 432     18     37    526     64      8
+  + common                 134
+
+
+                ****************************************
+                *                                      *
+                *      SEGMENTS IN ADDRESS ORDER       *
+                *                                      *
+                ****************************************
+
+
+SEGMENT              SPACE    START ADDRESS   END ADDRESS     SIZE  TYPE  ALIGN
+=======              =====    =============   ===========     ====  ====  =====
+INTVEC               CODE          00000000 - 00000085          86   com    0
+CSTART               CODE          00000086 - 000000D5          50   rel    0
+DATA_ID              CODE               000000D6                     dse    0
+BDATA_ID             CODE               000000D6                     dse    0
+BIT_ID               CODE               000000D6                     dse    0
+IXDATA_ID            CODE               000000D6                     dse    0
+PDATA_ID             CODE               000000D6                     dse    0
+IDATA_ID             CODE               000000D6                     dse    0
+XDATA_ID             CODE          000000D6 - 0000010F          3A   rel    0
+RCODE                CODE          00000110 - 000004E4         3D5   rel    0
+DIFUNCT              CODE               000004E5                     dse    0
+CODE_C               CODE               000004E5                     dse    0
+CODE_N               CODE               000004E5                     dse    0
+NEAR_CODE            CODE          000004E5 - 000011D5         CF1   rel    0
+REGISTERS            DATA          00000000 - 00000007           8   rel    0
+VREG                 DATA          00000008 - 0000000F           8   rel    0
+PSP                  DATA               00000010                     dse    0
+XSP                  DATA          00000010 - 00000011           2   rel    0
+BREG                 BIT        00000020.0  -  00000020.7        8   rel    0
+SFR_AN               DATA          00000080 - 00000080           1   rel    0
+                     DATA          00000087 - 00000087           1 
+                     DATA          0000008A - 0000008A           1 
+                     DATA          0000008D - 0000008D           1 
+                     DATA          00000090 - 00000091           2 
+                     DATA          0000009A - 0000009B           2 
+                     DATA          000000A1 - 000000A5           5 
+                     DATA          000000A8 - 000000A8           1 
+                     DATA          000000B4 - 000000B6           3 
+                     DATA          000000BA - 000000BC           3 
+                     DATA          000000BE - 000000BE           1 
+                     DATA          000000C0 - 000000C0           1 
+                     DATA          000000C6 - 000000C7           2 
+                     DATA          000000CB - 000000CB           1 
+                     DATA          000000CD - 000000CD           1 
+                     DATA          000000D1 - 000000D1           1 
+                     DATA          000000D4 - 000000D6           3 
+                     DATA          000000D8 - 000000D8           1 
+                     DATA          000000E1 - 000000E1           1 
+                     DATA          000000E8 - 000000E9           2 
+                     DATA          000000F2 - 000000F2           1 
+                     DATA          000000FD - 000000FE           2 
+XSTACK               XDATA         0000F000 - 0000F0FF         100   rel    0
+XDATA_Z              XDATA         0000F100 - 0000F1D3          D4   rel    0
+XDATA_I              XDATA         0000F1D4 - 0000F20D          3A   rel    0
+ISTACK               IDATA         000000C0 - 000000FF          40   rel    0
+
+                ****************************************
+                *                                      *
+                *        END OF CROSS REFERENCE        *
+                *                                      *
+                ****************************************
+
+ 4 566 bytes of CODE  memory
+    18 bytes of DATA  memory (+ 37 absolute )
+   526 bytes of XDATA memory
+    64 bytes of IDATA memory
+     8 bits  of BIT   memory
+
+Errors: none
+Warnings: none
+

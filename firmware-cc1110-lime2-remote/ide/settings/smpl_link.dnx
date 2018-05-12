@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>1288804489</Checksum>
+        <Checksum>3973088952</Checksum>
     </DebugChecksum>
     <CallStack>
         <ShowArgs>0</ShowArgs>
@@ -87,6 +87,24 @@
         <Fmt5>{W}1:URX0IE	1	0</Fmt5>
         <Fmt6>{W}1:URX0IF	1	0</Fmt6>
     </watch_formats>
+    <Breakpoints>
+        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\..\..\source\components\simpliciti\mrfi\radios\family2\mrfi_radio.c}.742.5" 0 0 0 0 "" 0 ""</Bp0>
+        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\..\..\source\apps\remote.c}.47.3" 0 0 0 0 "" 0 ""</Bp1>
+        <Bp2>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.152.3" 0 0 0 0 "" 0 ""</Bp2>
+        <Bp3>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.112.3" 0 0 0 0 "" 0 ""</Bp3>
+        <Bp4>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.449.13" 0 0 0 0 "" 0 ""</Bp4>
+        <Bp5>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.459.13" 0 0 0 0 "" 0 ""</Bp5>
+        <Bp6>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\remote.c}.155.5" 1 0 0 0 "" 0 ""</Bp6>
+        <Bp7>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\main.c}.68.23" 1 0 0 0 "" 0 ""</Bp7>
+        <Bp8>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\main.c}.72.13" 1 0 0 0 "" 0 ""</Bp8>
+        <Bp9>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\main.c}.87.5" 0 0 0 0 "" 0 ""</Bp9>
+        <Bp10>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\remote.c}.297.17" 1 0 0 0 "" 0 ""</Bp10>
+        <Count>11</Count>
+    </Breakpoints>
+    <ChipconEmu>
+        <StopTimersOnHalt>1</StopTimersOnHalt>
+        <LeaveTargetRunning>1</LeaveTargetRunning>
+    </ChipconEmu>
     <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -96,21 +114,6 @@
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
     </TermIOLog>
-    <Breakpoints>
-        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\..\..\source\components\simpliciti\mrfi\radios\family2\mrfi_radio.c}.742.5" 0 0 0 0 "" 0 ""</Bp0>
-        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\..\..\source\apps\remote.c}.47.3" 0 0 0 0 "" 0 ""</Bp1>
-        <Bp2>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\remote.c}.222.3" 0 0 0 0 "" 0 ""</Bp2>
-        <Bp3>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\remote.c}.257.9" 0 0 0 0 "" 0 ""</Bp3>
-        <Bp4>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.152.3" 0 0 0 0 "" 0 ""</Bp4>
-        <Bp5>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.112.3" 0 0 0 0 "" 0 ""</Bp5>
-        <Bp6>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.449.13" 1 0 0 0 "" 0 ""</Bp6>
-        <Bp7>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.459.13" 1 0 0 0 "" 0 ""</Bp7>
-        <Count>8</Count>
-    </Breakpoints>
-    <ChipconEmu>
-        <StopTimersOnHalt>1</StopTimersOnHalt>
-        <LeaveTargetRunning>1</LeaveTargetRunning>
-    </ChipconEmu>
     <Aliases>
         <A0>_ "C:\Users\fr_m\Dropbox\myCircuits\progetti\2017_controllo_elettrovalvole_irrigazione_COMPLETE\firmware-cc1110-lime2node-v3\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board.c" "C:\Users\fr_m\Dropbox\myCircuits\progetti\2017_controllo_elettrovalvole_irrigazione_COMPLETE\firmware-cc1110-lime2node-v3-v2-mrfi\source\components\simpliciti\bsp\boards\srfccxx10\bsp_board.c"</A0>
         <A1>_ "C:\Users\fr_m\Dropbox\myCircuits\progetti\2017_controllo_elettrovalvole_irrigazione_COMPLETE\firmware-cc1110-lime2node-v3\source\components\simpliciti\bsp\drivers\code\bsp_leds.c" "C:\Users\fr_m\Dropbox\myCircuits\progetti\2017_controllo_elettrovalvole_irrigazione_COMPLETE\firmware-cc1110-lime2node-v3-v2-mrfi\source\components\simpliciti\bsp\drivers\code\bsp_leds.c"</A1>

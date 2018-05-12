@@ -5,118 +5,117 @@
     <configuration>
         <name>LIME2</name>
         <outputs>
-            <file>$PROJ_DIR$\LIME2\Obj\bsp.pbi</file>
-            <file>$PROJ_DIR$\LIME2\Obj\main.r51</file>
-            <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
-            <file>$PROJ_DIR$\LIME2\Obj\remote.r51</file>
-            <file>$PROJ_DIR$\LIME2\Obj\bsp_extended.pbi</file>
-            <file>$PROJ_DIR$\LIME2\Obj\main.__cstat.et</file>
-            <file>$PROJ_DIR$\LIME2\Obj\mrfi.pbi</file>
-            <file>$PROJ_DIR$\LIME2\Obj\mrfi.r51</file>
-            <file>$PROJ_DIR$\LIME2\Obj\remote.pbi</file>
+            <file>$PROJ_DIR$\LIME2\Exe\smpl_link.hex</file>
+            <file>$TOOLKIT_DIR$\config\devices\Texas Instruments\lnk51ew_cc1110F32.xcl</file>
             <file>$PROJ_DIR$\LIME2\Obj\lime2.r51</file>
             <file>$PROJ_DIR$\LIME2\Obj\bsp.r51</file>
-            <file>$PROJ_DIR$\LIME2\Exe\smpl_link.d51</file>
-            <file>$PROJ_DIR$\LIME2\Obj\main.pbi</file>
-            <file>$TOOLKIT_DIR$\config\devices\Texas Instruments\lnk51ew_cc1110F32.xcl</file>
-            <file>$PROJ_DIR$\LIME2\Exe\smpl_link.hex</file>
-            <file>$PROJ_DIR$\LIME2\Obj\bsp_extended.__cstat.et</file>
-            <file>$PROJ_DIR$\LIME2\Obj\bsp.__cstat.et</file>
-            <file>$PROJ_DIR$\LIME2\Obj\mrfi.__cstat.et</file>
-            <file>$PROJ_DIR$\LIME2\Obj\lime2.pbi</file>
-            <file>$TOOLKIT_DIR$\inc\clib\string.h</file>
             <file>$PROJ_DIR$\LIME2\Obj\lime2.__cstat.et</file>
-            <file>$TOOLKIT_DIR$\lib\clib\cl-pli-nlxd-1e16x01.r51</file>
-            <file>$PROJ_DIR$\LIME2\Obj\bsp_extended.r51</file>
-            <file>$TOOLKIT_DIR$\inc\ioCC1110.h</file>
-            <file>$PROJ_DIR$\..\source\apps\bsp_extended.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp.h</file>
+            <file>$PROJ_DIR$\LIME2\Obj\main.r51</file>
+            <file>$PROJ_DIR$\LIME2\List\smpl_link.map</file>
+            <file>$PROJ_DIR$\LIME2\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\LIME2\Obj\remote.__cstat.et</file>
+            <file>$PROJ_DIR$\LIME2\Obj\main.__cstat.et</file>
+            <file>$PROJ_DIR$\LIME2\Exe\smpl_link.d51</file>
+            <file>$PROJ_DIR$\LIME2\Obj\remote.pbi</file>
+            <file>$PROJ_DIR$\LIME2\Obj\bsp_extended.__cstat.et</file>
+            <file>$PROJ_DIR$\LIME2\Obj\bsp_extended.pbi</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_generic_leds.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_generic_buttons.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_led_defs.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_leds.c</file>
             <file>$PROJ_DIR$\..\source\apps\bsp_extended.c</file>
             <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_button_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp.c</file>
             <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\mcus\bsp_8051_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board.c</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_led_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_drivers.c</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_generic_buttons.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_driver_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\smartrf\cc1110\smartrf_CC1110_srfcc1110.h</file>
-            <file>$PROJ_DIR$\..\source\apps\main.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\family2\mrfi_radio.c</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_buttons.c</file>
-            <file>$PROJ_DIR$\..\source\apps\smpl_config.dat</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_external\mrfi_board_defs.h</file>
-            <file>$PROJ_DIR$\..\source\apps\smpl_nwk_config.dat</file>
-            <file>$PROJ_DIR$\LIME2\Obj\remote.__cstat.et</file>
-            <file>$PROJ_DIR$\LIME2\List\smpl_link.map</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_generic_leds.h</file>
             <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\bsp_buttons.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\common\mrfi_f1f2.c</file>
             <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\bsp_leds.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi.h</file>
-            <file>$PROJ_DIR$\..\source\apps\hal_cc8051.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_leds.c</file>
-            <file>$PROJ_DIR$\..\source\apps\hal_defs.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_driver_defs.h</file>
             <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp_macros.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\common\mrfi_f1f2.h</file>
-            <file>$PROJ_DIR$\..\source\apps\hal_types.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_drivers.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board_defs.h</file>
+            <file>$PROJ_DIR$\..\source\apps\bsp_extended.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_buttons.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board.c</file>
+            <file>$PROJ_DIR$\LIME2\Obj\mrfi.r51</file>
+            <file>$PROJ_DIR$\LIME2\Obj\bsp_extended.r51</file>
+            <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
+            <file>$PROJ_DIR$\LIME2\Obj\bsp.pbi</file>
+            <file>$PROJ_DIR$\LIME2\Obj\mrfi.pbi</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\common\mrfi_f1f2.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\smartrf\cc1110\smartrf_CC1110_srfcc1110.h</file>
+            <file>$PROJ_DIR$\..\source\apps\smpl_config.dat</file>
             <file>$PROJ_DIR$\..\source\apps\ioCCxx10_bitdef.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi.c</file>
+            <file>$PROJ_DIR$\..\source\apps\hal_defs.h</file>
+            <file>$PROJ_DIR$\..\source\apps\hal_types.h</file>
+            <file>$TOOLKIT_DIR$\inc\ioCC1110.h</file>
+            <file>$PROJ_DIR$\LIME2\Obj\lime2.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\clib\string.h</file>
+            <file>$PROJ_DIR$\..\source\apps\main.h</file>
+            <file>$PROJ_DIR$\LIME2\Obj\bsp.__cstat.et</file>
+            <file>$PROJ_DIR$\LIME2\Obj\mrfi.__cstat.et</file>
+            <file>$PROJ_DIR$\..\source\apps\smpl_nwk_config.dat</file>
             <file>$PROJ_DIR$\..\source\apps\lime2.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi.h</file>
             <file>$PROJ_DIR$\..\source\apps\main.c</file>
+            <file>$PROJ_DIR$\LIME2\Obj\remote.r51</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\family2\mrfi_radio.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\common\mrfi_f1f2.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi_defs.h</file>
+            <file>$PROJ_DIR$\..\source\apps\hal_cc8051.h</file>
             <file>$PROJ_DIR$\..\source\apps\remote.c</file>
-            <file>$PROJ_DIR$\LIME2\Obj\smpl_link.pbd</file>
+            <file>$TOOLKIT_DIR$\lib\clib\cl-pli-nlxd-1e16x01.r51</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_external\mrfi_board_defs.h</file>
         </outputs>
-        <file>
-            <name>[ROOT_NODE]</name>
-            <outputs>
-                <tool>
-                    <name>XLINK</name>
-                    <file> 11 45 14</file>
-                </tool>
-            </outputs>
-        </file>
         <file>
             <name>$PROJ_DIR$\LIME2\Exe\smpl_link.d51</name>
             <outputs>
                 <tool>
                     <name>XLINK</name>
-                    <file> 45 14</file>
+                    <file> 6 0</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>XLINK</name>
-                    <file> 13 10 22 9 1 7 3 21</file>
+                    <file> 1 3 33 2 5 32 54 60</file>
                 </tool>
             </inputs>
+        </file>
+        <file>
+            <name>[ROOT_NODE]</name>
+            <outputs>
+                <tool>
+                    <name>XLINK</name>
+                    <file> 6 0 10</file>
+                </tool>
+            </outputs>
         </file>
         <file>
             <name>$PROJ_DIR$\..\source\apps\bsp_extended.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 4</file>
+                    <name>ICC8051</name>
+                    <file> 33</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 22</file>
+                    <name>BICOMP</name>
+                    <file> 13</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 15</file>
+                    <file> 12</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 54 24 25 34 49 32 50 47 31 29 23 36 46 27</file>
+                    <name>ICC8051</name>
+                    <file> 39 50 26 28 20 44 24 52 57 22 16 14 21 19 15 29</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 41 43 25 31 29 23 54 50 36 49 32 46 47 27 34 24</file>
+                    <name>BICOMP</name>
+                    <file> 24 29 26 15 22 16 52 21 28 20 44 57 14 19</file>
                 </tool>
             </inputs>
         </file>
@@ -124,26 +123,26 @@
             <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 0</file>
+                    <name>ICC8051</name>
+                    <file> 3</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 10</file>
+                    <name>BICOMP</name>
+                    <file> 35</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 16</file>
+                    <file> 48</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 52 54 30 23 29 31 35 33 49 32 27 25 47 40 46 34</file>
+                    <name>ICC8051</name>
+                    <file> 39 50 26 28 20 44 24 23 31 27 22 16 14 21 19 15 17 30</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 41 43 25 31 29 23 54 35 30 33 49 32 46 47 27 34 52 40</file>
+                    <name>BICOMP</name>
+                    <file> 17 24 31 44 20 28 23 27 22 16 19 26 21 30 14 15</file>
                 </tool>
             </inputs>
         </file>
@@ -151,26 +150,26 @@
             <name>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 6</file>
+                    <name>ICC8051</name>
+                    <file> 32</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 7</file>
+                    <name>BICOMP</name>
+                    <file> 36</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 17</file>
+                    <file> 49</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 31 55 50 25 39 29 23 54 48 19 36 42 2 37</file>
+                    <name>ICC8051</name>
+                    <file> 39 50 57 26 28 20 44 24 55 46 34 52 56 38 61 37</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 41 43 36 25 31 29 23 54 39 19 2 50 55 37 42 48</file>
+                    <name>BICOMP</name>
+                    <file> 28 56 52 26 55 20 44 24 37 46 57 61 34 38</file>
                 </tool>
             </inputs>
         </file>
@@ -178,26 +177,26 @@
             <name>$PROJ_DIR$\..\source\apps\lime2.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 18</file>
+                    <name>ICC8051</name>
+                    <file> 2</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 9</file>
+                    <name>BICOMP</name>
+                    <file> 45</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 20</file>
+                    <file> 4</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 32 51 47 24 31 29 23 25 34 49 19 54 50 38 58 36 46 27 2 56 53</file>
+                    <name>ICC8051</name>
+                    <file> 39 50 26 28 20 44 24 52 57 22 16 14 21 19 15 29 47 46 34 58 43 42 40</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 41 43 25 31 29 23 54 50 36 49 32 46 47 27 34 24 38 19 2 51 56 53 58</file>
+                    <name>BICOMP</name>
+                    <file> 16 58 21 29 28 20 44 26 15 22 46 24 52 47 40 57 14 19 34 43 42</file>
                 </tool>
             </inputs>
         </file>
@@ -205,26 +204,26 @@
             <name>$PROJ_DIR$\..\source\apps\main.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 12</file>
+                    <name>ICC8051</name>
+                    <file> 5</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 1</file>
+                    <name>BICOMP</name>
+                    <file> 7</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 5</file>
+                    <file> 9</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 31 24 54 49 19 29 23 25 2 50 47 38 36 32 46 27 34</file>
+                    <name>ICC8051</name>
+                    <file> 39 50 26 28 20 44 24 52 57 22 16 14 21 19 15 29 47 46 34</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 41 43 25 31 29 23 54 50 36 49 32 46 47 27 34 24 38 19 2</file>
+                    <name>BICOMP</name>
+                    <file> 28 29 24 22 46 20 44 26 34 52 21 47 57 16 14 19 15</file>
                 </tool>
             </inputs>
         </file>
@@ -232,31 +231,31 @@
             <name>$PROJ_DIR$\..\source\apps\remote.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 8</file>
+                    <name>ICC8051</name>
+                    <file> 54</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 3</file>
+                    <name>BICOMP</name>
+                    <file> 11</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 44</file>
+                    <file> 8</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 29 25 54 58 49 31 24 23 19 50 47 38 51 2 36 56 32 46 27 34 53</file>
+                    <name>ICC8051</name>
+                    <file> 39 50 44 46 34 26 28 20 24 52 57 22 16 14 21 19 15 29 47 40 58 43 42</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 41 43 23 19 2 25 31 29 54 50 36 49 32 46 47 27 34 24 38 58 51 56 53</file>
+                    <name>BICOMP</name>
+                    <file> 20 26 24 40 22 28 29 44 46 52 21 47 58 34 57 43 16 14 19 15 42</file>
                 </tool>
             </inputs>
         </file>
         <forcedrebuild>
-            <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board.c</name>
+            <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_leds.c</name>
             <tool>ICC8051</tool>
         </forcedrebuild>
         <forcedrebuild>
@@ -264,11 +263,11 @@
             <tool>ICC8051</tool>
         </forcedrebuild>
         <forcedrebuild>
-            <name>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\family2\mrfi_radio.c</name>
+            <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_buttons.c</name>
             <tool>ICC8051</tool>
         </forcedrebuild>
         <forcedrebuild>
-            <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_buttons.c</name>
+            <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board.c</name>
             <tool>ICC8051</tool>
         </forcedrebuild>
         <forcedrebuild>
@@ -276,116 +275,110 @@
             <tool>ICC8051</tool>
         </forcedrebuild>
         <forcedrebuild>
-            <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_leds.c</name>
+            <name>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\family2\mrfi_radio.c</name>
             <tool>ICC8051</tool>
         </forcedrebuild>
     </configuration>
     <configuration>
         <name>REMOTE</name>
         <outputs>
-            <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\lime2.pbi</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\bsp.r51</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\mrfi.pbi</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\bsp_extended.r51</file>
-            <file>$PROJ_DIR$\REMOTE\List\smpl_link.map</file>
-            <file>$PROJ_DIR$\REMOTE\Exe\smpl_link.hex</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\mrfi.r51</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\bsp.pbi</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\remote.r51</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\bsp_extended.pbi</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\main.pbi</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\remote.pbi</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\main.r51</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\smpl_link.pbd</file>
-            <file>$PROJ_DIR$\REMOTE\Exe\smpl_link.d51</file>
-            <file>$PROJ_DIR$\REMOTE\Obj\lime2.r51</file>
             <file>$TOOLKIT_DIR$\config\devices\Texas Instruments\lnk51ew_cc1110F32.xcl</file>
-            <file>$TOOLKIT_DIR$\inc\clib\string.h</file>
-            <file>$TOOLKIT_DIR$\lib\clib\cl-pli-nlxd-1e16x01.r51</file>
-            <file>$TOOLKIT_DIR$\inc\ioCC1110.h</file>
-            <file>$PROJ_DIR$\..\source\apps\bsp_extended.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_generic_leds.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_generic_buttons.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_led_defs.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_leds.c</file>
             <file>$PROJ_DIR$\..\source\apps\bsp_extended.c</file>
             <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_button_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp.c</file>
             <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\mcus\bsp_8051_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board.c</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_led_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_drivers.c</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_generic_buttons.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_driver_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi_defs.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\smartrf\cc1110\smartrf_CC1110_srfcc1110.h</file>
-            <file>$PROJ_DIR$\..\source\apps\main.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\family2\mrfi_radio.c</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_buttons.c</file>
-            <file>$PROJ_DIR$\..\source\apps\smpl_config.dat</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_external\mrfi_board_defs.h</file>
-            <file>$PROJ_DIR$\..\source\apps\smpl_nwk_config.dat</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_generic_leds.h</file>
             <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\bsp_buttons.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\common\mrfi_f1f2.c</file>
             <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\bsp_leds.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi.h</file>
-            <file>$PROJ_DIR$\..\source\apps\hal_cc8051.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_leds.c</file>
-            <file>$PROJ_DIR$\..\source\apps\hal_defs.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_driver_defs.h</file>
             <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp_macros.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\smartrf\cc2510\smartrf_cc2510_srfcc2510.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\common\mrfi_f1f2.h</file>
-            <file>$PROJ_DIR$\..\source\apps\hal_types.h</file>
-            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_drivers.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board_defs.h</file>
+            <file>$PROJ_DIR$\..\source\apps\bsp_extended.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_buttons.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board.c</file>
+            <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\common\mrfi_f1f2.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\smartrf\cc1110\smartrf_CC1110_srfcc1110.h</file>
+            <file>$PROJ_DIR$\..\source\apps\smpl_config.dat</file>
             <file>$PROJ_DIR$\..\source\apps\ioCCxx10_bitdef.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi.c</file>
+            <file>$PROJ_DIR$\..\source\apps\hal_defs.h</file>
+            <file>$PROJ_DIR$\..\source\apps\hal_types.h</file>
+            <file>$TOOLKIT_DIR$\inc\ioCC1110.h</file>
+            <file>$TOOLKIT_DIR$\inc\clib\string.h</file>
+            <file>$PROJ_DIR$\..\source\apps\main.h</file>
+            <file>$PROJ_DIR$\..\source\apps\smpl_nwk_config.dat</file>
             <file>$PROJ_DIR$\..\source\apps\lime2.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi.h</file>
             <file>$PROJ_DIR$\..\source\apps\main.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\family2\mrfi_radio.c</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\radios\common\mrfi_f1f2.h</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi_defs.h</file>
+            <file>$PROJ_DIR$\..\source\apps\hal_cc8051.h</file>
             <file>$PROJ_DIR$\..\source\apps\remote.c</file>
+            <file>$TOOLKIT_DIR$\lib\clib\cl-pli-nlxd-1e16x01.r51</file>
+            <file>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_external\mrfi_board_defs.h</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\mrfi.r51</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\lime2.__cstat.et</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\lime2.pbi</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\remote.pbi</file>
+            <file>$PROJ_DIR$\REMOTE\Exe\smpl_link.hex</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\main.r51</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\bsp.__cstat.et</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\mrfi.__cstat.et</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\remote.__cstat.et</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\lime2.r51</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\bsp.r51</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\bsp_extended.r51</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\remote.r51</file>
+            <file>$PROJ_DIR$\REMOTE\List\smpl_link.map</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\smpl_link.pbd</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\bsp_extended.pbi</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\main.__cstat.et</file>
+            <file>$PROJ_DIR$\REMOTE\Exe\smpl_link.d51</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\bsp.pbi</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\bsp_extended.__cstat.et</file>
+            <file>$PROJ_DIR$\REMOTE\Obj\mrfi.pbi</file>
         </outputs>
         <file>
             <name>[ROOT_NODE]</name>
             <outputs>
                 <tool>
                     <name>XLINK</name>
-                    <file> 15 5 6</file>
+                    <file> 59 55 45</file>
                 </tool>
             </outputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\REMOTE\Exe\smpl_link.d51</name>
-            <outputs>
-                <tool>
-                    <name>XLINK</name>
-                    <file> 5 6</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>XLINK</name>
-                    <file> 17 2 4 16 13 7 9 19</file>
-                </tool>
-            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\..\source\apps\bsp_extended.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 10</file>
+                    <name>ICC8051</name>
+                    <file> 53</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 4</file>
+                    <name>BICOMP</name>
+                    <file> 57</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 61</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 49 21 22 31 44 29 45 42 28 26 20 33 41 24</file>
+                    <name>ICC8051</name>
+                    <file> 22 30 13 15 7 27 11 32 36 9 3 1 8 6 2 16</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 38 40 22 28 26 20 49 45 33 44 29 41 42 24 31 21</file>
+                    <name>BICOMP</name>
+                    <file> 11 16 13 2 9 3 32 8 15 7 27 36 1 6</file>
                 </tool>
             </inputs>
         </file>
@@ -393,22 +386,26 @@
             <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 8</file>
+                    <name>ICC8051</name>
+                    <file> 52</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 2</file>
+                    <name>BICOMP</name>
+                    <file> 60</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 47</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 47 49 27 20 26 28 32 30 44 29 24 22 42 37 41 31</file>
+                    <name>ICC8051</name>
+                    <file> 22 30 13 15 7 27 11 10 18 14 9 3 1 8 6 2 4 17</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 38 40 22 28 26 20 49 32 27 30 44 29 41 42 24 31 47 37</file>
+                    <name>BICOMP</name>
+                    <file> 4 11 18 27 7 15 10 14 9 3 6 13 8 17 1 2</file>
                 </tool>
             </inputs>
         </file>
@@ -416,22 +413,26 @@
             <name>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 3</file>
+                    <name>ICC8051</name>
+                    <file> 41</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 7</file>
+                    <name>BICOMP</name>
+                    <file> 62</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 48</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 28 51 45 22 36 26 20 49 43 18 33 39 0 34</file>
+                    <name>ICC8051</name>
+                    <file> 22 30 36 13 15 7 27 11 34 28 19 32 35 21 40 20</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 38 40 33 22 28 26 20 49 36 18 0 45 51 34 39 43</file>
+                    <name>BICOMP</name>
+                    <file> 15 35 32 13 34 7 27 11 20 28 36 40 19 21</file>
                 </tool>
             </inputs>
         </file>
@@ -439,22 +440,26 @@
             <name>$PROJ_DIR$\..\source\apps\lime2.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 1</file>
+                    <name>ICC8051</name>
+                    <file> 51</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 16</file>
+                    <name>BICOMP</name>
+                    <file> 43</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 42</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 46 21 49 29 41 28 45 44 18 24 42 35 20 54 26 22 31 48 33 0 52</file>
+                    <name>ICC8051</name>
+                    <file> 22 30 13 15 7 27 11 32 36 9 3 1 8 6 2 16 29 28 19 37 26 25 23</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 38 40 22 28 26 20 49 45 33 44 29 41 42 24 31 21 35 18 0 46 52 48 54</file>
+                    <name>BICOMP</name>
+                    <file> 37 16 11 3 1 15 32 9 28 6 8 29 27 23 7 13 2 25 36 19 26</file>
                 </tool>
             </inputs>
         </file>
@@ -462,22 +467,26 @@
             <name>$PROJ_DIR$\..\source\apps\main.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 11</file>
+                    <name>ICC8051</name>
+                    <file> 46</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 13</file>
+                    <name>BICOMP</name>
+                    <file> 50</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 58</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 28 21 49 44 18 26 20 22 0 45 42 35 33 29 41 24 31</file>
+                    <name>ICC8051</name>
+                    <file> 22 30 13 15 7 27 11 32 36 9 3 1 8 6 2 16 29 28 19</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 38 40 22 28 26 20 49 45 33 44 29 41 42 24 31 21 35 18 0</file>
+                    <name>BICOMP</name>
+                    <file> 15 16 11 9 28 7 27 13 19 32 8 29 36 3 1 6 2</file>
                 </tool>
             </inputs>
         </file>
@@ -485,22 +494,41 @@
             <name>$PROJ_DIR$\..\source\apps\remote.c</name>
             <outputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 12</file>
+                    <name>ICC8051</name>
+                    <file> 54</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 9</file>
+                    <name>BICOMP</name>
+                    <file> 44</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 49</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 49 28 45 54 52 44 22 21 29 31 42 18 35 46 0 26 20 33 41 24 48</file>
+                    <name>ICC8051</name>
+                    <file> 22 30 27 28 19 13 15 7 11 32 36 9 3 1 8 6 2 16 29 23 37 26 25</file>
                 </tool>
                 <tool>
-                    <name>ICC8051</name>
-                    <file> 38 40 20 18 0 22 28 26 49 45 33 44 29 41 42 24 31 21 35 54 46 52 48</file>
+                    <name>BICOMP</name>
+                    <file> 3 23 8 26 9 13 2 16 11 15 32 28 29 37 19 7 27 36 1 6 25</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\REMOTE\Exe\smpl_link.d51</name>
+            <outputs>
+                <tool>
+                    <name>XLINK</name>
+                    <file> 55 45</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>XLINK</name>
+                    <file> 0 52 53 51 46 41 54 39</file>
                 </tool>
             </inputs>
         </file>
