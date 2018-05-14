@@ -61,7 +61,7 @@
       die();
   }
 
-  echo "Opening for logging '" . lime2node_get_log() . "'..."
+  echo "Opening for logging '" . lime2node_get_log() . "'...\n";
   lime2node_empty_log();
   lime2node_write_log("PHP Lime2Node backend: acquired lock file $cli_command_lockfile... proceeding with command: " . $argv[1]);
   lime2node_init_over_spi();
@@ -71,25 +71,27 @@
   $ack_contents = array();
   if ($argv[1] == "TURNON")
   {
-    echo "Sending TURNON command to remote node..."
+    echo "Sending TURNON command to remote node...\n";
     $result = lime2node_send_spi_cmd($turnon_cmd, $tid);
   }
   else
   {
-    echo "Sending TURNOFF command to remote node..."
+    echo "Sending TURNOFF command to remote node...\n";
     $result = lime2node_send_spi_cmd($turnoff_cmd, $tid);
   }
 
   if ($result["valid"])
   {
-    echo "Command was sent over SPI successfully. Waiting for the ACK from the remote node..."
-    if (lime2node_wait_for_ack($tid))
-      echo "Successfully received the ACK from the remote node! See log file to inspect ACK contents."
+    echo "Command was sent successfully over SPI. Waiting for the ACK from the remote node...\n";
+
+    $received_ack = lime2node_wait_for_ack($tid);
+    if ($received_ack["valid"])
+      echo "Successfully received the ACK from the remote node! Battery read is " .  $received_ack["batteryRead"] . "\n";
     else
-      echo "Failed waiting for the ACK."
+      echo "Failed waiting for the ACK.\n";
   }
   else {
-    echo "Command TX over SPI failed. Aborting."
+    echo "Command TX over SPI failed. Aborting.\n";
   }
   lime2node_write_log("PHP Lime2Node backend: command sequence completed. Exiting.");
 ?>

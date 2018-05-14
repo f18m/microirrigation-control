@@ -24,6 +24,8 @@
 */
 
 var socket;
+var socket_ready;
+
 function ws_init() {
     if (!("WebSocket" in window)) {
         alert("Your browser doesn't support latest Websockets");
@@ -33,6 +35,7 @@ function ws_init() {
     // we expect the WebSocket server to be up and running on the server-side on port 8080
     var wsUrl = 'ws://ffserver.changeip.org:8080/';
     socket = new WebSocket(wsUrl);
+    socket_ready = false;
     
     socket.onmessage = function (evt) {
         // we can receive only 1 type of message from the WebSocket: a log update
@@ -40,16 +43,51 @@ function ws_init() {
     };
     
     socket.onopen = function() {
-        // upon successful WebSocket connection, we send command:
-        if (window.location.href.indexOf("irrigation-start") !== -1)
-             socket.send('TURNON');
-        else if (window.location.href.indexOf("irrigation-stop") !== -1)
-             socket.send('TURNOFF');
+        socket_ready = true;
+        console.log("Socket now ready.");
     };
 }
 
 function ws_timer() {
     socket.send('GET_UPDATE');
+}
+
+function ws_check_ready() {
+    if (!socket_ready)
+    {
+        alert('Socket not ready. Please wait a couple more seconds and retry!');
+        return false;
+    }
+    return true;
+}
+
+function ws_send_turnon1() {
+    if (!ws_check_ready())
+      return;
+
+    // upon successful WebSocket connection, we send command:
+    //if (window.location.href.indexOf("irrigation-start") !== -1)
+    socket.send('TURNON1');
+    //else if (window.location.href.indexOf("irrigation-stop") !== -1)
+         //socket.send('TURNOFF');
+}
+
+function ws_send_turnoff1() {
+    if (!ws_check_ready())
+      return;
+    socket.send('TURNOFF1');
+}
+
+function ws_send_turnon2() {
+    if (!ws_check_ready())
+      return;
+    socket.send('TURNON2');
+}
+
+function ws_send_turnoff2() {
+    if (!ws_check_ready())
+      return;
+    socket.send('TURNOFF2');
 }
 
 // as soon as the HTML loads, setup the WebSocket:

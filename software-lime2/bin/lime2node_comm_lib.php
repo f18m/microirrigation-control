@@ -22,7 +22,7 @@
   $turnoff_cmd = 'TURNOFF';
   $status_cmd = 'STATUS_';
 
-  // since the TID is sent over commandline it should stay inside the ASCII range:
+  // since the Transaction ID (TID) is sent over commandline it should stay inside the ASCII range:
   $tid_for_status_cmd = 48;    // '0'
   $first_valid_tid = 49;    // '1'
   $last_valid_tid = 57;     // '9'
@@ -146,7 +146,7 @@
     return $ret_array;
   }
 
-  function lime2node_is_valid_ack($cmdreply)
+  function lime2node_parse_ack($cmdreply)
   {
     global $validack;
     $validack_arr = array_values(unpack("C*", $validack));
@@ -186,10 +186,15 @@
   {
     global $status_cmd, $tid_for_status_cmd, $max_wait_time_sec;
 
+    $invalid_ack_ret = array(
+        "valid" => FALSE,
+    );
+
     // ignore the result of the first STATUS command: it's crap related to the command before the last sent command!!
     $send_ret = lime2node_send_spi_cmd($status_cmd, $tid_for_status_cmd);
     if (!$send_ret["valid"])
-      return FALSE;
+      // failed SPI transaction... something is really going bad
+      return $invalid_ack_ret;
 
     //$ack = $send_ret["ack"];
     $waited_time_sec = 0;
@@ -198,11 +203,12 @@
     );
     while (TRUE) //count($ack)==0)    // NULL replies immediately after a command mean that the radio is still estabilishing connection with the "remote" node
     {
-      sleep(3);
+      sleep(2);
 
       $send_ret = lime2node_send_spi_cmd($status_cmd, $tid_for_status_cmd);
       if (!$send_ret["valid"])
-        return FALSE;
+        // failed SPI transaction... something is really going bad
+        return $invalid_ack_ret;
 
       if ($waited_time_sec > $max_wait_time_sec)
       {
@@ -212,17 +218,17 @@
       $waited_time_sec = $waited_time_sec + 3;
 
       $ack = $send_ret["ack"];
-      $valid_ack_ret = lime2node_is_valid_ack($ack);
+      $valid_ack_ret = lime2node_parse_ack($ack);
       if ($valid_ack_ret["valid"]==1 && $valid_ack_ret["transactionID"]==$transactionID)
       {
         lime2node_write_log("Received valid ACK; last ACK'ed transaction ID=" . $valid_ack_ret["transactionID"] . ", battery read=" . $valid_ack_ret["batteryRead"]);
-        return TRUE;
+        return $valid_ack_ret;
       }
     }
 
     lime2node_write_log("Invalid ACK received (waiting for the ACK of transaction ID=" . $transactionID .
                         " but the last ACK'ed command had transaction ID=" . $valid_ack_ret["transactionID"] . ")!");
-    return FALSE;
+    return $invalid_ack_ret;
   }
 
   function lime2node_get_last_transaction_id_and_advance()
