@@ -1,4 +1,6 @@
-firmware-cc1110-lime2-remote/ide/settings/*.*
+firmware-cc1110-lime2-remote/ide/settings/*.dnx
+firmware-cc1110-lime2-remote/ide/settings/*.dbgdt
+firmware-cc1110-lime2-remote/ide/settings/*.dnx
 firmware-cc1110-lime2-remote/ide/LIME2/Obj/*
 firmware-cc1110-lime2-remote/ide/REMOTE/Obj/*
 firmware-cc1110-lime2-remote/ide/*.log

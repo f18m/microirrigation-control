@@ -1,6 +1,6 @@
 <?php
 
-  // 
+  //
   // lime2node_comm_lib.php
   // This is a library of PHP functions to be used on a Linux system to communicate over SPI with the "lime2" node
   // part of the https://github.com/f18m/microirrigation-control github project
@@ -8,7 +8,7 @@
   // Author: Francesco Montorsi
   // Creation date: Nov 2017
   //
-  
+
 
   // constants
   $transaction_file = 'last_spi_transaction_id';
@@ -28,6 +28,10 @@
   $last_valid_tid = 57;     // '9'
 
 
+  //
+  // LOGGING
+  //
+
   function lime2node_empty_log()
   {
     global $last_spi_op_logfile;
@@ -43,7 +47,19 @@
       global $last_spi_op_logfile;
       file_put_contents($last_spi_op_logfile, $msg . "\n", FILE_APPEND | LOCK_EX);
   }
-  
+
+  function lime2node_get_log()
+  {
+    global $last_spi_op_logfile;
+    return $last_spi_op_logfile;
+  }
+
+
+
+  //
+  // SPI COMMUNICATION HELPER FUNCTIONS
+  //
+
   function lime2node_init_over_spi()
   {
     /* Fread is binary-safe IF AND ONLY IF you don't use magic-quotes.
@@ -94,7 +110,7 @@
 
     lime2node_write_log("Sending command over SPI:" . $cmd . " with transaction ID=" . $transactionID);
     $rawcommand = $cmd . chr($transactionID);
-    
+
     // NOTE: the "sudo" operation is required when running e.g. on a webserver that is not running as ROOT user:
     //       to be able to send/receive data over SPI, root permissions are needed.
     $command = 'sudo spidev_test -D /dev/spidev2.0 -s ' . strval($speed_hz) . ' -v -p "' . $rawcommand . '" --output ' . $output_file;
@@ -122,7 +138,7 @@
     $content_arr = lime2node_trim_nulls($content_arr);
     lime2node_write_log("Received a reply over SPI that is " . count($content_arr) . "B long");
     //print_r($content_arr);
-    
+
     $ret_array = array(
         "valid"  => TRUE,
         "ack" => $content_arr,
@@ -204,7 +220,7 @@
       }
     }
 
-    lime2node_write_log("Invalid ACK received (waiting for the ACK of transaction ID=" . $transactionID . 
+    lime2node_write_log("Invalid ACK received (waiting for the ACK of transaction ID=" . $transactionID .
                         " but the last ACK'ed command had transaction ID=" . $valid_ack_ret["transactionID"] . ")!");
     return FALSE;
   }
@@ -223,7 +239,7 @@
       $str = file_get_contents($transaction_file);
     else
       $str = 0;
-    
+
     $ret_tid = intval($str)+1;
 
     // since the TID is sent over commandline it should stay inside the ASCII range:
@@ -238,4 +254,3 @@
     return $ret_tid;
   }
 ?>
-

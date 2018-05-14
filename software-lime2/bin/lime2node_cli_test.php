@@ -1,7 +1,7 @@
-#!/usr/bin/php    
+#!/usr/bin/php
 <?php
 
-  // 
+  //
   // lime2node_cli_test.php
   // Small utility to test the PHP library for over-SPI communication
   // part of the https://github.com/f18m/microirrigation-control github project
@@ -9,19 +9,19 @@
   // Author: Francesco Montorsi
   // Creation date: Nov 2017
   //
-  
+
   include 'lime2node_comm_lib.php';
-  
+
   // constants
-  
+
   $cli_command_lockfile="/tmp/lime2node_cli.lock";
-  
-  
+
+
   // utility class:
-  
+
   class FileLocker {
       protected static $loc_files = array();
-  
+
       public static function lockFile($file_name, $wait = false) {
           $loc_file = fopen($file_name, 'c');
           if ( !$loc_file ) {
@@ -42,40 +42,54 @@
               return false;
           }
       }
-  
+
       public static function unlockFile($file_name) {
           fclose(self::$loc_files[$file_name]);
           @unlink($file_name);
           unset(self::$loc_files[$file_name]);
       }
-  } 
+  }
 
-  
-  
+
+
   // main:
-  
-  
+
+
   // ensure only one turnon/turnoff command can be running at any given time:
   if ( !FileLocker::lockFile($cli_command_lockfile) ) {
       echo "Can't lock file $cli_command_lockfile: another operations is ongoing. Aborting.\n";
       die();
   }
 
+  echo "Opening for logging '" . lime2node_get_log() . "'..."
   lime2node_empty_log();
   lime2node_write_log("PHP Lime2Node backend: acquired lock file $cli_command_lockfile... proceeding with command: " . $argv[1]);
   lime2node_init_over_spi();
-  
-  // for testing purpose: send TURNON command
+
+  // for testing purpose: send TURNON/TURNOFF command
   $tid = lime2node_get_last_transaction_id_and_advance();
   $ack_contents = array();
   if ($argv[1] == "TURNON")
+  {
+    echo "Sending TURNON command to remote node..."
     $result = lime2node_send_spi_cmd($turnon_cmd, $tid);
+  }
   else
+  {
+    echo "Sending TURNOFF command to remote node..."
     $result = lime2node_send_spi_cmd($turnoff_cmd, $tid);
-    
-  if ($result["valid"])
-    lime2node_wait_for_ack($tid);
+  }
 
+  if ($result["valid"])
+  {
+    echo "Command was sent over SPI successfully. Waiting for the ACK from the remote node..."
+    if (lime2node_wait_for_ack($tid))
+      echo "Successfully received the ACK from the remote node! See log file to inspect ACK contents."
+    else
+      echo "Failed waiting for the ACK."
+  }
+  else {
+    echo "Command TX over SPI failed. Aborting."
+  }
   lime2node_write_log("PHP Lime2Node backend: command sequence completed. Exiting.");
 ?>
-
