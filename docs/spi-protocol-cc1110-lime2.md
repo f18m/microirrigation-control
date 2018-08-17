@@ -17,7 +17,7 @@ Each command is identified by a "transaction ID" byte.
 The transaction ID is a number that will be provided in the ACK response to allow the 
 SPI master to associate a sent command with its ACK.
 
-<img src="docs/packet_format.png" />
+<img src="packet_format.png" />
 
 ## Commands ##
 
