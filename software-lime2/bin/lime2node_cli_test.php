@@ -60,6 +60,36 @@
       echo "Can't lock file $cli_command_lockfile: another operations is ongoing. Aborting.\n";
       die();
   }
+  
+  
+  // parse command line arguments:
+
+  $cmd_to_send = $turnon_cmd;
+  if ($argc > 1)
+  {
+    if ($argv[1] == "TURNON") {
+      $cmd_to_send = $turnon_cmd;
+    } else if ($argv[1] == "TURNOFF") {
+      $cmd_to_send = $turnoff_cmd;
+    } else {
+      echo "Invalid value for argument #1: only values 'TURNON' or 'TURNOFF' are accepted.\n";
+      die();
+    }
+  }
+  
+  // currently only 2 values of cmdParameter are supported: '1' or '2' to indicate the relay channel group
+  $cmdParameter = ord("1");      // must be ASCII encoded
+  if ($argc > 2) {
+    if ($argv[2] == "2") {
+      $cmdParameter = ord("2");
+    } else {
+      echo "Invalid value for argument #2: only values '1' or '2' are accepted.\n";
+      die();
+    }
+  }
+
+
+  // now start SPI activities:
 
   echo "Opening for logging '" . lime2node_get_log() . "'...\n";
   lime2node_empty_log();
@@ -69,16 +99,8 @@
   // for testing purpose: send TURNON/TURNOFF command
   $tid = lime2node_get_last_transaction_id_and_advance();
   $ack_contents = array();
-  if ($argv[1] == "TURNON")
-  {
-    echo "Sending TURNON command to remote node...\n";
-    $result = lime2node_send_spi_cmd($turnon_cmd, $tid);
-  }
-  else
-  {
-    echo "Sending TURNOFF command to remote node...\n";
-    $result = lime2node_send_spi_cmd($turnoff_cmd, $tid);
-  }
+  echo "Sending $cmd_to_send command (with param=$cmdParameter) to remote node...\n";
+  $result = lime2node_send_spi_cmd($cmd_to_send, $tid, $cmdParameter);
 
   if ($result["valid"])
   {

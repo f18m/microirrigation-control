@@ -24,6 +24,7 @@
 
   // since the Transaction ID (TID) is sent over commandline it should stay inside the ASCII range:
   $tid_for_status_cmd = 48;    // '0'
+  $cmdparam_for_status_cmd = 48;   // '0'
   $first_valid_tid = 49;    // '1'
   $last_valid_tid = 57;     // '9'
 
@@ -104,12 +105,12 @@
     return $content_arr;
   }
 
-  function lime2node_send_spi_cmd($cmd, $transactionID)
+  function lime2node_send_spi_cmd($cmd, $transactionID, $cmdParameter)
   {
     global $output_file, $speed_hz;
 
-    lime2node_write_log("Sending command over SPI:" . $cmd . " with transaction ID=" . $transactionID);
-    $rawcommand = $cmd . chr($transactionID);
+    lime2node_write_log("Sending command over SPI:" . $cmd . " with transaction ID=" . $transactionID . " and parameter=" . $cmdParameter);
+    $rawcommand = $cmd . chr($transactionID) . chr($cmdParameter);
 
     // NOTE: the "sudo" operation is required when running e.g. on a webserver that is not running as ROOT user:
     //       to be able to send/receive data over SPI, root permissions are needed.
@@ -184,14 +185,14 @@
 
   function lime2node_wait_for_ack($transactionID)
   {
-    global $status_cmd, $tid_for_status_cmd, $max_wait_time_sec;
+    global $status_cmd, $tid_for_status_cmd, $max_wait_time_sec, $cmdparam_for_status_cmd;
 
     $invalid_ack_ret = array(
         "valid" => FALSE,
     );
 
     // ignore the result of the first STATUS command: it's crap related to the command before the last sent command!!
-    $send_ret = lime2node_send_spi_cmd($status_cmd, $tid_for_status_cmd);
+    $send_ret = lime2node_send_spi_cmd($status_cmd, $tid_for_status_cmd, $cmdparam_for_status_cmd);
     if (!$send_ret["valid"])
       // failed SPI transaction... something is really going bad
       return $invalid_ack_ret;
@@ -205,7 +206,7 @@
     {
       sleep(2);
 
-      $send_ret = lime2node_send_spi_cmd($status_cmd, $tid_for_status_cmd);
+      $send_ret = lime2node_send_spi_cmd($status_cmd, $tid_for_status_cmd, $cmdparam_for_status_cmd);
       if (!$send_ret["valid"])
         // failed SPI transaction... something is really going bad
         return $invalid_ack_ret;
