@@ -43,9 +43,9 @@ Description:        Code for the "remote" node.
 #define WAIT_TIME_RADIOOFF_MSEC                            (6000)
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   GPIO #1 ---> attached to VALVE_CTRL1
+ *   GPIO #1 ---> attached to VALVE_CTRL1a
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Polarity  :  Active Low
+ *   Polarity  :  Active High
  *   GPIO      :  P0.3
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
@@ -54,9 +54,9 @@ Description:        Code for the "remote" node.
 #define REMOTE_GPIO1_DDR__           P0DIR
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   GPIO #2 ---> attached to VALVE_CTRL2
+ *   GPIO #2 ---> attached to VALVE_CTRL1b
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Polarity  :  Active Low
+ *   Polarity  :  Active High
  *   GPIO      :  P0.2
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
@@ -64,7 +64,31 @@ Description:        Code for the "remote" node.
 #define REMOTE_GPIO2_BIT__           2
 #define REMOTE_GPIO2_DDR__           P0DIR
 
-#define REMOTE_GPIO_ACTIVE_LOW       1
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   GPIO #3 ---> attached to VALVE_CTRL2a
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Polarity  :  Active High
+ *   GPIO      :  P0.4
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+#define REMOTE_GPIO3_PORT__          P0
+#define REMOTE_GPIO3_BIT__           4
+#define REMOTE_GPIO3_DDR__           P0DIR
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   GPIO #4 ---> attached to VALVE_CTRL2b
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Polarity  :  Active High
+ *   GPIO      :  P0.5
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+#define REMOTE_GPIO4_PORT__          P0
+#define REMOTE_GPIO4_BIT__           1
+#define REMOTE_GPIO4_DDR__           P0DIR
+
+   
+// global active low/high switch
+#define REMOTE_GPIO_ACTIVE_LOW       0
 
 
 
@@ -89,6 +113,7 @@ static          mrfiPacket_t  g_pktTx;
 static          command_e     g_lastCmdRx = CMD_MAX;
 static          uint8_t       g_lastTransactionIDRX = 0;
 static          uint8_t       g_lastTransactionIDApplied = 0;
+static          uint8_t       g_lastCmdParameter = 0;
 static          uint16_t      g_last_adc_result = 0;
 
 
@@ -115,7 +140,8 @@ static uint8_t CheckCmdAndReplyWithAck()                // will leave the radio 
     }
 
     // retrieve the transaction ID
-    g_lastTransactionIDRX = radioMsg[COMMAND_LEN+0];
+    g_lastTransactionIDRX = radioMsg[COMMAND_LEN+0];            // this should be ASCII encoded
+    g_lastCmdParameter = radioMsg[COMMAND_LEN+1];            // this should be ASCII encoded
 
     // Build and immediately send the acknowledge for this transaction
     // otherwise the "lime2" node will keep sending us the same command
@@ -154,13 +180,29 @@ static void ApplyCmdRx()
 
     if (g_lastCmdRx == CMD_TURN_ON)
     {
-        TURN_OUTPUT_PORT_ON( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
-        TURN_OUTPUT_PORT_OFF( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        if (g_lastCmdParameter == '1')
+        {
+          TURN_OUTPUT_PORT_ON(  REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+          TURN_OUTPUT_PORT_OFF( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        }
+        else if (g_lastCmdParameter == '2')
+        {
+          TURN_OUTPUT_PORT_ON(  REMOTE_GPIO3_BIT__, REMOTE_GPIO3_PORT__, REMOTE_GPIO3_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+          TURN_OUTPUT_PORT_OFF( REMOTE_GPIO4_BIT__, REMOTE_GPIO4_PORT__, REMOTE_GPIO4_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        }
     }
     else if (g_lastCmdRx == CMD_TURN_OFF)
     {
-        TURN_OUTPUT_PORT_OFF( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
-        TURN_OUTPUT_PORT_ON( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        if (g_lastCmdParameter == '1')
+        {
+          TURN_OUTPUT_PORT_OFF( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+          TURN_OUTPUT_PORT_ON(  REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        }
+        else if (g_lastCmdParameter == '2')
+        {
+          TURN_OUTPUT_PORT_OFF( REMOTE_GPIO3_BIT__, REMOTE_GPIO3_PORT__, REMOTE_GPIO3_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+          TURN_OUTPUT_PORT_ON(  REMOTE_GPIO4_BIT__, REMOTE_GPIO4_PORT__, REMOTE_GPIO4_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+        }
     }
     else
         return;
@@ -175,9 +217,17 @@ static void ApplyCmdRx()
 
     // then turn off relay:
 
-    TURN_OUTPUT_PORT_OFF( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
-    TURN_OUTPUT_PORT_OFF( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
-
+    if (g_lastCmdParameter == '1')
+    {
+      TURN_OUTPUT_PORT_OFF( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+      TURN_OUTPUT_PORT_OFF( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    }
+    else if (g_lastCmdParameter == '2')
+    {
+      TURN_OUTPUT_PORT_OFF( REMOTE_GPIO3_BIT__, REMOTE_GPIO3_PORT__, REMOTE_GPIO3_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+      TURN_OUTPUT_PORT_OFF( REMOTE_GPIO4_BIT__, REMOTE_GPIO4_PORT__, REMOTE_GPIO4_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    }
+    
     g_lastTransactionIDApplied = g_lastTransactionIDRX;
 }
 
@@ -236,8 +286,12 @@ static void PinConfigRemote()
 
     __bsp_LED_CONFIG__  ( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
     __bsp_LED_CONFIG__  ( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    __bsp_LED_CONFIG__  ( REMOTE_GPIO3_BIT__, REMOTE_GPIO3_PORT__, REMOTE_GPIO3_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    __bsp_LED_CONFIG__  ( REMOTE_GPIO4_BIT__, REMOTE_GPIO4_PORT__, REMOTE_GPIO4_DDR__, REMOTE_GPIO_ACTIVE_LOW );
     __bsp_LED_TURN_OFF__( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
     __bsp_LED_TURN_OFF__( REMOTE_GPIO2_BIT__, REMOTE_GPIO2_PORT__, REMOTE_GPIO2_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    __bsp_LED_TURN_OFF__( REMOTE_GPIO3_BIT__, REMOTE_GPIO3_PORT__, REMOTE_GPIO3_DDR__, REMOTE_GPIO_ACTIVE_LOW );
+    __bsp_LED_TURN_OFF__( REMOTE_GPIO4_BIT__, REMOTE_GPIO4_PORT__, REMOTE_GPIO4_DDR__, REMOTE_GPIO_ACTIVE_LOW );
 
     // Set [ADCCFG.ADCCFG7 = 1].
     ADCCFG |= ADCCFG_7;

@@ -78,14 +78,15 @@ Notes:              Because of the way SPI operates it's important that the MAST
 * LOCAL VARIABLES
 */
 
-// SLAVE->MASTER variables
+// SPI and radio SLAVE->MASTER variables
 static          uint8_t       g_noAckCount = 0;
 static          uint8_t       g_lastRemoteBatteryRead = 0;
 static          uint8_t       g_lastRemoteAckTransactionID = 0;
 
-// MASTER->SLAVE variables
+// SPI and radio MASTER->SLAVE variables
 static          command_e     g_lastSpiCommand = CMD_MAX;
 static          uint8_t       g_lastSpiCommandTransactionID = 0;
+static          uint8_t       g_lastSpiCommandParameter = 0;
 static          mrfiPacket_t  g_pktTx;
 
 // SPI:
@@ -126,6 +127,7 @@ static void SendCommandOverRadioWithACK()
     uint8_t* cmdMsg = MRFI_P_PAYLOAD(&g_pktTx);
     memcpy(cmdMsg, g_commands[g_lastSpiCommand], COMMAND_LEN);
     cmdMsg[COMMAND_LEN+0] = g_lastSpiCommandTransactionID;
+    cmdMsg[COMMAND_LEN+1] = g_lastSpiCommandParameter;
 
     // note that SetRxAddressFilter() is commented out in the MAIN (does not work for whatever reason) so the following
     // two lines are useless:
@@ -335,6 +337,11 @@ static void HandleSPI()
     if (g_rxBufferLastIdx == 0)
         return;           // nothing received!
 
+    
+    // the idea is that we will enter this function from time to time.
+    // SPI communication is pretty fast so by the time this function checks the
+    // SPI RX buffer, we should find all bytes there. For this reason we reject
+    // what we received if its length is not correct!    
     if (g_rxBufferLastIdx != COMMAND_LEN + COMMAND_POSTFIX_LEN /* transaction ID byte */)
     {
         // default: garbage command... do not provide a valid ACK on SPI:
@@ -356,9 +363,10 @@ static void HandleSPI()
     case CMD_TURN_OFF:
         // Read the transaction ID
         g_lastSpiCommandTransactionID = g_rxBufferSPISlave[COMMAND_LEN+0];
+        g_lastSpiCommandParameter = g_rxBufferSPISlave[COMMAND_LEN+1];
                 // fallthrough!
 
-        // IMPORTANT: the transaction ID given in the STATUS command is ignored:
+        // IMPORTANT: the transaction ID / cmdParameter given in the STATUS command is ignored:
         //            the STATUS command is used to retrieve ACK of other commands!
     case CMD_GET_STATUS:
         // signal we received a valid command:
@@ -399,7 +407,8 @@ void sLime2Node(void)
     PinConfigLime2_GPIO_INPUT();
 #endif
 
-    // now wait forever for commands from LIME2 to bridge over radio:
+    // now wait forever for commands from LIME2 Linux SPI master
+    // that we will bridge over radio toward the "remote" node:
     unsigned int count1=0, count2=0;
     while (1)
     {

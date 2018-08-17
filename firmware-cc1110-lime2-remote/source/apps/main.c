@@ -34,7 +34,7 @@ volatile uint8_t       g_sRxCallbackSemaphore = 0;
 
 const char* g_commands[] =
 {
-     // keep all the same lenght == COMMAND_LEN
+     // keep all the same length == COMMAND_LEN
     "TURNON_",
     "TURNOFF",
     "STATUS_"

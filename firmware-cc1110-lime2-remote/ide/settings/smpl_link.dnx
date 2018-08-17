@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>3973088952</Checksum>
+        <Checksum>205244797</Checksum>
     </DebugChecksum>
     <CallStack>
         <ShowArgs>0</ShowArgs>
@@ -90,19 +90,17 @@
     <Breakpoints>
         <Bp0>_ "STD_CODE" "{$PROJ_DIR$\..\..\source\components\simpliciti\mrfi\radios\family2\mrfi_radio.c}.742.5" 0 0 0 0 "" 0 ""</Bp0>
         <Bp1>_ "STD_CODE" "{$PROJ_DIR$\..\..\source\apps\remote.c}.47.3" 0 0 0 0 "" 0 ""</Bp1>
-        <Bp2>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.152.3" 0 0 0 0 "" 0 ""</Bp2>
-        <Bp3>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.112.3" 0 0 0 0 "" 0 ""</Bp3>
-        <Bp4>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.449.13" 0 0 0 0 "" 0 ""</Bp4>
-        <Bp5>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.459.13" 0 0 0 0 "" 0 ""</Bp5>
-        <Bp6>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\remote.c}.155.5" 1 0 0 0 "" 0 ""</Bp6>
-        <Bp7>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\main.c}.68.23" 1 0 0 0 "" 0 ""</Bp7>
-        <Bp8>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\main.c}.72.13" 1 0 0 0 "" 0 ""</Bp8>
-        <Bp9>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\main.c}.87.5" 0 0 0 0 "" 0 ""</Bp9>
-        <Bp10>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\remote.c}.297.17" 1 0 0 0 "" 0 ""</Bp10>
-        <Count>11</Count>
+        <Bp2>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.155.17" 0 0 0 0 "" 0 ""</Bp2>
+        <Bp3>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.114.9" 0 0 0 0 "" 0 ""</Bp3>
+        <Bp4>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\main.c}.72.13" 1 0 0 0 "" 0 ""</Bp4>
+        <Bp5>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\main.c}.87.5" 0 0 0 0 "" 0 ""</Bp5>
+        <Bp6>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\remote.c}.351.17" 0 0 0 0 "" 0 ""</Bp6>
+        <Bp7>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.358.1" 0 0 0 0 "" 0 ""</Bp7>
+        <Bp8>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.358.5" 0 0 0 0 "" 0 ""</Bp8>
+        <Count>9</Count>
     </Breakpoints>
     <ChipconEmu>
-        <StopTimersOnHalt>1</StopTimersOnHalt>
+        <StopTimersOnHalt>0</StopTimersOnHalt>
         <LeaveTargetRunning>1</LeaveTargetRunning>
     </ChipconEmu>
     <LogFile>

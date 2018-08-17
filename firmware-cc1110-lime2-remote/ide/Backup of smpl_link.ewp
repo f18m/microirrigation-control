@@ -279,7 +279,7 @@
                 </option>
                 <option>
                     <name>OGChipConfigPath</name>
-                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\8051\bin\..\config\devices\Texas Instruments\CC11xx\CC1110F32.i51</state>
+                    <state>$TOOLKIT_DIR$\config\devices\Texas Instruments\CC1110F32.i51</state>
                 </option>
             </data>
         </settings>
@@ -1398,7 +1398,7 @@
                 </option>
                 <option>
                     <name>OGChipConfigPath</name>
-                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\8051\bin\..\config\devices\Texas Instruments\CC11xx\CC1110F32.i51</state>
+                    <state>$TOOLKIT_DIR$\config\devices\Texas Instruments\CC1110F32.i51</state>
                 </option>
             </data>
         </settings>
@@ -2262,17 +2262,17 @@
                 <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\mcus\bsp_8051_defs.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\srfccxx10\bsp_board.c</name>
+                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board.c</name>
                 <excluded>
                     <configuration>REMOTE</configuration>
                     <configuration>LIME2</configuration>
                 </excluded>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\srfccxx10\bsp_board_defs.h</name>
+                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board_defs.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\srfccxx10\bsp_button_defs.h</name>
+                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_button_defs.h</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_buttons.c</name>
@@ -2285,10 +2285,10 @@
                 <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\bsp_buttons.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\srfccxx10\bsp_driver_defs.h</name>
+                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_driver_defs.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\srfccxx10\bsp_drivers.c</name>
+                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_drivers.c</name>
                 <excluded>
                     <configuration>REMOTE</configuration>
                     <configuration>LIME2</configuration>
@@ -2301,7 +2301,7 @@
                 <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_generic_leds.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\srfccxx10\bsp_led_defs.h</name>
+                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_led_defs.h</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\drivers\code\bsp_leds.c</name>
@@ -2317,7 +2317,7 @@
                 <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\bsp_macros.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\srfccxx10\bsp_external\mrfi_board_defs.h</name>
+                <name>$PROJ_DIR$\..\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_external\mrfi_board_defs.h</name>
                 <excluded>
                     <configuration>REMOTE</configuration>
                     <configuration>LIME2</configuration>
@@ -2360,7 +2360,7 @@
                 <name>$PROJ_DIR$\..\source\components\simpliciti\mrfi\mrfi_defs.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\source\components\simpliciti\mrfi\smartrf\cc1110\smartrf_cc1110_srfcc1110.h</name>
+                <name>$PROJ_DIR$\..\source\components\simpliciti\mrfi\smartrf\cc1110\smartrf_CC1110_srfcc1110.h</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\source\components\simpliciti\mrfi\smartrf\cc2510\smartrf_cc2510_srfcc2510.h</name>
