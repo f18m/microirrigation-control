@@ -1,0 +1,10 @@
+verbosity=1
+logo=disabled
+console=both
+disp_mode=1920x1080p60
+overlay_prefix=sun7i-a20
+rootdev=UUID=8cf9ed72-8225-4db8-a3a2-a242d648d644
+rootfstype=ext4
+overlays=spi2 spi-spidev
+param_spidev_spi_bus=2
+param_spi2_bus_pins=a

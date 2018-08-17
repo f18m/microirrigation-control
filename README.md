@@ -4,8 +4,9 @@ This project contains source code for
  - a Linux embedded system (in my case Olimex Lime2 A20 single board computer)
  - digital radio transceivers (in my case a couple of Texas Instruments CC1110 boards)
 
-The system aim is to provide via a web interface the possibility to open or close a remote relais,
-which in my case is attached to an electrovalve that opens or closes water flow (to my home irrigation system).
+The aim of the system is to provide via a web interface the possibility to open or close remote relays,
+which in my casea are attached to electrovalves that open or close some water flows (in my case to provide
+irrigation in my garden).
 However the target of the system is much more generic and you can attach to the "remote" node pretty much
 anything you like.
 
@@ -15,10 +16,11 @@ This project assumes that you have:
 1. an embedded Linux system, in particular Olimex Lime2 is assumed here.
    Moreover I tested this project only with a recent Debian-variant "armbian" installed, using DeviceTree overlays for
    accessing the SPI bus of the embedded system. See https://docs.armbian.com/User-Guide_Allwinner_overlays/.
+   The DeviceTree config file used in my case is [available here](docs/armbianEnv.txt).
 2. two digital radios, based on Texas Instruments CC1110, operating in the 433 or 868/915 Mhz ISM bands.
    See e.g., http://www.ti.com/tool/CC1110EMK868-915 for the commercial boards used in this project.
-   This choice is motivated by the fact that these frequencies provide high wall penetration and low battery consumption
-   compared to other radio technologies like the well-known Wi-Fi.
+   This choice is motivated by the fact that these frequencies provide high wall penetration and low battery 
+   consumption compared to other radio technologies like the well-known Wi-Fi.
 
 
 ## Architecture ##
@@ -64,6 +66,7 @@ The result is a battery duration of 162 days.
 
 Basic documentation for the [SPI protocol](docs/spi-protocol-cc1110-lime2.md)
 
+Basic documentation for the [Radio protocol](docs/spi-protocol-cc1110-lime2.md)
 
 TO BE WRITTEN
 
