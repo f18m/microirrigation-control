@@ -32,6 +32,7 @@ So far 3 command strings are supported:
  1. 'TURNON_': signals the remote note that a relay must be turned on
  2. 'TURNOFF': signals the remote note that a relay must be turned off
  3. 'STATUS_': reports battery level of remote node to SPI master
+
 So far 2 command parameters are supported:
  1. '1' to indicate the first relay group
  2. '2' to indicate the second relay group
@@ -46,8 +47,9 @@ before giving up (about 10secs).
 
 Every command sent from Lime2 Linux system to the Lime2 node will be acknowledged in the 
 opposite direction with a string "ACK_" followed by 1 transaction ID byte.
-To receive the acknowledge the SPI master must initiate the communication; this is done
-by using the "STATUS_" command: the 
+To receive the acknowledge the SPI master must initiate the communication; this is typically
+done by using the "STATUS_" command: the Lime2 node will repeat the acknowledge for the last
+command that was successful.
 
 ## Testing communication ##
 
