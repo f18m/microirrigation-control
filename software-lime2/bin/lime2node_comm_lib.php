@@ -11,10 +11,11 @@
 
 
   // constants
-  $transaction_file = 'last_spi_transaction_id';
+  $transaction_filename = 'last_spi_transaction_id';        // this filename will be created under $HOME directory
   $output_file = '/tmp/last_spi_reply';
   $last_spi_op_logfile = '/var/log/lime2node_last_operation.log';
-
+  $spi_bus_lockfile = "/tmp/lime2node_spi_bus.lock";
+  
   $max_wait_time_sec = 30;
   $speed_hz = 5000;
   $validack = 'ACK_';
@@ -24,35 +25,85 @@
 
   // since the Transaction ID (TID) is sent over commandline it should stay inside the ASCII range:
   $tid_for_status_cmd = 48;    // '0'
-  $cmdparam_for_status_cmd = 48;   // '0'
   $first_valid_tid = 49;    // '1'
   $last_valid_tid = 57;     // '9'
 
+  $cmdparam_for_status_cmd = '0';
+  
 
   //
   // LOGGING
   //
 
+  function lime2node_set_logfile($newlogfile)
+  {
+    global $last_spi_op_logfile;
+    $last_spi_op_logfile=$newlogfile;    // empty string is allowed and means stdout
+    lime2node_empty_log();
+  }
+  
   function lime2node_empty_log()
   {
     global $last_spi_op_logfile;
-    $f = @fopen($last_spi_op_logfile, "r+");
-    if ($f !== false) {
-        ftruncate($f, 0);
-        fclose($f);
+    
+    if (last_spi_op_logfile != "") {
+      $f = @fopen($last_spi_op_logfile, "r+");
+      if ($f !== false) {
+          ftruncate($f, 0);
+          fclose($f);
+      }
     }
   }
 
   function lime2node_write_log($msg)
   {
-      global $last_spi_op_logfile;
+    global $last_spi_op_logfile;
+    if (last_spi_op_logfile != "") {
       file_put_contents($last_spi_op_logfile, $msg . "\n", FILE_APPEND | LOCK_EX);
+    } else {
+      // stdout was selected!
+      echo $msg . "\n";
+    }
   }
 
-  function lime2node_get_log()
+  function lime2node_get_logfile()
   {
     global $last_spi_op_logfile;
     return $last_spi_op_logfile;
+  }
+
+
+  // utility class:
+
+  class FileLocker {
+      protected static $loc_files = array();
+
+      public static function lockFile($file_name, $wait = false) {
+          $loc_file = fopen($file_name, 'c');
+          if ( !$loc_file ) {
+              throw new \Exception('Can\'t create lock file!');
+          }
+          if ( $wait ) {
+              $lock = flock($loc_file, LOCK_EX);
+          } else {
+              $lock = flock($loc_file, LOCK_EX | LOCK_NB);
+          }
+          if ( $lock ) {
+              self::$loc_files[$file_name] = $loc_file;
+              fprintf($loc_file, "%s\n", getmypid());
+              return $loc_file;
+          } else if ( $wait ) {
+              throw new \Exception('Can\'t lock file!');
+          } else {
+              return false;
+          }
+      }
+
+      public static function unlockFile($file_name) {
+          fclose(self::$loc_files[$file_name]);
+          @unlink($file_name);
+          unset(self::$loc_files[$file_name]);
+      }
   }
 
 
@@ -60,6 +111,16 @@
   //
   // SPI COMMUNICATION HELPER FUNCTIONS
   //
+  
+  function lime2node_acquire_lock_or_die()
+  {
+    global $spi_bus_lockfile;
+    // ensure only one turnon/turnoff command can be running at any given time:
+    if ( !FileLocker::lockFile($spi_bus_lockfile) ) {
+        lime2node_write_log("Can't lock file $spi_bus_lockfile: another operations is ongoing. Aborting.");
+        die();
+    }
+  }
 
   function lime2node_init_over_spi()
   {
@@ -105,12 +166,35 @@
     return $content_arr;
   }
 
+  function lime2node_assert_valid_cmd($cmd, $cmdParameter)
+  {
+    global $turnon_cmd, $turnoff_cmd, $status_cmd;
+    if ($cmd != $turnon_cmd &&
+        $cmd != $turnoff_cmd &&
+        $cmd != $status_cmd) {
+      lime2node_write_log("Invalid command [$cmd]. Aborting.");
+      die();
+    }
+    
+    if ($cmd == $turnon_cmd ||
+        $cmd == $turnoff_cmd)
+    {
+      if ($cmdParameter != "1" &&
+          $cmdParameter != "2") {
+        lime2node_write_log("Invalid command parameter [$cmdParameter]. Aborting.");
+        die();
+      }
+    }
+  }
+  
   function lime2node_send_spi_cmd($cmd, $transactionID, $cmdParameter)
   {
     global $output_file, $speed_hz;
+    
+    lime2node_assert_valid_cmd($cmd, $cmdParameter);
 
     lime2node_write_log("Sending command over SPI:" . $cmd . " with transaction ID=" . $transactionID . " and parameter=" . $cmdParameter);
-    $rawcommand = $cmd . chr($transactionID) . chr($cmdParameter);
+    $rawcommand = $cmd . chr($transactionID) . $cmdParameter;
 
     // NOTE: the "sudo" operation is required when running e.g. on a webserver that is not running as ROOT user:
     //       to be able to send/receive data over SPI, root permissions are needed.
@@ -234,14 +318,14 @@
 
   function lime2node_get_last_transaction_id_and_advance()
   {
-    global $transaction_file, $first_valid_tid, $last_valid_tid;
+    global $transaction_filename, $first_valid_tid, $last_valid_tid;
 
     $homedir = getenv("HOME");
     if (count($homedir)==0 || !file_exists($homedir))
       $homedir = "/tmp";
 
     // load last TID from file:
-    $transaction_file = $homedir . "/" . $transaction_file;
+    $transaction_file = $homedir . "/" . $transaction_filename;
     if (file_exists($transaction_file))
       $str = file_get_contents($transaction_file);
     else

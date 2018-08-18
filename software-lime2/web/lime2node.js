@@ -1,7 +1,12 @@
 // 
 // lime2node.js
-// This is a library of PHP functions to be used on a Linux system to communicate over SPI with the "lime2" node
-// part of the https://github.com/f18m/microirrigation-control github project
+// This is a library of Javascript functions that help managing a websocket
+// for sending dynamic updates to the browser where this Javascript runs.
+//
+// The server-side is written in PHP and is contained into the 'lime2node_websocket_srv.php'
+// file.
+//  
+// This is part of the https://github.com/f18m/microirrigation-control github project
 //
 // Author: Francesco Montorsi
 // Creation date: Nov 2017
@@ -9,22 +14,30 @@
 
 
 /*
-   SSE events does not work correctly with long text files like log files!!! :(
+   NOTE: SSE events do not work correctly with long text files like log files!!! :(
     
     var evtSource = new EventSource("http://ffserver.changeip.org:82/lime2node_server_sent_event.php", { withCredentials: false } ); 
     evtSource.onmessage = function(e) {
       //$(js_updated).html(e.data);
       document.getElementById("js_updated").innerHTML = e.data; 
     }
-*/
 
-
-/*
     Rather let's go with WebSockets!!!
 */
 
+
+// CONSTANTS
+
+var ws_server_url = 'ws://ffserver.changeip.org:8080/';
+    // we expect the WebSocket server to be up and running on the server-side on port 8080
+
+// GLOBALS
+
 var socket;
 var socket_ready;
+
+
+// FUNCTIONS
 
 function ws_init() {
     if (!("WebSocket" in window)) {
@@ -32,11 +45,11 @@ function ws_init() {
         return;
     }
     
-    // we expect the WebSocket server to be up and running on the server-side on port 8080
-    var wsUrl = 'ws://ffserver.changeip.org:8080/';
-    socket = new WebSocket(wsUrl);
+    // create socket
+    socket = new WebSocket(ws_server_url);
     socket_ready = false;
     
+    // attach the websocket "message received" to the HTML element showing the acivity log:
     socket.onmessage = function (evt) {
         // we can receive only 1 type of message from the WebSocket: a log update
         document.getElementById("js_updated").innerHTML = evt.data; 
@@ -49,7 +62,9 @@ function ws_init() {
 }
 
 function ws_timer() {
-    socket.send('GET_UPDATE');
+    socket.send(JSON.stringify({
+  command: 'GET_UPDATE'
+}));
 }
 
 function ws_check_ready() {
@@ -61,34 +76,19 @@ function ws_check_ready() {
     return true;
 }
 
-function ws_send_turnon1() {
+// this is the function that can be linked to HTML elements:
+function ws_send_cmd(cmd, cmdParam) {
     if (!ws_check_ready())
       return;
-
-    // upon successful WebSocket connection, we send command:
-    //if (window.location.href.indexOf("irrigation-start") !== -1)
-    socket.send('TURNON1');
-    //else if (window.location.href.indexOf("irrigation-stop") !== -1)
-         //socket.send('TURNOFF');
+    socket.send(JSON.stringify({
+  command: cmd,
+  commandParameter: cmdParam
+}));
 }
 
-function ws_send_turnoff1() {
-    if (!ws_check_ready())
-      return;
-    socket.send('TURNOFF1');
-}
 
-function ws_send_turnon2() {
-    if (!ws_check_ready())
-      return;
-    socket.send('TURNON2');
-}
 
-function ws_send_turnoff2() {
-    if (!ws_check_ready())
-      return;
-    socket.send('TURNOFF2');
-}
+// SCRIPT MAIN
 
 // as soon as the HTML loads, setup the WebSocket:
 document.addEventListener('DOMContentLoaded', ws_init);
