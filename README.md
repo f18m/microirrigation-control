@@ -86,7 +86,7 @@ Data entered on that page in my case is:
  - 3600sec / (7sec + 1sec) = 450 number of wakeups per hour
  - 1000 ms duration of wake time
  
-The result is a battery duration of *~78 days*.
+The result is a battery duration of **~78 days**.
 
 The computations above do not include of course the current consumed to actually activate the relays and to move the
 electrovalve from the OPEN to the CLOSE position or viceversa. However such event is typically very rare (let's say once per day)
@@ -165,6 +165,20 @@ This how my final assembly of the remote node looks like:
 
 <img src="docs/photo1.jpg" />
 <img src="docs/photo2.jpg" />
+
+These are instead a screenshot of the web interface:
+
+<img src="docs/screenshot1.png" />
+
+It is very very simple and is currently integrated with my other project: http://github.com/f18m/light-media-center
+
+
+## Project Status ##
+
+As of Aug 2018 I put "on the field" (literally) my assembly with the software and firmare of this GIT repo.
+It works well so far. 
+I will develop and maintain this project in my free time, though I don't plan to add any new feature.
+Eventually I will improve the look and feel of the web interface but that's pretty much it.
 
 
 ## Similar Projects ##
