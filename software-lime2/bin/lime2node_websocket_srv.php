@@ -2,8 +2,10 @@
   
     // 
     // lime2node_websocket_srv.php
-    // This is a library of PHP functions to be used on a Linux system to communicate over SPI with the "lime2" node
-    // part of the https://github.com/f18m/microirrigation-control github project
+    // This is the server-side PHP server that maintains communications via WebSockets
+    // to client browsers.
+    //
+    // This is part of the https://github.com/f18m/microirrigation-control github project
     //
     // Author: Francesco Montorsi
     // Creation date: Nov 2017

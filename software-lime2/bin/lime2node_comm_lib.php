@@ -11,10 +11,12 @@
 
 
   // constants
-  $transaction_file = 'last_spi_transaction_id';
+  $transaction_filename = 'last_spi_transaction_id';        // this filename will be created under $HOME directory
   $output_file = '/tmp/last_spi_reply';
   $last_spi_op_logfile = '/var/log/lime2node_last_operation.log';
-
+  $enabled_loglevel = "INFO";
+  $spi_bus_lockfile = "/tmp/lime2node_spi_bus.lock";
+  
   $max_wait_time_sec = 30;
   $speed_hz = 5000;
   $validack = 'ACK_';
@@ -24,35 +26,104 @@
 
   // since the Transaction ID (TID) is sent over commandline it should stay inside the ASCII range:
   $tid_for_status_cmd = 48;    // '0'
-  $cmdparam_for_status_cmd = 48;   // '0'
   $first_valid_tid = 49;    // '1'
   $last_valid_tid = 57;     // '9'
 
+  $cmdparam_for_status_cmd = '0';
+  
 
   //
   // LOGGING
   //
 
+  function lime2node_set_logfile($newlogfile)
+  {
+    global $last_spi_op_logfile;
+    $last_spi_op_logfile=$newlogfile;    // empty string is allowed and means stdout
+    
+    if ($last_spi_op_logfile != "")
+      lime2node_empty_log();
+    else
+      echo "Selected stdout as logging mechanism.\n";
+  }
+  
   function lime2node_empty_log()
   {
     global $last_spi_op_logfile;
-    $f = @fopen($last_spi_op_logfile, "r+");
-    if ($f !== false) {
-        ftruncate($f, 0);
-        fclose($f);
+    
+    if ($last_spi_op_logfile != "") {
+      $f = @fopen($last_spi_op_logfile, "r+");
+      if ($f !== false) {
+          ftruncate($f, 0);
+          fclose($f);
+      }
+    }
+  }
+  
+  function lime2node_loglevel2number($level)
+  {
+    if ($level == "DEBUG") {
+      return 1;
+    }else if ($level == "INFO") {
+      return 2;
+    }
+    return 2;
+  }
+
+  function lime2node_write_log($level, $msg)
+  {
+    global $last_spi_op_logfile;
+    global $enabled_loglevel;
+    
+    if (lime2node_loglevel2number($level) < lime2node_loglevel2number($enabled_loglevel))
+      return;   // discard
+    
+    if ($last_spi_op_logfile != "") {
+      file_put_contents($last_spi_op_logfile, $msg . "\n", FILE_APPEND | LOCK_EX);
+    } else {
+      // stdout was selected!
+      echo $msg . "\n";
     }
   }
 
-  function lime2node_write_log($msg)
-  {
-      global $last_spi_op_logfile;
-      file_put_contents($last_spi_op_logfile, $msg . "\n", FILE_APPEND | LOCK_EX);
-  }
-
-  function lime2node_get_log()
+  function lime2node_get_logfile()
   {
     global $last_spi_op_logfile;
     return $last_spi_op_logfile;
+  }
+
+
+  // utility class:
+
+  class FileLocker {
+      protected static $loc_files = array();
+
+      public static function lockFile($file_name, $wait = false) {
+          $loc_file = fopen($file_name, 'c');
+          if ( !$loc_file ) {
+              throw new \Exception('Can\'t create lock file!');
+          }
+          if ( $wait ) {
+              $lock = flock($loc_file, LOCK_EX);
+          } else {
+              $lock = flock($loc_file, LOCK_EX | LOCK_NB);
+          }
+          if ( $lock ) {
+              self::$loc_files[$file_name] = $loc_file;
+              fprintf($loc_file, "%s\n", getmypid());
+              return $loc_file;
+          } else if ( $wait ) {
+              throw new \Exception('Can\'t lock file!');
+          } else {
+              return false;
+          }
+      }
+
+      public static function unlockFile($file_name) {
+          fclose(self::$loc_files[$file_name]);
+          @unlink($file_name);
+          unset(self::$loc_files[$file_name]);
+      }
   }
 
 
@@ -60,6 +131,16 @@
   //
   // SPI COMMUNICATION HELPER FUNCTIONS
   //
+  
+  function lime2node_acquire_lock_or_die()
+  {
+    global $spi_bus_lockfile;
+    // ensure only one turnon/turnoff command can be running at any given time:
+    if ( !FileLocker::lockFile($spi_bus_lockfile) ) {
+        echo "Can't lock file $spi_bus_lockfile: another operations is ongoing. Aborting.\n";    // this must be ECHOED!
+        die();
+    }
+  }
 
   function lime2node_init_over_spi()
   {
@@ -105,29 +186,52 @@
     return $content_arr;
   }
 
+  function lime2node_assert_valid_cmd($cmd, $cmdParameter)
+  {
+    global $turnon_cmd, $turnoff_cmd, $status_cmd;
+    if ($cmd != $turnon_cmd &&
+        $cmd != $turnoff_cmd &&
+        $cmd != $status_cmd) {
+      lime2node_write_log("DEBUG", "Invalid command [$cmd]. Aborting.");
+      die();
+    }
+    
+    if ($cmd == $turnon_cmd ||
+        $cmd == $turnoff_cmd)
+    {
+      if ($cmdParameter != "1" &&
+          $cmdParameter != "2") {
+        lime2node_write_log("DEBUG", "Invalid command parameter [$cmdParameter]. Aborting.");
+        die();
+      }
+    }
+  }
+  
   function lime2node_send_spi_cmd($cmd, $transactionID, $cmdParameter)
   {
     global $output_file, $speed_hz;
+    
+    lime2node_assert_valid_cmd($cmd, $cmdParameter);
 
-    lime2node_write_log("Sending command over SPI:" . $cmd . " with transaction ID=" . $transactionID . " and parameter=" . $cmdParameter);
-    $rawcommand = $cmd . chr($transactionID) . chr($cmdParameter);
+    lime2node_write_log("DEBUG", "Sending command over SPI:" . $cmd . " with transaction ID=" . $transactionID . " and parameter=" . $cmdParameter);
+    $rawcommand = $cmd . chr($transactionID) . $cmdParameter;
 
     // NOTE: the "sudo" operation is required when running e.g. on a webserver that is not running as ROOT user:
     //       to be able to send/receive data over SPI, root permissions are needed.
     $command = 'sudo spidev_test -D /dev/spidev2.0 -s ' . strval($speed_hz) . ' -v -p "' . $rawcommand . '" --output ' . $output_file;
-    lime2node_write_log($command);
+    lime2node_write_log("DEBUG", $command);
 
     exec($command, $output, $retval);
     if ($retval != 0)
     {
-      lime2node_write_log("Failed sending command... spidev_test exited with " . $retval . "... output: " . implode("\n", $output));
+      lime2node_write_log("DEBUG", "Failed sending command... spidev_test exited with " . $retval . "... output: " . implode("\n", $output));
       $ret_array = array(
           "valid"  => FALSE,
           "ack" => array(),
       );
       return $ret_array;
     }
-    lime2node_write_log(implode("\n", $output));
+    lime2node_write_log("DEBUG", implode("\n", $output));
 
     // read output reply from SPI
     $handle = fopen($output_file, "rb");
@@ -137,7 +241,7 @@
     // transform in binary array of uint8
     $content_arr = unpack("C*", $content_str);
     $content_arr = lime2node_trim_nulls($content_arr);
-    lime2node_write_log("Received a reply over SPI that is " . count($content_arr) . "B long");
+    lime2node_write_log("DEBUG", "Received a reply over SPI that is " . count($content_arr) . "B long");
     //print_r($content_arr);
 
     $ret_array = array(
@@ -213,7 +317,7 @@
 
       if ($waited_time_sec > $max_wait_time_sec)
       {
-        lime2node_write_log("After " . $waited_time_sec . "secs still no valid ACK received. Aborting.");
+        lime2node_write_log("DEBUG", "After " . $waited_time_sec . "secs still no valid ACK received. Aborting.");
         break;
       }
       $waited_time_sec = $waited_time_sec + 3;
@@ -222,26 +326,26 @@
       $valid_ack_ret = lime2node_parse_ack($ack);
       if ($valid_ack_ret["valid"]==1 && $valid_ack_ret["transactionID"]==$transactionID)
       {
-        lime2node_write_log("Received valid ACK; last ACK'ed transaction ID=" . $valid_ack_ret["transactionID"] . ", battery read=" . $valid_ack_ret["batteryRead"]);
+        lime2node_write_log("DEBUG", "Received valid ACK; last ACK'ed transaction ID=" . $valid_ack_ret["transactionID"] . ", battery read=" . $valid_ack_ret["batteryRead"]);
         return $valid_ack_ret;
       }
     }
 
-    lime2node_write_log("Invalid ACK received (waiting for the ACK of transaction ID=" . $transactionID .
+    lime2node_write_log("DEBUG", "Invalid ACK received (waiting for the ACK of transaction ID=" . $transactionID .
                         " but the last ACK'ed command had transaction ID=" . $valid_ack_ret["transactionID"] . ")!");
     return $invalid_ack_ret;
   }
 
   function lime2node_get_last_transaction_id_and_advance()
   {
-    global $transaction_file, $first_valid_tid, $last_valid_tid;
+    global $transaction_filename, $first_valid_tid, $last_valid_tid;
 
     $homedir = getenv("HOME");
     if (count($homedir)==0 || !file_exists($homedir))
       $homedir = "/tmp";
 
     // load last TID from file:
-    $transaction_file = $homedir . "/" . $transaction_file;
+    $transaction_file = $homedir . "/" . $transaction_filename;
     if (file_exists($transaction_file))
       $str = file_get_contents($transaction_file);
     else

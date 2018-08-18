@@ -27,6 +27,10 @@
     // constants
     
     $logfile='/var/log/lime2node_websocket_srv.log';
+    $backend_script='/opt/microirrigation-control/software-lime2/bin/lime2node_cli_backend.php';
+    
+    
+    // functions
   
     function websocketsrv_write_log($msg) {
         global $logfile;
@@ -66,6 +70,37 @@
           
             lime2node_write_log("PHP Lime2Node backend: command sequence completed. Exiting.");
         }
+        
+        private function sendSPICommand($cmd_to_send, $cmdParameter) {
+        
+            lime2node_acquire_lock_or_die();
+        
+            echo "Opening for logging '" . lime2node_get_logfile() . "'...\n";
+            
+            lime2node_empty_log();
+            lime2node_write_log("PHP Lime2Node backend: acquired lock on SPI bus... proceeding with command: " . $cmd_to_send);
+            lime2node_init_over_spi();
+          
+            // for testing purpose: send TURNON/TURNOFF command
+            $tid = lime2node_get_last_transaction_id_and_advance();
+            $ack_contents = array();
+            echo "Sending $cmd_to_send command (with param=$cmdParameter) to remote node...\n";
+            $result = lime2node_send_spi_cmd($cmd_to_send, $tid, $cmdParameter);
+          
+            if ($result["valid"])
+            {
+              echo "Command was sent successfully over SPI. Waiting for the ACK from the remote node...\n";
+          
+              $received_ack = lime2node_wait_for_ack($tid);
+              if ($received_ack["valid"])
+                echo "Successfully received the ACK from the remote node! Battery read is " .  $received_ack["batteryRead"] . "\n";
+              else
+                echo "Failed waiting for the ACK.\n";
+            }
+            else {
+              echo "Command TX over SPI failed. Aborting.\n";
+            }
+        }
     }*/
     
     
@@ -82,17 +117,28 @@
             $this->clients = new \SplObjectStorage;
         }
         
+        private function getLogFilenameForConnection(ConnectionInterface $conn) {
+            $newfile = '/var/log/lime2node_log_' . $conn->resourceId . '.log';
+            //lime2node_set_logfile($newfile);
+            return $newfile;
+        }
+        
+        
         public function onOpen(ConnectionInterface $conn) {
             // Store the new connection to send messages to later
             $this->clients->attach($conn);
+            
             websocketsrv_write_log("New connection with resource ID {$conn->resourceId}");
         }
     
-        public function onMessage(ConnectionInterface $from, $msg) {
-            global $last_spi_op_logfile;
-            websocketsrv_write_log(sprintf('From connection with resource ID %d received message "%s"', $from->resourceId, $msg));
+        public function onMessage(ConnectionInterface $from, $serialized_json) {
+            websocketsrv_write_log(sprintf('From connection with resource ID %d received message "%s"', $from->resourceId, $serialized_json));
   
-            if ($msg == "TURNON" || $msg == "TURNOFF")
+            // parse command from WebSocket: it's a JSON string
+            $msg = json_decode($serialized_json, true);
+            //var_dump($msg);
+            
+            if ($msg["command"] == "TURNON" || $msg["command"] == "TURNOFF" || $msg["command"] == "TURNON_WITH_TIMER")
             {
                 /*   MULTITHREADING OPTION DISABLED FOR NOW:
                 
@@ -106,31 +152,48 @@
                 $background_thread->start();*/
                 
                 
-                // run the command in a detached shell.
+                // run the command in a detached shell; in this way we can do it asynchronously and avoid blocking the whole
+                // PHP server!
+                //
                 // Note that the /dev/null redirections are very important otherwise PHP will NOT detach the child shell and will
                 // instead wait for that to complete!
                 
-                $command = '/opt/microirrigation-control/software-lime2/bin/lime2node_cli_test.php ' . $msg . ' 2>/dev/null >/dev/null &';
-                websocketsrv_write_log("Received ${msg} command; running ${command}");
+                $logfile = $this->getLogFilenameForConnection($from);
                 
-                lime2node_empty_log();
-              	shell_exec($command);
+                global $backend_script;
+                $command = $backend_script . 
+                            " --log-file " . $logfile . 
+                            " --spi-command " . $msg["command"] . 
+                            " --spi-command-parameter " . $msg["commandParameter"] . 
+                            " 2>/dev/null >/dev/null &";
+
+                websocketsrv_write_log("Received " . $msg["command"] . " command; running ${command}");
+                shell_exec($command);
             }
-            else if ($msg == "GET_UPDATE")
+            else if ($msg["command"] == "GET_UPDATE")
             {
-                websocketsrv_write_log("Sending contents of file $last_spi_op_logfile over the websocket");
+                $logfile = $this->getLogFilenameForConnection($from);
+                $contents = "";
                 
-                 // last_spi_op_logfile variable is defined in lime2node_comm_lib.php
-                $contents = file_get_contents($last_spi_op_logfile);
+                if (is_file($logfile)) {
+                  websocketsrv_write_log("Sending contents of file $logfile over the websocket");
+                  $contents = file_get_contents($logfile);
+                }
+                
                 $from->send($contents);
             }
             else
             {
-                websocketsrv_write_log("Unknown ${msg} command");
+                $cmd = $msg["command"];
+                websocketsrv_write_log("Unknown ${cmd} command");
             }
         }
     
         public function onClose(ConnectionInterface $conn) {
+            $logfile = $this->getLogFilenameForConnection($conn);
+            if (is_file($logfile))
+              unlink( $logfile );    // remove logfile, it's not useful anymore
+        
             // The connection is closed, remove it, as we can no longer send it messages
             $this->clients->detach($conn);
             websocketsrv_write_log("Connection with resource ID {$conn->resourceId} has disconnected");
