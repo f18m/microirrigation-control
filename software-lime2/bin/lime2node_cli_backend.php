@@ -34,7 +34,6 @@
   $cmd_to_send = $turnon_cmd;
   $cmdParameter = "1";     // currently when cmd=TURNON/TURNOFF only 2 values of cmdParameter are supported: '1' or '2' to indicate the relay channel group
   $run_cmd_sequence = false;
-  lime2node_set_logfile("");    // by default logfile == stdout
   
   foreach (array_keys($options) as $opt) switch ($opt) {
     case "spi-command":
@@ -77,13 +76,15 @@
       echo "Unknown option $opt\n";
       die();
   }
-
+  
+  if (array_key_exists('log-file', $options) == false)
+    lime2node_set_logfile("");    // then set logfile == stdout
 
   // now start SPI activities:
 
   echo "Opening for logging '" . lime2node_get_logfile() . "'...\n";
   lime2node_empty_log();
-  lime2node_write_log("PHP Lime2Node backend: acquired lock on SPI bus... proceeding with command sequence");
+  lime2node_write_log("INFO", "PHP Lime2Node backend: acquired lock on SPI bus... proceeding with command sequence");
   lime2node_init_over_spi();
   
   if ($run_cmd_sequence)
@@ -94,67 +95,67 @@
     $cmd_to_send = $turnon_cmd;
     $cmdParameter = "2";
     $tid = lime2node_get_last_transaction_id_and_advance();
-    lime2node_write_log("Sending $cmd_to_send command (with param=$cmdParameter and tid=$tid) to remote node...");
+    lime2node_write_log("INFO", "Sending $cmd_to_send command (with param=$cmdParameter and tid=$tid) to remote node...");
     $result = lime2node_send_spi_cmd($cmd_to_send, $tid, $cmdParameter);
     if ($result["valid"] == false) {
-      lime2node_write_log("Command TX over SPI failed. Aborting.");
+      lime2node_write_log("INFO", "Command TX over SPI failed. Aborting.");
       die();
     }
     
-    lime2node_write_log("First command was sent successfully over SPI. Waiting for the ACK from the remote node...");
+    lime2node_write_log("INFO", "First command was sent successfully over SPI. Waiting for the ACK from the remote node...");
     $received_ack = lime2node_wait_for_ack($tid);
     if ($received_ack["valid"] == false) {
-      lime2node_write_log("Failed waiting for the ACK. Turn ON command probably was never received. Aborting.");
+      lime2node_write_log("INFO", "Failed waiting for the ACK. Turn ON command probably was never received. Aborting.");
       die();
     }
     
-    lime2node_write_log("Successfully received the ACK from the remote node! Battery read is " .  $received_ack["batteryRead"] );
+    lime2node_write_log("INFO", "Successfully received the ACK from the remote node! Battery read is " .  $received_ack["batteryRead"] );
     
     // now wait for a certain amount of minutes
-    lime2node_write_log("Now sleeping for ${timerMin} minutes before sending TURNOFF command");
+    lime2node_write_log("INFO", "Now sleeping for ${timerMin} minutes before sending TURNOFF command");
     sleep(60 * $timerMin);
     
     // run a TURNOFF command 
     $cmd_to_send = $turnoff_cmd;
     $cmdParameter = "2";
     $tid = lime2node_get_last_transaction_id_and_advance();
-    lime2node_write_log("Sending $cmd_to_send command (with param=$cmdParameter and tid=$tid) to remote node...");
+    lime2node_write_log("INFO", "Sending $cmd_to_send command (with param=$cmdParameter and tid=$tid) to remote node...");
     $result = lime2node_send_spi_cmd($cmd_to_send, $tid, $cmdParameter);
     if ($result["valid"] == false) {
-      lime2node_write_log("Command TX over SPI failed. Aborting.");
+      lime2node_write_log("INFO", "Command TX over SPI failed. Aborting.");
       die();
     }
     
-    lime2node_write_log("First command was sent successfully over SPI. Waiting for the ACK from the remote node...");
+    lime2node_write_log("INFO", "First command was sent successfully over SPI. Waiting for the ACK from the remote node...");
     $received_ack = lime2node_wait_for_ack($tid);
     if ($received_ack["valid"] == false) {
-      lime2node_write_log("Failed waiting for the ACK. Turn ON command probably was never received. Aborting.");
+      lime2node_write_log("INFO", "Failed waiting for the ACK. Turn ON command probably was never received. Aborting.");
       die();
     }
     
-    lime2node_write_log("Successfully received the ACK from the remote node! Battery read is " .  $received_ack["batteryRead"] );
+    lime2node_write_log("INFO", "Successfully received the ACK from the remote node! Battery read is " .  $received_ack["batteryRead"] );
   }
   else
   {
     // basic TURNON/TURNOFF command
     $tid = lime2node_get_last_transaction_id_and_advance();
-    lime2node_write_log("Sending $cmd_to_send command (with param=$cmdParameter and tid=$tid) to remote node...");
+    lime2node_write_log("INFO", "Sending $cmd_to_send command (with param=$cmdParameter and tid=$tid) to remote node...");
     $result = lime2node_send_spi_cmd($cmd_to_send, $tid, $cmdParameter);
   
     if ($result["valid"])
     {
-      lime2node_write_log("Command was sent successfully over SPI. Waiting for the ACK from the remote node...");
+      lime2node_write_log("INFO", "Command was sent successfully over SPI. Waiting for the ACK from the remote node...");
   
       $received_ack = lime2node_wait_for_ack($tid);
       if ($received_ack["valid"])
-        lime2node_write_log("Successfully received the ACK from the remote node! Battery read is " .  $received_ack["batteryRead"] );
+        lime2node_write_log("INFO", "Successfully received the ACK from the remote node! Battery read is " .  $received_ack["batteryRead"] );
       else
-        lime2node_write_log("Failed waiting for the ACK.");
+        lime2node_write_log("INFO", "Failed waiting for the ACK.");
     }
     else {
-      lime2node_write_log("Command TX over SPI failed. Aborting.");
+      lime2node_write_log("INFO", "Command TX over SPI failed. Aborting.");
     }
   }
   
-  lime2node_write_log("PHP Lime2Node backend: command sequence completed. Exiting.");
+  lime2node_write_log("INFO", "PHP Lime2Node backend: command sequence completed. Exiting.");
 ?>
