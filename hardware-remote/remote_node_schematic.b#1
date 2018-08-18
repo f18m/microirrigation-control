@@ -2516,21 +2516,36 @@ design rules under a new name.</description>
 <attribute name="PACKAGE" value="MSOP-8 Analog Devices" x="-6.35" y="-379.73" size="1.778" layer="27" display="off"/>
 <attribute name="PRICE" value="1.69 USD" x="-6.35" y="-379.73" size="1.778" layer="27" display="off"/>
 </element>
+<element name="U2" library="ADP3333ARMZ-3.3-R7" package="SOP65P490X110-8N" value="ADP3333ARMZ-3.3-R7" x="-6.35" y="-391.16">
+<attribute name="AVAILABILITY" value="Good" x="-6.35" y="-391.16" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value=" PMIC - LDO voltage regulator Analog Devices ADP3333ARMZ-3.3-R7 Positive, fixed MSOP 8 " x="-6.35" y="-391.16" size="1.778" layer="27" display="off"/>
+<attribute name="MF" value="Analog Devices" x="-6.35" y="-391.16" size="1.778" layer="27" display="off"/>
+<attribute name="MP" value="ADP3333ARMZ-5-R7" x="-6.35" y="-391.16" size="1.778" layer="27" display="off"/>
+<attribute name="PACKAGE" value="MSOP-8 Analog Devices" x="-6.35" y="-391.16" size="1.778" layer="27" display="off"/>
+<attribute name="PRICE" value="1.69 USD" x="-6.35" y="-391.16" size="1.778" layer="27" display="off"/>
+</element>
 <element name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" package="085CS_1AR" package3d_urn="urn:adsk.eagle:package:23396/1" value="10u" x="-2.54" y="-401.32"/>
+<element name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" package="085CS_1AR" package3d_urn="urn:adsk.eagle:package:23396/1" value="10u" x="-2.54" y="-410.21"/>
 </elements>
 <signals>
 <signal name="+12V">
 <contactref element="R1" pad="2"/>
 <contactref element="U1" pad="2"/>
 <contactref element="U1" pad="7"/>
+<contactref element="U2" pad="2"/>
+<contactref element="U2" pad="7"/>
+<wire x1="-4.1656" y1="-390.8298" x2="-8.5344" y2="-390.8298" width="0" layer="19" extent="1-1"/>
+<wire x1="-8.5344" y1="-379.3998" x2="-8.5344" y2="-390.8298" width="0" layer="19" extent="1-1"/>
 <wire x1="-4.1656" y1="-379.3998" x2="-8.5344" y2="-379.3998" width="0" layer="19" extent="1-1"/>
 <wire x1="5.08" y1="-340.36" x2="-4.1656" y2="-379.3998" width="0" layer="19" extent="1-1"/>
 </signal>
-<signal name="P0.4">
+<signal name="IN3">
 </signal>
-<signal name="P0.1">
+<signal name="IN4">
 </signal>
 <signal name="P0.7">
+</signal>
+<signal name="+5V">
 </signal>
 <signal name="+3V3">
 <contactref element="U1" pad="1"/>
@@ -2546,8 +2561,17 @@ design rules under a new name.</description>
 <contactref element="U1" pad="3"/>
 <contactref element="C1" pad="-"/>
 <contactref element="R2" pad="1"/>
-<wire x1="-8.5344" y1="-380.0602" x2="-5.79" y2="-401.32" width="0" layer="19" extent="1-1"/>
+<contactref element="C2" pad="-"/>
+<contactref element="U2" pad="3"/>
+<wire x1="-5.79" y1="-401.32" x2="-5.79" y2="-410.21" width="0" layer="19" extent="1-1"/>
+<wire x1="-8.5344" y1="-391.4902" x2="-5.79" y2="-401.32" width="0" layer="19" extent="1-1"/>
+<wire x1="-8.5344" y1="-380.0602" x2="-8.5344" y2="-391.4902" width="0" layer="19" extent="1-1"/>
 <wire x1="-5.08" y1="-354.33" x2="-8.5344" y2="-380.0602" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="+9V">
+<contactref element="U2" pad="1"/>
+<contactref element="C2" pad="+"/>
+<wire x1="-8.5344" y1="-390.1948" x2="0.71" y2="-410.21" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 </board>

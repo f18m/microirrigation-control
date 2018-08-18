@@ -16,7 +16,7 @@ This project assumes that you have:
 1. an embedded Linux system, in particular Olimex Lime2 is assumed here.
    Moreover I tested this project only with a recent Debian-variant "armbian" installed, using DeviceTree overlays for
    accessing the SPI bus of the embedded system. See https://docs.armbian.com/User-Guide_Allwinner_overlays/.
-   The DeviceTree config file used in my case is [available here](docs/armbianEnv.txt).
+   The DeviceTree config file used in my case is [available here](software-lime2/lime2_device_tree/armbianEnv.txt).
 2. two digital radios, based on Texas Instruments CC1110, operating in the 433 or 868/915 Mhz ISM bands.
    See e.g., http://www.ti.com/tool/CC1110EMK868-915 for the commercial boards used in this project.
    This choice is motivated by the fact that these frequencies provide high wall penetration and low battery 
@@ -33,14 +33,36 @@ See the architecture picture in docs folder:
 
 The hardware design for the remote note is available as Cadsoft Eagle schematics (see https://www.autodesk.com/products/eagle/overview)
 in the hardware-remote folder. The design is based on 3 major parts:
-1) the CC1110 evaluation module which provides the antenna, the CC1110 radio+micro and its programming interface. See http://www.ti.com/tool/CC1110EMK868-915
-2) a commercial relay board like the SunFounder 4channel 5V relay shield module. See https://www.sunfounder.com/4-channel-5v-relay-shield-module.html
-3) a custom "glue" board to provide right power and cabling between the other 2 parts. I built this on a simple stripboard (https://en.wikipedia.org/wiki/Stripboard).
+1) the CC1110 evaluation module which provides the antenna, the CC1110 radio+micro and its programming interface. 
+   See http://www.ti.com/tool/CC1110EMK868-915
+2) one or more commercial relay boards. These are usually unbranded chinese boards which you can find by googling 
+   for e.g. "DC 12V 2CH isolated high low level trigger relay module". Here's a picture of the one I used: <img src="docs/relay_module.jpg" />
+   The important aspect to keep in mind is that in my hardware design the CC1110 will drive the inputs of these
+   relay modules directly (thus applying 3.3V as logic high signal) so that they must be both opto-isolated and
+   sensitive enough (most modules out there expect 5V as logic high signal).
+3) a custom "glue" board to provide right power and cabling between the other 2 parts. 
+   I built this on a simple stripboard (https://en.wikipedia.org/wiki/Stripboard).
    This board connects the battery source (a 12V lead-acid battery in my case) to the radio module and relay module.
 
 This is the overview of the custom glue board (extremehely simple):
 
 <img src="hardware-remote/remote_node_schematic.png" />
+
+Finally a small caveat: typical electrovalves will require a positive pulse to move the internal valve to the OPEN
+position and a negative pulse to go in the CLOSE position. This requires the driving hardware to be able to 
+invert the output polarity. This can be achieved using 2 channels of a relay module and wiring the electrovalve
+as shown in this picture:
+
+<img src="docs/relay_wiring.png" />
+
+Note that the normally-open (NO) contacts are attached to the 12V battery while the normally-closed (NC) contacts
+are attached to the ground. When no signal is applied to the relay module, the electrovalve has both its wires
+connected to the 12V and thus no current circulates. When one of the relay modules is triggered then the electrovalve
+will receive +12V or -12V. Thus the polarity applied to the electrovalve can be controlled by triggering just one 
+of the 2 relay channels.
+
+
+## Battery Duration ##
 
 The current budget of the remote node when the firmware puts the radio in sleep mode is:
  - 100 uA for each current regulator (in the shown design an ADP3333 low dropout 300mA-max regulator was chosen)
@@ -59,6 +81,7 @@ Data entered on that page in my case is:
  - 21 mA current consumption of device during wake
  - 180 number of wakeups per hour
  - 1000 ms duration of wake time
+ 
 The result is a battery duration of 162 days.
 
 
@@ -66,7 +89,7 @@ The result is a battery duration of 162 days.
 
 Basic documentation for the [SPI protocol](docs/spi-protocol-cc1110-lime2.md)
 
-Basic documentation for the [Radio protocol](docs/spi-protocol-cc1110-lime2.md)
+Basic documentation for the [Radio protocol](docs/radio-protocol.md)
 
 TO BE WRITTEN
 

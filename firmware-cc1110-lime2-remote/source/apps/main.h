@@ -58,11 +58,12 @@ typedef enum
 */
 
 // direction MASTER -> SLAVE:
- // after COMMAND_LEN bytes, we expect to find 1 byte containing the
- // "transaction ID", i.e., a number that will be provided in the ACK
- // to allow the master to associate the cmd with its ack
+ //  COMMAND_LEN bytes + 
+ //  1 byte containing the "transaction ID", i.e., a number that will be provided in the ACK
+ //  to allow the master to associate the cmd with its ack +
+ //  1 byte of command parameters
 #define COMMAND_LEN                                    (7)
-#define COMMAND_POSTFIX_LEN                            (1)
+#define COMMAND_POSTFIX_LEN                            (2)
 
 // direction SLAVE -> MASTER:
  // after REPLY_LEN bytes, we provide 1 byte containing the
