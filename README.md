@@ -53,7 +53,7 @@ position and a negative pulse to go in the CLOSE position. This requires the dri
 invert the output polarity. This can be achieved using 2 channels of a relay module and wiring the electrovalve
 as shown in this picture:
 
-<img src="hardware-remote/relay_wiring.png" />
+<img src="docs/relay_wiring.png" />
 
 Note that the normally-open (NO) contacts are attached to the 12V battery while the normally-closed (NC) contacts
 are attached to the ground. When no signal is applied to the relay module, the electrovalve has both its wires
@@ -62,7 +62,7 @@ will receive +12V or -12V. Thus the polarity applied to the electrovalve can be 
 of the 2 relay channels.
 
 
-## Battery Sizing ##
+## Battery Duration ##
 
 The current budget of the remote node when the firmware puts the radio in sleep mode is:
  - 100 uA for each current regulator (in the shown design an ADP3333 low dropout 300mA-max regulator was chosen)
@@ -81,6 +81,7 @@ Data entered on that page in my case is:
  - 21 mA current consumption of device during wake
  - 180 number of wakeups per hour
  - 1000 ms duration of wake time
+ 
 The result is a battery duration of 162 days.
 
 
@@ -88,7 +89,7 @@ The result is a battery duration of 162 days.
 
 Basic documentation for the [SPI protocol](docs/spi-protocol-cc1110-lime2.md)
 
-Basic documentation for the [Radio protocol](docs/spi-protocol-cc1110-lime2.md)
+Basic documentation for the [Radio protocol](docs/radio-protocol.md)
 
 TO BE WRITTEN
 
