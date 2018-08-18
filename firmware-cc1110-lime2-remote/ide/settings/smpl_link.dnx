@@ -87,6 +87,15 @@
         <Fmt5>{W}1:URX0IE	1	0</Fmt5>
         <Fmt6>{W}1:URX0IF	1	0</Fmt6>
     </watch_formats>
+    <LogFile>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+        <Category>_ 0</Category>
+    </LogFile>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
     <Breakpoints>
         <Bp0>_ "STD_CODE" "{$PROJ_DIR$\..\..\source\components\simpliciti\mrfi\radios\family2\mrfi_radio.c}.742.5" 0 0 0 0 "" 0 ""</Bp0>
         <Bp1>_ "STD_CODE" "{$PROJ_DIR$\..\..\source\apps\remote.c}.47.3" 0 0 0 0 "" 0 ""</Bp1>
@@ -103,15 +112,6 @@
         <StopTimersOnHalt>1</StopTimersOnHalt>
         <LeaveTargetRunning>1</LeaveTargetRunning>
     </ChipconEmu>
-    <LogFile>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-        <Category>_ 0</Category>
-    </LogFile>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
     <Aliases>
         <A0>_ "C:\Users\fr_m\Dropbox\myCircuits\progetti\2017_controllo_elettrovalvole_irrigazione_COMPLETE\firmware-cc1110-lime2node-v3\source\components\simpliciti\bsp\boards\SRFCCxx10\bsp_board.c" "C:\Users\fr_m\Dropbox\myCircuits\progetti\2017_controllo_elettrovalvole_irrigazione_COMPLETE\firmware-cc1110-lime2node-v3-v2-mrfi\source\components\simpliciti\bsp\boards\srfccxx10\bsp_board.c"</A0>
         <A1>_ "C:\Users\fr_m\Dropbox\myCircuits\progetti\2017_controllo_elettrovalvole_irrigazione_COMPLETE\firmware-cc1110-lime2node-v3\source\components\simpliciti\bsp\drivers\code\bsp_leds.c" "C:\Users\fr_m\Dropbox\myCircuits\progetti\2017_controllo_elettrovalvole_irrigazione_COMPLETE\firmware-cc1110-lime2node-v3-v2-mrfi\source\components\simpliciti\bsp\drivers\code\bsp_leds.c"</A1>

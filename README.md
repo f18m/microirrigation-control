@@ -1,6 +1,6 @@
 # Micro-irrigation Control #
 
-This project contains source code for 
+This project contains source code for:
  - a Linux embedded system (in my case Olimex Lime2 A20 single board computer)
  - digital radio transceivers (in my case a couple of Texas Instruments CC1110 boards)
 
@@ -25,7 +25,7 @@ This project assumes that you have:
 
 ## Architecture ##
 
-See the architecture picture in docs folder:
+This picture gives an overview of the whole system:
 <img src="docs/architecture.png" />
 
 
@@ -36,7 +36,8 @@ in the hardware-remote folder. The design is based on 3 major parts:
 1) the CC1110 evaluation module which provides the antenna, the CC1110 radio+micro and its programming interface. 
    See http://www.ti.com/tool/CC1110EMK868-915
 2) one or more commercial relay boards. These are usually unbranded chinese boards which you can find by googling 
-   for e.g. "DC 12V 2CH isolated high low level trigger relay module". Here's a picture of the one I used: <img src="docs/relay_module.jpg" />
+   for e.g. "DC 12V 2CH isolated high low level trigger relay module". Here's a picture of the one I used:
+   <img src="docs/relay_module.jpg" style="width: 50%;"/>
    The important aspect to keep in mind is that in my hardware design the CC1110 will drive the inputs of these
    relay modules directly (thus applying 3.3V as logic high signal) so that they must be both opto-isolated and
    sensitive enough (most modules out there expect 5V as logic high signal).
@@ -64,34 +65,73 @@ of the 2 relay channels.
 
 ## Battery Duration ##
 
-The current budget of the remote node when the firmware puts the radio in sleep mode is:
- - 100 uA for each current regulator (in the shown design an ADP3333 low dropout 300mA-max regulator was chosen)
+The current consumption budget of the remote node when the firmware puts the radio in sleep mode is:
+ - 100 uA for the 12V to 3V current regulator (in the hardware schematic shown above an ADP3333 low dropout 300mA-max regulator was chosen)
  - 130 uA for the static resistor divider used for battery voltage probing
  - between 1 and 200 uA for the CC1110 depending on the power mode selected by firmware (power mode 1 or 2)
 
-The current budget of the remote node when the firmware puts the radio in RX mode is dominated by the CC1110 and will be around 21mA.
-Of course the "remote" node also needs to transmit an acknowledge to the "lime2" node raising current consumption up to 36mA but the TX
-time is so short that can be neglected in computations.
+For a total consumption of about 430uA.
+The current consumption budget of the remote node when the firmware puts the radio in RX mode is dominated by the CC1110 
+and will be around 22mA. With current firmware settings the RX window lasts for about 1sec.
+Of course the "remote" node also needs to transmit an acknowledge to the "lime2" node (when a command is received in that RX window)
+raising current consumption up to 36mA but the TX time is so short that can be neglected in computations.
 
-Assuming that a 7Ah lead-acid battery is used for powering the system, and that the sensor will wake up once every 20sec to check for
+Assuming that a 7Ah lead-acid battery is used for powering the system, and that the sensor will wake up once every 7 seconds to check for
 commands over the radio channel, the battery life can be easily computed using e.g. https://oregonembedded.com/batterycalc.htm.
+
 Data entered on that page in my case is:
- - 7000 mAh capacity rating
- - 0.5 mA current consumption of device during sleep
- - 21 mA current consumption of device during wake
- - 180 number of wakeups per hour
+ - 7000mAh capacity rating
+ - 100uA + 130uA + 200uA ~0.5mA current consumption of device during sleep
+ - ~22mA current consumption of device during wake (radio in RX mode)
+ - 3600sec / (7sec + 1sec) = 450 number of wakeups per hour
  - 1000 ms duration of wake time
  
-The result is a battery duration of 162 days.
+The result is a battery duration of *~78 days*.
+
+The computations above do not include of course the current consumed to actually activate the relays and to move the
+electrovalve from the OPEN to the CLOSE position or viceversa. However such event is typically very rare (let's say once per day)
+and thus can be ignored to simplify computation.
+
+Of course it's clear that the more the remote node remains in sleep mode the longer the battery will last. This resolves to a basic
+tradeoff in the design criteria: by increasing the sleep time the battery life is increased but the latency for delivering commands
+from the lime2 node to the remote node increases as well.
 
 
 ## Firmware and Software Design ##
 
-Basic documentation for the [SPI protocol](docs/spi-protocol-cc1110-lime2.md)
+Both the remote node and the lime2 nodes have custom firmware written in C and based upon Texas Instruments BSP and MRFI packages for CC1110.
+The directory with the source code is "firmware-cc1110-lime2-remote"; it contains a project for the [IAR Embedded Workbench for 8051](https://www.iar.com/iar-embedded-workbench/) IDE. Unfortunately if you need to change it (you will probably need unless you use exactly
+the same evaluation module from TI with the same pinout), you have to either buy the IAR software or use the 30days evaluation trial;
+indeed the 4-kb limited edition is not suitable for any project employing CC1110 radio.
 
-Basic documentation for the [Radio protocol](docs/radio-protocol.md)
+The firmware can be built in 2 modes: REMOTE and LIME2 to produce the firmware for the 2 peers of this project.
+[SPI protocol](docs/spi-protocol-cc1110-lime2.md) documentation is available and provides an overview of supported SPI commands.
+[Radio protocol](docs/radio-protocol.md) documentation is available as well.
 
-TO BE WRITTEN
+The firmware logic of the LIME2 node can be summarized as follows:
+ - poll the SPI RX buffer looking for commands
+ - whenever an SPI TURNON/TURNOFF command is received from the Lime2 Linux system, then a radio packet is filled with that command 
+   and sent (there is no real addressing logic: we assume only 1 receiver will be present); 
+   for each transmitted command, the system waits for an over-radio acknowledge and, if that arrives, the data contained in the
+   acknowledge packet is saved; if it does not arrive, the command is retransmitted until the acknowledge arrives;
+ - whenever an SPI STATUS command is received from the Lime2 Linux, then the data contained from the most recent acknowledge packet
+   is provided to the Lime2 Linux.
+   
+In practice the LIME2 node acts as an SPI-to-radio bridge.
+The presence of the "transaction ID" in both command packets and acknowledge packets allows all parts of the system to discard duplicates
+(e.g. the remote node can discard multiple commands having the same transaction IDs, which may be transmitted by the lime2 node when 
+the acknowledge packet gets lost) and the Lime2 Linux system to understand if a command has been successfully received by the remote node.
+
+The firmware logic of the REMOTE node can be summarized as follows:
+ - sleep for a certain amount of time, using a low-power timer to wake up the MCU;
+ - when the MCU wakes up, the radio is turned on in RX mode and the remote node waits for a certain time window for incoming commands;
+ - whenever a radio TURNON/TURNOFF command is received from the Lime2 node, then the command data is saved and an acknowledge
+   radio packet is generated and transmitted; the system then waits some time to allow the Lime2 node to receive the acknowledge and
+   stop repeating the command. After such "cool down" time window, the remote node drives its GPIO pins to turn on/off the relay modules
+   which in turn will open/close the electrovalves.
+
+The presence of the ADC read of the battery in each acknowledge allows to exploit the uplink channel remote->lime2 node to also 
+provide an indication of how much battery power is left.
 
 
 ## Source code ##
@@ -117,6 +157,14 @@ Tree of contained source code is:
 ## Installation ##
 
 TO BE WRITTEN
+
+
+## Final Result ##
+
+This how my final assembly of the remote node looks like:
+
+<img src="docs/photo1.jpg" />
+<img src="docs/photo2.jpg" />
 
 
 ## Similar Projects ##
