@@ -37,7 +37,7 @@ Description:        Code for the "remote" node.
 * CONSTANTS
 */
 
-#define ENABLE_LOWPOWER_MODE                               (0)
+#define ENABLE_LOWPOWER_MODE                               (1)
 
 #define ACTUATOR_IMPULSE_DURATION_MSEC                     (3000)
 #define WAIT_TIME_RADIOOFF_MSEC                            (6000)
@@ -237,13 +237,18 @@ static void WaitInLowPowerMode()
     //            ACK a radio command quickly enough!
 
 #if ENABLE_LOWPOWER_MODE
-    MRFI_RxIdle();              // this decreases very much power consumption!
-    ///DelayMsNOInterrupts(WAIT_TIME_RADIOOFF_MSEC);                    // with this consumption remains around 14mA
-    BSP_SleepFor( POWER_MODE_2, SLEEP_1_MS_RESOLUTION, WAIT_TIME_RADIOOFF_MSEC );
-    MRFI_RxOn();                  // before leaving restore radio RX status
+    #if 0    // with this consumption remains around 14mA
+      MRFI_RxIdle();              // this decreases very much power consumption!
+      DelayMsNOInterrupts(WAIT_TIME_RADIOOFF_MSEC);                  
+      MRFI_RxOn();                  // before leaving restore radio RX status
+    #else    // much better battery saving in this mode: in power mode 2 consumption goes to
+      BSP_SleepFor( POWER_MODE_2, SLEEP_1_MS_RESOLUTION, WAIT_TIME_RADIOOFF_MSEC );
+      MRFI_RxOn();                  // before leaving restore radio RX status
+    #endif
 #else
     // no sleep policy: sleep with radio in RX and with interrupts enabled
-    DelayMsNOInterrupts(WAIT_TIME_RADIOOFF_MSEC);
+    //DelayMsNOInterrupts(WAIT_TIME_RADIOOFF_MSEC);
+    DelayMsWithInterrupts(WAIT_TIME_RADIOOFF_MSEC);
 #endif
 }
 
@@ -341,7 +346,8 @@ void sRemoteNode(void)
     MRFI_RxOn();
 
 
-    unsigned int count1=0, count2=0, counter_to_apply_lastcmd=0;
+    unsigned int count1=0, count2=0;
+    //unsigned int counter_to_apply_lastcmd=0;
     unsigned int go_low_power=0;
     unsigned int do_battery_meas=0;
     while (1)
@@ -374,7 +380,7 @@ void sRemoteNode(void)
                 {
                     ApplyCmdRx();               // this will take a lot of time!
                     g_lastCmdRx = CMD_MAX;
-                    counter_to_apply_lastcmd = 0;
+                    //counter_to_apply_lastcmd = 0;
                     // we just received something; it's unlikely we're going to receive
                     // another command shortly... we can sleep a little bit
                     ///go_low_power=1;

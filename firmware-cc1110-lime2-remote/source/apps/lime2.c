@@ -56,7 +56,7 @@ Notes:              Because of the way SPI operates it's important that the MAST
 #define ALLOW_BUTTONS_TO_OVERRIDE_LIME2                    (0)
 
 #define HOLDOFF_TIME_AFTER_CMD_MSEC                        (5000)
-#define DURATION_TX_RETRIES_MSEC                           (10000)
+#define DURATION_TX_RETRIES_MSEC                           (10000)              // must be bigger than the time the remote node sleeps (WAIT_TIME_RADIOOFF_MSEC)
 #define DELAY_AFTER_EACH_TX_MSEC                           (250)
 #define NUM_TX_RETRIES                                     (DURATION_TX_RETRIES_MSEC/DELAY_AFTER_EACH_TX_MSEC)
 
@@ -65,13 +65,13 @@ Notes:              Because of the way SPI operates it's important that the MAST
 
 #define __bsp_CONFIG_AS_INPUT__(bit,port,ddr,low)          st( ddr &= ~BV(bit); )
 
-#define BSP_TURN_ON_LED_SPI           BSP_TURN_ON_LED1
-#define BSP_TURN_OFF_LED_SPI          BSP_TURN_OFF_LED1
-#define BSP_TOGGLE_LED_SPI            BSP_TOGGLE_LED1
+#define BSP_TURN_ON_LED_SPI                                BSP_TURN_ON_LED1
+#define BSP_TURN_OFF_LED_SPI                               BSP_TURN_OFF_LED1
+#define BSP_TOGGLE_LED_SPI                                 BSP_TOGGLE_LED1
 
-#define BSP_TURN_ON_LED_RADIO         BSP_TURN_ON_LED2
-#define BSP_TURN_OFF_LED_RADIO        BSP_TURN_OFF_LED2
-#define BSP_TOGGLE_LED_RADIO          BSP_TOGGLE_LED2
+#define BSP_TURN_ON_LED_RADIO                              BSP_TURN_ON_LED2
+#define BSP_TURN_OFF_LED_RADIO                             BSP_TURN_OFF_LED2
+#define BSP_TOGGLE_LED_RADIO                               BSP_TOGGLE_LED2
 
 
 /***********************************************************************************

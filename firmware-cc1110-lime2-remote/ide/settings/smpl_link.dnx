@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>205244797</Checksum>
+        <Checksum>4038133766</Checksum>
     </DebugChecksum>
     <CallStack>
         <ShowArgs>0</ShowArgs>
@@ -92,15 +92,15 @@
         <Bp1>_ "STD_CODE" "{$PROJ_DIR$\..\..\source\apps\remote.c}.47.3" 0 0 0 0 "" 0 ""</Bp1>
         <Bp2>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.155.17" 0 0 0 0 "" 0 ""</Bp2>
         <Bp3>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.114.9" 0 0 0 0 "" 0 ""</Bp3>
-        <Bp4>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\main.c}.72.13" 1 0 0 0 "" 0 ""</Bp4>
-        <Bp5>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\main.c}.87.5" 0 0 0 0 "" 0 ""</Bp5>
-        <Bp6>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\remote.c}.351.17" 0 0 0 0 "" 0 ""</Bp6>
-        <Bp7>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.358.1" 0 0 0 0 "" 0 ""</Bp7>
-        <Bp8>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.358.5" 0 0 0 0 "" 0 ""</Bp8>
+        <Bp4>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\remote.c}.357.17" 0 0 0 0 "" 0 ""</Bp4>
+        <Bp5>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.358.1" 0 0 0 0 "" 0 ""</Bp5>
+        <Bp6>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\lime2.c}.358.5" 0 0 0 0 "" 0 ""</Bp6>
+        <Bp7>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\remote.c}.245.7" 1 0 0 0 "" 0 ""</Bp7>
+        <Bp8>_ "STD_CODE" "{$PROJ_DIR$\..\source\apps\bsp_extended.c}.137.3" 1 0 0 0 "" 0 ""</Bp8>
         <Count>9</Count>
     </Breakpoints>
     <ChipconEmu>
-        <StopTimersOnHalt>0</StopTimersOnHalt>
+        <StopTimersOnHalt>1</StopTimersOnHalt>
         <LeaveTargetRunning>1</LeaveTargetRunning>
     </ChipconEmu>
     <LogFile>

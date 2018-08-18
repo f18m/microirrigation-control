@@ -32,7 +32,7 @@
 #define NULL (void *)0
 #else
 #ifdef __IAR_SYSTEMS_ICC__
-#warning "Macro NULL already defined"
+//#warning "Macro NULL already defined"
 #endif
 #endif
 
