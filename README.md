@@ -34,7 +34,8 @@ This picture gives an overview of the whole system:
 The hardware design for the remote note is available as Cadsoft Eagle schematics (see https://www.autodesk.com/products/eagle/overview)
 in the hardware-remote folder. The design is based on 3 major parts:
 1) the CC1110 evaluation module which provides the antenna, the CC1110 radio+micro and its programming interface. 
-   See http://www.ti.com/tool/CC1110EMK868-915
+   See http://www.ti.com/tool/CC1110EMK868-915 ; this can be connected via SPI bus to an embedded SoC Linux system
+   like a Raspberry Pi or similar boards. I used the Olimex Lime2. I documented the [wiring between the CC1110 board and the Lime2](docs/wiring-cc1110-lime2.md).
 2) one or more commercial relay boards. These are usually unbranded chinese boards which you can find by googling 
    for e.g. "DC 12V 2CH isolated high low level trigger relay module". Here's a picture of the one I used:
    <img src="docs/relay_module.jpg" style="width: 50%;"/>
@@ -45,7 +46,7 @@ in the hardware-remote folder. The design is based on 3 major parts:
    I built this on a simple stripboard (https://en.wikipedia.org/wiki/Stripboard).
    This board connects the battery source (a 12V lead-acid battery in my case) to the radio module and relay module.
 
-This is the overview of the custom glue board (extremehely simple):
+This is the overview of the custom glue board (extremely simple):
 
 <img src="hardware-remote/remote_node_schematic.png" />
 
