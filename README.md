@@ -31,7 +31,7 @@ This picture gives an overview of the whole system:
 
 ## Hardware Design ##
 
-The hardware design for the remote note is available as Cadsoft Eagle schematics (see https://www.autodesk.com/products/eagle/overview)
+The hardware design for the remote node is available as Cadsoft Eagle schematics (see https://www.autodesk.com/products/eagle/overview)
 in the hardware-remote folder. The design is based on 3 major parts:
 1) the CC1110 evaluation module which provides the antenna, the CC1110 radio+micro and its programming interface. 
    See http://www.ti.com/tool/CC1110EMK868-915 ; this can be connected via SPI bus to an embedded SoC Linux system
