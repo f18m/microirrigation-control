@@ -155,6 +155,13 @@ Tree of contained source code is:
                     the WebSocket server is used by Javascript code to fetch updates from SPI.
 ```
 
+Main source files to understand the application:
+
+ - [main.c](firmware-cc1110-lime2-remote/source/apps/main.c)
+ - [lime2.c](firmware-cc1110-lime2-remote/source/apps/lime2.c)
+ - [remote.c](firmware-cc1110-lime2-remote/source/apps/remote.c)
+
+
 ## Installation ##
 
 TO BE WRITTEN
