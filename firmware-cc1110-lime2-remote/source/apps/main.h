@@ -73,9 +73,10 @@ typedef enum
 
 typedef enum
 {
-    CMD_TURN_ON = 0,
-    CMD_TURN_OFF,
-    CMD_GET_STATUS,
+    CMD_TURN_ON = 0,  // can be sent both on SPI and on the radio
+    CMD_TURN_OFF,  // can be sent both on SPI and on the radio
+    CMD_NO_OP,  // can be sent both on SPI and on the radio: used to get battery level from remote
+    CMD_GET_STATUS, // can be sent only on SPI
     CMD_MAX
 } command_e;
 

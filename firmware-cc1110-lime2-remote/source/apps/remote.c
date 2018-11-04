@@ -40,7 +40,11 @@ Description:        Code for the "remote" node.
 #define ENABLE_LOWPOWER_MODE                               (1)
 
 #define ACTUATOR_IMPULSE_DURATION_MSEC                     (3000)
-#define WAIT_TIME_RADIOOFF_MSEC                            (6000)
+#define WAIT_TIME_RADIOOFF_MSEC                            (4000)
+#define APPROX_BATTERY_MEAS_INTERVAL_SEC                   (120)
+
+// constants derived from above settings
+#define WAIT_TIME_RADIOOFF_SEC                             (WAIT_TIME_RADIOOFF_MSEC/1000)
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   GPIO #1 ---> attached to VALVE_CTRL1a
@@ -178,8 +182,9 @@ static void ApplyCmdRx()
 
     // activate output relay:
 
-    if (g_lastCmdRx == CMD_TURN_ON)
+    switch (g_lastCmdRx)
     {
+    case CMD_TURN_ON:
         if (g_lastCmdParameter == '1')
         {
           TURN_OUTPUT_PORT_ON(  REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
@@ -190,9 +195,11 @@ static void ApplyCmdRx()
           TURN_OUTPUT_PORT_ON(  REMOTE_GPIO3_BIT__, REMOTE_GPIO3_PORT__, REMOTE_GPIO3_DDR__, REMOTE_GPIO_ACTIVE_LOW );
           TURN_OUTPUT_PORT_OFF( REMOTE_GPIO4_BIT__, REMOTE_GPIO4_PORT__, REMOTE_GPIO4_DDR__, REMOTE_GPIO_ACTIVE_LOW );
         }
-    }
-    else if (g_lastCmdRx == CMD_TURN_OFF)
-    {
+        else
+          return;       // invalid command parameter
+        break;
+        
+    case CMD_TURN_OFF:
         if (g_lastCmdParameter == '1')
         {
           TURN_OUTPUT_PORT_OFF( REMOTE_GPIO1_BIT__, REMOTE_GPIO1_PORT__, REMOTE_GPIO1_DDR__, REMOTE_GPIO_ACTIVE_LOW );
@@ -203,10 +210,18 @@ static void ApplyCmdRx()
           TURN_OUTPUT_PORT_OFF( REMOTE_GPIO3_BIT__, REMOTE_GPIO3_PORT__, REMOTE_GPIO3_DDR__, REMOTE_GPIO_ACTIVE_LOW );
           TURN_OUTPUT_PORT_ON(  REMOTE_GPIO4_BIT__, REMOTE_GPIO4_PORT__, REMOTE_GPIO4_DDR__, REMOTE_GPIO_ACTIVE_LOW );
         }
-    }
-    else
+        else
+          return;       // invalid command parameter
+        break;
+        
+    case CMD_NO_OP:
+        // nothing to do actually!
+        g_lastTransactionIDApplied = g_lastTransactionIDRX;
         return;
 
+    default:
+        return;         // unknown command... logical programming error?
+    }
 
     // the duration of the pulse needs to be tuned for your specific application.
     // in my case the electrovalve I had took quite a lot of time to stabilize to the new
@@ -241,7 +256,7 @@ static void WaitInLowPowerMode()
       MRFI_RxIdle();              // this decreases very much power consumption!
       DelayMsNOInterrupts(WAIT_TIME_RADIOOFF_MSEC);                  
       MRFI_RxOn();                  // before leaving restore radio RX status
-    #else    // much better battery saving in this mode: in power mode 2 consumption goes to
+    #else    // much better battery saving in this mode: in power mode 2 consumption goes to 0.5uA (by datasheet) and crystal oscillator will still be on
       BSP_SleepFor( POWER_MODE_2, SLEEP_1_MS_RESOLUTION, WAIT_TIME_RADIOOFF_MSEC );
       MRFI_RxOn();                  // before leaving restore radio RX status
     #endif
@@ -369,10 +384,18 @@ void sRemoteNode(void)
             }
         }
 
+        // NOTE:
+        // 
+        #define MAIN_LOOP_CALIBRATION_CONSTANT_CYCLES_PER_SEC       ((unsigned)10880)
+        #define GO_LOW_POWER_INTERVAL_SEC                           ((unsigned)6)
+        #define MAIN_LOOP_WAIT_COUNTER                              (MAIN_LOOP_CALIBRATION_CONSTANT_CYCLES_PER_SEC*GO_LOW_POWER_INTERVAL_SEC)
+        
         count1++;
-        go_low_power = ((count1 % 0xFF00) == 0);
+        go_low_power = ((count1 % MAIN_LOOP_WAIT_COUNTER) == 0);
         if (go_low_power)
         {
+            //BSP_TURN_ON_LED1();   // useful to measure experimentally the frequency this code is run
+          
             if (g_lastCmdRx != CMD_MAX)
             {
                 //counter_to_apply_lastcmd++;
@@ -391,16 +414,21 @@ void sRemoteNode(void)
             go_low_power = 0;
 
             // should we do a battery measurement?
+            // NOTE: the time spent in the low power is dominant over other aspects, that's why the
+            //       number of cycles required to reach APPROX_BATTERY_MEAS_INTERVAL_SEC secs is
+            //       just the APPROX_BATTERY_MEAS_INTERVAL_SEC amount divided by wait time:
+            #define APPROX_BATTERY_MEAS_WAIT_COUNTER                   (APPROX_BATTERY_MEAS_INTERVAL_SEC/WAIT_TIME_RADIOOFF_SEC)
+
             count2++;
-            do_battery_meas = ((count2 % 0x20) == 0);
+            do_battery_meas = ((count2 % APPROX_BATTERY_MEAS_WAIT_COUNTER) == 0);
             if (do_battery_meas)
             {
-                 // with current settings for count1 and count2, we enter
-                 // this piece of code about every 40sec
-
+                //BSP_TOGGLE_LED1();   // useful to measure experimentally the frequency this code is run
                 ReadBatteryVoltage();
                 do_battery_meas = 0;
             }
+            
+            //BSP_TURN_OFF_LED1();   // useful to measure experimentally the frequency this code is run
         }
         //else: keep spinning with radio in Rx mode for a while
     }

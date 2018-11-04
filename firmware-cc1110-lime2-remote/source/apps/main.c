@@ -37,6 +37,7 @@ const char* g_commands[] =
      // keep all the same length == COMMAND_LEN
     "TURNON_",
     "TURNOFF",
+    "NOOP___",
     "STATUS_"
 };
 

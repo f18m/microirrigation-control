@@ -361,6 +361,7 @@ static void HandleSPI()
     {
     case CMD_TURN_ON:
     case CMD_TURN_OFF:
+    case CMD_NO_OP:
         // Read the transaction ID
         g_lastSpiCommandTransactionID = g_rxBufferSPISlave[COMMAND_LEN+0];
         g_lastSpiCommandParameter = g_rxBufferSPISlave[COMMAND_LEN+1];
@@ -412,7 +413,7 @@ void sLime2Node(void)
     unsigned int count1=0, count2=0;
     while (1)
     {
-        if (g_lastSpiCommand == CMD_TURN_ON || g_lastSpiCommand == CMD_TURN_OFF)
+        if (g_lastSpiCommand == CMD_TURN_ON || g_lastSpiCommand == CMD_TURN_OFF || g_lastSpiCommand == CMD_NO_OP)
         {
             SendCommandOverRadioWithACK();        // this can take up to DURATION_TX_RETRIES_MSEC!
             g_lastSpiCommand = CMD_MAX;
