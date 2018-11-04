@@ -35,7 +35,9 @@ var ws_server_url = 'ws://ffserver.changeip.org:8080/';
 
 var socket;
 var socket_ready;
-
+var last_command;
+var num_updates = 0;
+var num_battery_updates = 0;
 
 // FUNCTIONS
 
@@ -51,8 +53,22 @@ function ws_init() {
     
     // attach the websocket "message received" to the HTML element showing the acivity log:
     socket.onmessage = function (evt) {
-        // we can receive only 1 type of message from the WebSocket: a log update
-        document.getElementById("js_updated").innerHTML = evt.data; 
+        logContent = evt.data; 
+    
+        // we can receive only 2 types of message from the WebSocket: a log update or battery level updates
+        if (last_command == "GET_BATTERY_LEVEL" && logContent )
+        {
+          var batteryVoltagePercentage = parseFloat(logContent);
+          console.log("Received battery level update: %f.", batteryVoltagePercentage);
+          if (!isNaN(batteryVoltagePercentage))
+          {
+            // use Bootstrap framework to update the bar: (see http://getbootstrap.com)
+            $("#battery .bar").css("width", batteryVoltagePercentage + "%");
+            //document.getElementById("js_updated").style.width = batteryVoltagePercentage + "%";
+          }
+        }
+        else
+          document.getElementById("js_updated").innerHTML = logContent; 
     };
     
     socket.onopen = function() {
@@ -62,9 +78,26 @@ function ws_init() {
 }
 
 function ws_timer() {
+
+    // launch a battery level update:
+    if (socket_ready)
+    {
+      if (num_battery_updates == 0 || (num_updates%100)==0)
+      {
+        ws_send_cmd("GET_BATTERY_LEVEL", "");
+        console.log("Refreshing battery level.");
+        
+        // launched battery update!
+        num_battery_updates++;
+      }
+    }
+
+    // ask log content updates:
     socket.send(JSON.stringify({
   command: 'GET_UPDATE'
 }));
+
+    num_updates++;
 }
 
 function ws_check_ready() {
@@ -80,10 +113,14 @@ function ws_check_ready() {
 function ws_send_cmd(cmd, cmdParam) {
     if (!ws_check_ready())
       return;
+    
+    // send JSON over the websocket:
     socket.send(JSON.stringify({
   command: cmd,
   commandParameter: cmdParam
 }));
+
+    last_command = cmd;
 }
 
 
@@ -93,5 +130,5 @@ function ws_send_cmd(cmd, cmdParam) {
 // as soon as the HTML loads, setup the WebSocket:
 document.addEventListener('DOMContentLoaded', ws_init);
 
-// then every 3sec ask for updates:
-var myRefreshTimer = setInterval(ws_timer, 3000);
+// then every 1sec ask for updates:
+var myRefreshTimer = setInterval(ws_timer, 1000);

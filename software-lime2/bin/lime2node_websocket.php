@@ -138,7 +138,8 @@
             $msg = json_decode($serialized_json, true);
             //var_dump($msg);
             
-            if ($msg["command"] == "TURNON" || $msg["command"] == "TURNOFF" || $msg["command"] == "TURNON_WITH_TIMER")
+            if ($msg["command"] == "TURNON" || $msg["command"] == "TURNOFF" || $msg["command"] == "NOOP"
+                || $msg["command"] == "TURNON_WITH_TIMER" || $msg["command"] == "GET_BATTERY_LEVEL")
             {
                 /*   MULTITHREADING OPTION DISABLED FOR NOW:
                 
@@ -159,10 +160,15 @@
                 // instead wait for that to complete!
                 
                 $logfile = $this->getLogFilenameForConnection($from);
+                $loglevel = "INFO";
+                
+                if ($msg["command"] == "GET_BATTERY_LEVEL")
+                  $loglevel = "ALERT";
                 
                 global $backend_script;
                 $command = $backend_script . 
                             " --log-file " . $logfile . 
+                            " --log-level " . $loglevel . 
                             " --spi-command " . $msg["command"] . 
                             " --spi-command-parameter " . $msg["commandParameter"] . 
                             " 2>/dev/null >/dev/null &";

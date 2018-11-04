@@ -17,12 +17,16 @@
   $enabled_loglevel = "INFO";
   $spi_bus_lockfile = "/tmp/lime2node_spi_bus.lock";
   
+  // SPI protocol details:
   $max_wait_time_sec = 30;
   $speed_hz = 5000;
   $validack = 'ACK_';
-  $turnon_cmd = 'TURNON_';
+  
+  // commands - the SPI/OtA protocol dictates a len of 7 bytes:
+  $turnon_cmd  = 'TURNON_';
   $turnoff_cmd = 'TURNOFF';
-  $status_cmd = 'STATUS_';
+  $noop_cmd    = 'NOOP___';
+  $status_cmd  = 'STATUS_';
 
   // since the Transaction ID (TID) is sent over commandline it should stay inside the ASCII range:
   $tid_for_status_cmd = 48;    // '0'
@@ -30,6 +34,11 @@
   $last_valid_tid = 57;     // '9'
 
   $cmdparam_for_status_cmd = '0';
+  
+  // BATTERY ADC->VOLTAGE CONVERSION FACTORS
+  $battery_angular_coeff = 0.069;  // in V/ADC
+  $battery_voltage_offset = 4.386; // in V
+  $battery_max_voltage = 13.0; // in V
   
 
   //
@@ -41,17 +50,23 @@
     global $last_spi_op_logfile;
     $last_spi_op_logfile=$newlogfile;    // empty string is allowed and means stdout
     
-    if ($last_spi_op_logfile != "")
+    if ($last_spi_op_logfile != "" && $last_spi_op_logfile != "stdout")
       lime2node_empty_log();
     else
       echo "Selected stdout as logging mechanism.\n";
+  }
+  
+  function lime2node_set_loglevel($newloglevel)  // string with loglevel 'ALERT' or 'INFO' or 'DEBUG'
+  {
+    global $enabled_loglevel;
+    $enabled_loglevel=$newloglevel;
   }
   
   function lime2node_empty_log()
   {
     global $last_spi_op_logfile;
     
-    if ($last_spi_op_logfile != "") {
+    if ($last_spi_op_logfile != "" && $last_spi_op_logfile != "stdout") {
       $f = @fopen($last_spi_op_logfile, "r+");
       if ($f !== false) {
           ftruncate($f, 0);
@@ -64,10 +79,12 @@
   {
     if ($level == "DEBUG") {
       return 1;
-    }else if ($level == "INFO") {
+    } else if ($level == "INFO") {
       return 2;
+    } else if ($level == "ALERT") {
+      return 3;
     }
-    return 2;
+    return 2;    // if $level contains typos, default to INFO level 
   }
 
   function lime2node_write_log($level, $msg)
@@ -78,7 +95,7 @@
     if (lime2node_loglevel2number($level) < lime2node_loglevel2number($enabled_loglevel))
       return;   // discard
     
-    if ($last_spi_op_logfile != "") {
+    if ($last_spi_op_logfile != "" && $last_spi_op_logfile != "stdout") {
       file_put_contents($last_spi_op_logfile, $msg . "\n", FILE_APPEND | LOCK_EX);
     } else {
       // stdout was selected!
@@ -92,6 +109,13 @@
     return $last_spi_op_logfile;
   }
 
+  function lime2node_get_loglevel()
+  {
+    global $enabled_loglevel;
+    return $enabled_loglevel;
+  }
+  
+  
 
   // utility class:
 
@@ -188,9 +212,10 @@
 
   function lime2node_assert_valid_cmd($cmd, $cmdParameter)
   {
-    global $turnon_cmd, $turnoff_cmd, $status_cmd;
+    global $turnon_cmd, $turnoff_cmd, $noop_cmd, $status_cmd;
     if ($cmd != $turnon_cmd &&
         $cmd != $turnoff_cmd &&
+        $cmd != $noop_cmd &&
         $cmd != $status_cmd) {
       lime2node_write_log("DEBUG", "Invalid command [$cmd]. Aborting.");
       die();
@@ -210,8 +235,17 @@
   function lime2node_send_spi_cmd($cmd, $transactionID, $cmdParameter)
   {
     global $output_file, $speed_hz;
-    
+    global $status_cmd, $tid_for_status_cmd, $cmdparam_for_status_cmd;
+
     lime2node_assert_valid_cmd($cmd, $cmdParameter);
+    
+    if ($cmd == $status_cmd)
+    {
+        // override user-provided TID and cmd parameter: STATUS command is special and wants
+        // fixed value for TID and cmd param:
+        assert($transactionID == $tid_for_status_cmd);
+        assert($cmdParameter == $cmdparam_for_status_cmd);
+    }
 
     lime2node_write_log("DEBUG", "Sending command over SPI:" . $cmd . " with transaction ID=" . $transactionID . " and parameter=" . $cmdParameter);
     $rawcommand = $cmd . chr($transactionID) . $cmdParameter;
@@ -306,8 +340,8 @@
     $valid_ack_ret = array(
         "transactionID" => 0,
     );
-    while (TRUE) //count($ack)==0)    // NULL replies immediately after a command mean that the radio is still estabilishing connection with the "remote" node
-    {
+    while (TRUE) //count($ack)==0)    // NULL replies immediately after a command mean that the radio is still 
+    {                                 // estabilishing connection with the "remote" node
       sleep(2);
 
       $send_ret = lime2node_send_spi_cmd($status_cmd, $tid_for_status_cmd, $cmdparam_for_status_cmd);
@@ -324,10 +358,19 @@
 
       $ack = $send_ret["ack"];
       $valid_ack_ret = lime2node_parse_ack($ack);
-      if ($valid_ack_ret["valid"]==1 && $valid_ack_ret["transactionID"]==$transactionID)
+      if ($valid_ack_ret["valid"]==1)
       {
-        lime2node_write_log("DEBUG", "Received valid ACK; last ACK'ed transaction ID=" . $valid_ack_ret["transactionID"] . ", battery read=" . $valid_ack_ret["batteryRead"]);
-        return $valid_ack_ret;
+        if ($valid_ack_ret["transactionID"]==$transactionID)
+        {
+          lime2node_write_log("DEBUG", "Received valid ACK; last ACK'ed transaction ID=" . $valid_ack_ret["transactionID"] 
+                                        . ". " . lime2node_get_battery_info($valid_ack_ret["batteryRead"]));
+          return $valid_ack_ret; 
+        }
+        else
+        {
+          lime2node_write_log("DEBUG", "Received ACK for a previous transaction ID " . $valid_ack_ret["transactionID"] 
+                                        . " while waiting for ACK of ID " . $transactionID);
+        }
       }
     }
 
@@ -363,5 +406,31 @@
     file_put_contents($transaction_file, $ret_tid);
 
     return $ret_tid;
+  }
+  
+  function lime2node_get_battery_level($batteryRead_adc_counts)
+  {
+    global $battery_angular_coeff, $battery_voltage_offset;
+    
+    // simple basic linear fitting :)
+    $battery_voltage = $battery_angular_coeff * $batteryRead_adc_counts + $battery_voltage_offset;
+
+    // human-friendly formatting:
+    return $battery_voltage;
+  }
+  
+  function lime2node_get_battery_level_percentage($batteryRead_adc_counts)
+  {
+    global $battery_max_voltage;
+    $battery_voltage = lime2node_get_battery_level($batteryRead_adc_counts);
+    return 100.0 * ($battery_voltage / $battery_max_voltage);
+  }
+  
+  function lime2node_get_battery_info($batteryRead_adc_counts)
+  {
+    $battery_voltage = lime2node_get_battery_level($batteryRead_adc_counts);
+
+    // human-friendly formatting:
+    return "Battery read is " . $battery_voltage . "V (" .  $batteryRead_adc_counts . " ADC counts)";
   }
 ?>
