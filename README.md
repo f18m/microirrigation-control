@@ -69,25 +69,25 @@ of the 2 relay channels.
 The current consumption budget of the remote node when the firmware puts the radio in sleep mode is:
  - 100 uA for the 12V to 3V current regulator (in the hardware schematic shown above an ADP3333 low dropout 300mA-max regulator was chosen)
  - 130 uA for the static resistor divider used for battery voltage probing
- - between 1 and 200 uA for the CC1110 depending on the power mode selected by firmware (power mode 1 or 2)
+ - 0.5 uA for the CC1110 (considering the power mode 2 used by the firmware of this project)
 
-For a total consumption of about 430uA.
+For a total consumption of about 240uA.
 The current consumption budget of the remote node when the firmware puts the radio in RX mode is dominated by the CC1110 
-and will be around 22mA. With current firmware settings the RX window lasts for about 1sec.
+and will be around 22mA. With current firmware settings the RX window lasts for about 3sec.
 Of course the "remote" node also needs to transmit an acknowledge to the "lime2" node (when a command is received in that RX window)
 raising current consumption up to 36mA but the TX time is so short that can be neglected in computations.
 
-Assuming that a 7Ah lead-acid battery is used for powering the system, and that the sensor will wake up once every 7 seconds to check for
+Assuming that a 7Ah lead-acid battery is used for powering the system, and that the sensor will wake up once every 6 seconds to check for
 commands over the radio channel, the battery life can be easily computed using e.g. https://oregonembedded.com/batterycalc.htm.
 
-Data entered on that page in my case is:
+Data entered on that page is thus (considering current firmware version in this Github project):
  - 7000mAh capacity rating
- - 100uA + 130uA + 200uA ~0.5mA current consumption of device during sleep
+ - 100uA + 130uA + 0.5uA  ~0.240mA current consumption of device during sleep
  - ~22mA current consumption of device during wake (radio in RX mode)
- - 3600sec / (7sec + 1sec) = 450 number of wakeups per hour
- - 1000 ms duration of wake time
+ - 3600sec / (6sec + 3sec) = 400 number of wakeups per hour
+ - 3000 ms duration of wake time
  
-The result is a battery duration of **~78 days**.
+The result is a battery duration of **~33 days**.
 
 The computations above do not include of course the current consumed to actually activate the relays and to move the
 electrovalve from the OPEN to the CLOSE position or viceversa. However such event is typically very rare (let's say once per day)
@@ -100,7 +100,8 @@ from the lime2 node to the remote node increases as well.
 
 ## Firmware and Software Design ##
 
-Both the remote node and the lime2 nodes have custom firmware written in C and based upon Texas Instruments BSP and MRFI packages for CC1110.
+Both the remote node and the lime2 nodes have custom firmware written in C and based upon Texas Instruments BSP and MRFI packages for CC1110
+(its datasheet is available on Texas Instruments website at http://www.ti.com/lit/ds/symlink/cc1110-cc1111.pdf)
 The directory with the source code is "firmware-cc1110-lime2-remote"; it contains a project for the [IAR Embedded Workbench for 8051](https://www.iar.com/iar-embedded-workbench/) IDE. Unfortunately if you need to change it (you will probably need unless you use exactly
 the same evaluation module from TI with the same pinout), you have to either buy the IAR software or use the 30days evaluation trial;
 indeed the 4-kb limited edition is not suitable for any project employing CC1110 radio.
